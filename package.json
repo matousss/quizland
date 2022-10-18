@@ -1,0 +1,35 @@
+{
+  "name": "quiz-land",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@next-auth/fauna-adapter": "^1.0.4",
+    "@next-auth/sequelize-adapter": "^1.0.6",
+    "faunadb": "^4.7.0",
+    "next": "12.3.1",
+    "next-auth": "^4.14.0",
+    "process": "^0.11.10",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sequelize": "^6.25.2"
+  },
+  "devDependencies": {
+    "@react-buddy/ide-toolbox": "^2.2.1",
+    "@types/node": "18.11.0",
+    "@types/react": "18.0.21",
+    "@types/react-dom": "18.0.6",
+    "autoprefixer": "^10.4.12",
+    "eslint": "8.25.0",
+    "eslint-config-next": "12.3.1",
+    "postcss": "^8.4.18",
+    "sqlite3": "^5.1.2",
+    "tailwindcss": "^3.1.8",
+    "typescript": "4.8.4"
+  }
+}

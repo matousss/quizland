@@ -1,4 +1,8 @@
-"use strict";
-const sequelize = require("./index").sequelize
+const {models} = require("@next-auth/sequelize-adapter");
 
-sequelize.define()
+module.exports = (sequelize, DataTypes) => sequelize.define(
+    'user',
+    {
+        ...models.User,
+    }
+)

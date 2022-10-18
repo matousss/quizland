@@ -2,7 +2,7 @@ module.exports = {
   "development": {
     "username": "root",
     "password": null,
-    "database": "database_development",
+    "database": "database_test",
     "host": "./db.sqlite3",
     "dialect": "sqlite"
   },

@@ -2,14 +2,14 @@ import NextAuth from "next-auth"
 import SequelizeAdapter from "@next-auth/sequelize-adapter"
 import CredentialsProvider from "next-auth/providers/credentials"
 
-const sequelize = require('/db/models').sequelize
+const sequelize = require('/db')
 
-export default NextAuth({
+const options = {
     providers: [
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                username: {label: "Username", type: "text", placeholder: "jsmith"},
+                username: {label: "Username", type: "text", placeholder: "username"},
                 password: {label: "Password", type: "password"}
             },
             async authorize(credentials, req) {
@@ -22,4 +22,6 @@ export default NextAuth({
         })
     ],
     adapter: SequelizeAdapter(sequelize),
-})
+}
+
+export default NextAuth(options)

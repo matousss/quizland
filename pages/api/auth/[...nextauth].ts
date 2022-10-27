@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import SequelizeAdapter from "@next-auth/sequelize-adapter"
 import CredentialsProvider from "next-auth/providers/credentials"
 
-const sequelize = require('/db')
+const sequelize = require('/db/models')
 
 const options = {
     providers: [

@@ -7,7 +7,7 @@ type Props = {
 
 export const NavBar: FC<Props> = ({children}) => {
     return (
-        <div className={'bg-primary sticky w-full h-16 bg-gray-300'}>  
+        <div className={'bg-primary sticky w-full'}>
             {children}
         </div>
     )

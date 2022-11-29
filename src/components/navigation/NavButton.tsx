@@ -1,12 +1,12 @@
 import type { FC, ReactNode } from "react";
 
 interface Props {
-    children: ReactNode;
+    children?: ReactNode;
 }
 
 export const NavButton: FC<Props> = ({ children }) => {
     return (
-        <div className={'h-full inline-block p-3'}>
+        <div className={'navbtn inline-block bg-tercial text-text_a p-2'}>
             {children}
         </div>
     )

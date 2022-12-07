@@ -20,8 +20,9 @@ const Home: NextPage = () => {
         {/*</Link>*/}
 
         <NavButton>Blank button</NavButton>
-          <NavLink title={'home'} href={'/ahoj'}/>
-          <NavLink title={'test'} href={'/test'}/>
+        <NavLink title={'home'} href={'/ahoj'}/>
+        <NavLink title={'test'} href={'/test'}/>
+
       </NavBar>
     </>
   )

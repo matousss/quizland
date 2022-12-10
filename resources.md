@@ -1,5 +1,9 @@
 ### Docs
+- https://www.typescriptlang.org/docs
+- https://nextjs.org/docs/
 - https://next-auth.js.org
+- https://www.apollographql.com/docs/apollo-server/
+- https://www.mongodb.com/docs/
 
 ### Tutorials
 - a

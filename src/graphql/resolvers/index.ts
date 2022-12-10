@@ -1,3 +1,5 @@
+import type { MongoClient } from "mongodb"
+
 const users = [
     {
         id: '1',
@@ -9,7 +11,7 @@ const users = [
     }
 ]
 
-export const resolvers = {
+export const getResolvers = (client: MongoClient) => {
     Query: {
         getUsers: () => users
     }

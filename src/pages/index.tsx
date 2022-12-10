@@ -1,10 +1,10 @@
 import type { NextPage } from 'next'
-import styles from '../styles/Home.module.css'
-import { NavBar } from "../src/components/navigation/NavBar";
-import { NavButton } from "../src/components/navigation/NavButton";
+import styles from '../../styles/Home.module.css'
+import { NavBar } from "../components/navigation/NavBar";
+import { NavButton } from "../components/navigation/NavButton";
 import Image from "next/image"
 import Link from 'next/link';
-import {NavLink} from "../src/components/navigation/NavLink";
+import {NavLink} from "../components/navigation/NavLink";
 import React from "react";
 
 

@@ -1,5 +1,5 @@
-import {gql} from "graphql-tag";
-export const typeDefs = gql`    
+scalar DateTime
+
 type Query {
     getUsers: [User]
     getUser(id: ID!): User
@@ -46,7 +46,41 @@ type Folder implements Item {
     children: [Item]
 }
 
+type Account {
+    id: ID
+    type: String
+    provider: String
+    providerAccountId: String
+    refreshToken: String
+    expires_at: DateTime
+    accessToken: String
+    token_type: String
+    refresh_token: String
+    access_token: String
+    scope: String
+    id_token: String
+    session_state: String
+    user: User
+}
+type Session{
+    id: ID
+    expires: DateTime
+    sessionToken: String
+    user: User
+}
 type User {
-    id: ID!
-    username: String!
-}`
+    id: ID
+    name: String
+    email: String
+    emailVerified: DateTime
+    image: String
+    accounts: [Account]
+    sessions: [Session]
+}
+
+type VerificationToken {
+    id: ID
+    identifier: String
+    token: String
+    expires: DateTime
+}

@@ -1,13 +1,10 @@
-import { startServerAndCreateNextHandler } from '@as-integrations/next';
+import {startServerAndCreateNextHandler} from '@as-integrations/next';
 import {ApolloServer} from '@apollo/server';
-import {getResolvers} from '../../graphql/resolvers';
-import {typeDefs} from '../../graphql/typedefs';
-import { MongoClient } from 'mongodb';
-import {NextApiRequest, NextApiResponse} from "next";
-import {printType} from "graphql/utilities";
-import {GraphQLSchema} from "graphql/type";
+import {getResolvers} from 'src/graphql/resolvers';
+import {typeDefs} from 'src/graphql/typedefs';
+import mongoClient from 'lib/mongodb';
 
-const mongo_client = new MongoClient(process.env.DB_URL || 'mongodb://localhost:27017');
+const mongo_client = mongoClient;
 const resolvers = getResolvers(mongo_client);
 
 const apolloServer = new ApolloServer({typeDefs: typeDefs, resolvers: resolvers});

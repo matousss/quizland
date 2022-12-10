@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "gentypes": "graphql-codegen --config codegen.yml",
+    "dev": "yarn run gentypes && next dev",
+    "build": "yarn run gentypes && next build",
+    "start": "yarn run gentypes && next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.2",
     "@apollo/server": "^4.2.2",
     "@as-integrations/next": "^1.2.0",
     "@next-auth/sequelize-adapter": "^1.0.6",
@@ -41,7 +43,10 @@
     "typescript": "4.8.4"
   },
   "peerDependencies": {
+    "@babel/core": "^7.0.0-0",
+    "@babel/plugin-syntax-import-assertions": "7.20.0",
     "@types/validator": "^13.7.10",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^10.9.1"
   }
 }

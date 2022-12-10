@@ -1,22 +1,3 @@
-# QuizLand
-
-## Build on
-
-- Next.js
-- NextAuth
-- ApolloServer
-- ApolloClient
-- MongoDB
-- Graphql
-
-## API
-
-Api is using Graphql and is maintained by ApolloServer.
-The server is hosted on `/api/graphql`.
-
-API server can be started without Next.js by following code:
-
-```typescript
 import {ApolloServer} from "@apollo/server";
 import {startStandaloneServer} from "@apollo/server/standalone";
 import {typeDefs} from "src/graphql/typedefs";
@@ -29,8 +10,3 @@ const apolloServer = new ApolloServer(
 );
 
 startStandaloneServer(apolloServer);
-```
-
-### Packages
-
-- Graphql

@@ -5,6 +5,7 @@
   "scripts": {
     "gentypes": "graphql-codegen --config codegen.yml",
     "dev": "yarn run gentypes && next dev",
+    "devu": "next dev",
     "build": "yarn run gentypes && next build",
     "start": "yarn run gentypes && next start",
     "lint": "next lint"

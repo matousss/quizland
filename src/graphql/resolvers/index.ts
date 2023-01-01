@@ -1,4 +1,5 @@
 import type {MongoClient} from "mongodb"
+import {getAuthResolvers} from "./auth";
 
 const users = [
     {
@@ -17,21 +18,12 @@ const users = [
 
 
 export const getResolvers = (client: MongoClient) => {
-
+    const authResolvers = getAuthResolvers(client);
 
 
 
     return {
-        Query: {
-            getUsers: () => users,
-            getUserID: (parent, args, contextValue, info) => {
-                console.log({parent, args, contextValue, info})
-                return users.find((user) => user.id === args.id)
-            },
-            getUserEmail: (_, args) => users.find(user => user.email == args.email)
-
-
-        }
+        Query: {...authResolvers.Query}
     }
 }
 

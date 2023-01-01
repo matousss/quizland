@@ -1,6 +1,12 @@
 import {ApolloClient, gql} from "@apollo/client";
-import {Resolvers} from "../__generated__/resolvers-types";
+import {Resolvers} from "src/__generated__/resolvers-types";
 import type {AdapterUser} from "next-auth/adapters";
+
+
+const Fields = {
+    AdapterUser: ['id', 'email', 'emailVerified']
+}
+
 
 /** @returns {import('next-auth/adapters').Adapter} */
 export default function GraphqlAdapter(client: ApolloClient<any>, options = {}) {
@@ -9,17 +15,26 @@ export default function GraphqlAdapter(client: ApolloClient<any>, options = {}) 
             return
         },
         async getUser(id: string) {
-            return await client.query<Resolvers['User']>({
-                query: gql`query ExampleQuery($getUserId: ID!) {
-                    getUser(id: $getUserId) {
-                        
+            let user = await client.query<Resolvers['User']>({
+                query: gql`query GetUsers($getUserId: ID!) {
+                    getUserID(id: $getUserId) {
+                        ${Fields.AdapterUser}
                     }
                 }
                 `
             })
+            console.log(user)
+            return user;
         },
-        async getUserByEmail(email) {
-            return
+        async getUserByEmail(email: string) {
+            return await client.query<Resolvers["User"]>({
+                query: gql`query GetUsersByEmail($getUserEmail: String!) {
+                    getUserEmail(email: $getUserEmail) {
+                        ${Fields.AdapterUser}
+                    }
+                }
+                `
+            });
         },
         async getUserByAccount({providerAccountId, provider}) {
             return

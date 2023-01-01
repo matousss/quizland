@@ -2,7 +2,8 @@ scalar DateTime
 
 type Query {
     getUsers: [User]
-    getUser(id: ID!): User
+    getUserID(id: ID!): User
+    getUserEmail(email: String!): User
 }
 
 enum Permission {

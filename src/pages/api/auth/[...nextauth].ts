@@ -1,8 +1,9 @@
 import NextAuth from "next-auth"
-import SequelizeAdapter from "@next-auth/sequelize-adapter"
+import GraphqlAdapter from 'src/nextauth/graphqAdapter'
 import CredentialsProvider from "next-auth/providers/credentials"
 
-const sequelize = require('/db/models')
+import apolloClient from 'lib/graphql'
+
 
 const options = {
     providers: [
@@ -21,7 +22,8 @@ const options = {
             }
         })
     ],
-    adapter: SequelizeAdapter(sequelize),
+    adapter: GraphqlAdapter(apolloClient),
 }
 
+// @ts-ignore
 export default NextAuth(options)

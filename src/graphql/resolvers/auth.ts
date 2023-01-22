@@ -3,6 +3,7 @@ import {ObjectId, Filter} from "mongodb";
 import {AUTH_COLLECTIONS, AUTH_DB} from "lib/mongodb";
 import {common} from "@apollo/protobufjs";
 import get = common.get;
+import type {User, CreateUserInput} from "../../__generated__/resolvers-types";
 
 const getDB = (client: MongoClient) =>
 {
@@ -24,11 +25,27 @@ export const getAuthResolvers = (client: MongoClient) => {
         Query: {
             getUsers: async () => {
                 let arr = await db.Users.find().toArray();
-                let result = [];
-
+                let result: Array<User> = [];
+                return result;
             },
-            getUsersID: async (id: string) => {
-                return await db.Users.findOne({_id: id})
+            getUserByID: async (id: string) => {
+                return await db.Users.findOne({_id: id});
+            },
+            getUserByEmail: async (email: string) => {
+                return await db.Users.findOne({email: email});
+            },
+        },
+        Mutation: {
+            createUser: async (args: any, {input}: {input: CreateUserInput}) => {
+                if (await db.Users.findOne({email: input.email})) throw new Error("Email already used");
+                await db.Users.insertOne(input);
+                return await db.Users.findOne({email: input.email});
+            },
+            updateUser: async (user: User) => {
+                return await db.Users.updateOne({_id: user.id}, {$set: user});
+            },
+            deleteUser: async (id: string) => {
+                return await db.Users.deleteOne({_id: id});
             }
         }
     }

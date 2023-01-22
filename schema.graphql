@@ -2,14 +2,47 @@ scalar DateTime
 
 type Query {
     getUsers: [User]
-    getUserID(id: ID!): User
-    getUserEmail(email: String!): User
+    getUserByID(id: ID!): User
+    getUserByEmail(email: String!): User
+    getUserByAccount(providerAccountId: ID!, provider: Provider!): User
+}
+
+type Mutation {
+    createUser(input: CreateUserInput!): User
+    updateUser(input: UpdateUserInput!): User
+    deleteUser(id: ID!): User
+}
+
+input UpdateUserInput {
+    id: ID!
+    name: String
+    email: String
+    image: String
+    emailVerified: DateTime
+}
+
+input CreateUserInput {
+    email: String!
+    name: String!
+    image: String
+    emailVerified: DateTime
 }
 
 enum Permission {
     R
     RW
     M
+}
+
+enum Provider {
+    GOOGLE
+    FACEBOOK
+    GITHUB
+    TWITTER
+    LINKEDIN
+    INSTAGRAM
+    DISCORD
+    EMAIL
 }
 
 interface Permit {
@@ -48,9 +81,8 @@ type Folder implements Item {
 }
 
 type Account {
-    id: ID
     type: String
-    provider: String
+    provider: Provider
     providerAccountId: String
     refreshToken: String
     expires_at: DateTime
@@ -64,7 +96,6 @@ type Account {
     user: User
 }
 type Session{
-    id: ID
     expires: DateTime
     sessionToken: String
     user: User
@@ -80,7 +111,6 @@ type User {
 }
 
 type VerificationToken {
-    id: ID
     identifier: String
     token: String
     expires: DateTime

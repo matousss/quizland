@@ -19,11 +19,9 @@ const users = [
 
 export const getResolvers = (client: MongoClient) => {
     const authResolvers = getAuthResolvers(client);
-
-
-
     return {
-        Query: {...authResolvers.Query}
+        Query: {...authResolvers.Query},
+        Mutation: {...authResolvers.Mutation},
     }
 }
 

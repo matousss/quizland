@@ -1,5 +1,5 @@
 import {ApolloClient, gql} from "@apollo/client";
-import {Resolvers} from "src/__generated__/resolvers-types";
+import {Resolvers, Provider} from "src/__generated__/resolvers-types";
 import type {AdapterUser} from "next-auth/adapters";
 
 
@@ -10,6 +10,8 @@ const Fields = {
 
 /** @returns {import('next-auth/adapters').Adapter} */
 export default function GraphqlAdapter(client: ApolloClient<any>, options = {}) {
+    const providers = Object.values(Provider);
+
     return {
         async createUser(user: AdapterUser) {
             return
@@ -17,27 +19,32 @@ export default function GraphqlAdapter(client: ApolloClient<any>, options = {}) 
         async getUser(id: string) {
             let user = await client.query<Resolvers['User']>({
                 query: gql`query GetUsers($getUserId: ID!) {
-                    getUserID(id: $getUserId) {
+                    getUserByID(id: $getUserId) {
                         ${Fields.AdapterUser}
                     }
-                }
-                `
+                }`, variables: {getUserId: id}
             })
-            console.log(user)
             return user;
         },
         async getUserByEmail(email: string) {
             return await client.query<Resolvers["User"]>({
                 query: gql`query GetUsersByEmail($getUserEmail: String!) {
-                    getUserEmail(email: $getUserEmail) {
+                    getUserByEmail(email: $getUserEmail) {
                         ${Fields.AdapterUser}
                     }
-                }
-                `
+                }`, variables: {getUserEmail: email}
             });
         },
-        async getUserByAccount({providerAccountId, provider}) {
-            return
+        async getUserByAccount({providerAccountId, provider}: { providerAccountId: string, provider: string }) {
+            if (!providers.includes(provider as any)) return null;
+
+            return await client.query<Resolvers["User"]>({
+                query: gql`query GetUsersByAccount($providerAccountId: ID!, $provider: Provider!) {
+                    getUserByAccount(providerAccountId: $providerAccountId, provider: $provider) {
+                        ${Fields.AdapterUser}
+                    }
+                }`, variables: {providerAccountId: providerAccountId, provider: provider}
+            });
         },
         async updateUser(user) {
             return

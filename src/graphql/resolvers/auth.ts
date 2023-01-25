@@ -1,8 +1,6 @@
 import type {MongoClient} from "mongodb";
 import {ObjectId, Filter} from "mongodb";
 import {AUTH_COLLECTIONS, AUTH_DB} from "lib/mongodb";
-import {common} from "@apollo/protobufjs";
-import get = common.get;
 import type {User, CreateUserInput} from "src/__generated__/resolvers-types";
 
 const getDB = (client: MongoClient) => {
@@ -44,7 +42,7 @@ export const getAuthResolvers = (client: MongoClient) => {
                 return await db.Users.findOne({email: input.email});
             },
             updateUser: async (user: User) => {
-                return await db.Users.updateOne({_id: user.id}, {$set: user});
+                return await db.Users.updateOne({_id: _id(user.id)}, {$set: user});
             },
             deleteUser: async ({id}: { id: string }) => {
                 console.log({id});

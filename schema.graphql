@@ -10,7 +10,7 @@ type Query {
     getUsers: [User] @server
     getUserByID(id: ID!): User
     getUserByEmail(email: String!): User
-    getUserByAccount(providerAccountId: ID!, provider: Provider!): User @server
+    getUserByAccount(providerAccountId: ID!, provider: ProviderType!): User @server
 
 
 
@@ -23,7 +23,12 @@ type Mutation {
     deleteUser(id: ID!): Void @private
 
     # 
-    authenticateUser(email: String!, password: String!): Session
+    authenticateUser(input: AuthenticateUserInput): VerificationToken
+}
+
+input AuthenticateUserInput {
+    provider: ProviderType!
+    secret: String!
 }
 
 input UpdateUserInput {
@@ -46,7 +51,7 @@ enum Permission {
     M   # manage (read, write, delete, change permissions, etc.)
 }
 
-enum Provider {
+enum ProviderType {
     GOOGLE
     FACEBOOK
     GITHUB
@@ -94,8 +99,8 @@ type Folder implements Item {
 }
 
 type Account @server {
-    type: String
-    provider: Provider
+    user(id: ID!): User
+    provider: ProviderType
     providerAccountId: String
     refreshToken: String
     expires_at: DateTime
@@ -106,28 +111,20 @@ type Account @server {
     scope: String
     id_token: String
     session_state: String
-    user(id: ID!): User!
-}
 
-type Session @server {
-    expires: DateTime!
-    sessionToken: String!
-    user(id: ID!): User!
 }
-
 
 type User {
     id: ID!
     name: String @private
     email: String!
     emailVerified: DateTime @server
-    image: String
+    #image: String
     accounts: [Account] @private
-    sessions: [Session] @server
+    tokens: [VerificationToken] @server
 }
 
 type VerificationToken @server {
-    identifier: String
     token: String
     expires: DateTime
 }

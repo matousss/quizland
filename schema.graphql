@@ -1,16 +1,29 @@
 scalar DateTime
+scalar Void
+
+directive @permitted (required: Permission) on FIELD_DEFINITION
+directive @private on FIELD_DEFINITION | QUERY # visible only to user who owns the item
+directive @server on FIELD_DEFINITION | QUERY | MUTATION | OBJECT | INPUT_FIELD_DEFINITION # only for server side
+directive @internal on FIELD_DEFINITION | OBJECT # only for internal usage eg. data structure, only relevant for database
 
 type Query {
-    getUsers: [User]
+    getUsers: [User] @server
     getUserByID(id: ID!): User
     getUserByEmail(email: String!): User
-    getUserByAccount(providerAccountId: ID!, provider: Provider!): User
+    getUserByAccount(providerAccountId: ID!, provider: Provider!): User @server
+
+
+
 }
 
 type Mutation {
+    # database mutations
     createUser(input: CreateUserInput!): User
-    updateUser(input: UpdateUserInput!): User
-    deleteUser(id: ID!): User
+    updateUser(input: UpdateUserInput!): User @private
+    deleteUser(id: ID!): Void @private
+
+    # 
+    authenticateUser(email: String!, password: String!): Session
 }
 
 input UpdateUserInput {
@@ -18,20 +31,19 @@ input UpdateUserInput {
     name: String
     email: String
     image: String
-    emailVerified: DateTime
+    emailVerified: DateTime @server
 }
 
 input CreateUserInput {
     email: String!
     name: String!
     image: String
-    emailVerified: DateTime
 }
 
 enum Permission {
-    R
-    RW
-    M
+    R   # read
+    RW  # read and write
+    M   # manage (read, write, delete, change permissions, etc.)
 }
 
 enum Provider {
@@ -55,19 +67,20 @@ interface Item {
     name: String!
     description: String
     owner(id: ID!): User
-    permissions: [Permit!]
+    permissions: [Permit!] @permitted(required: M)
 }
 
-type Card {
+interface Card {
     term: String
     definition: [String]
 }
+
 type CardSet implements Item {
     id: ID!
     name: String!
     description: String
     owner(id: ID!): User
-    permissions: [Permit!]
+    permissions: [Permit!] @permitted(required: M)
     cards: [Card!]!
 }
 
@@ -76,11 +89,11 @@ type Folder implements Item {
     name: String!
     description: String
     owner(id: ID!): User
-    permissions: [Permit!]
-    children: [Item]
+    permissions: [Permit!] @permitted(required: M)
+    children: [Item] @permitted(required: R)
 }
 
-type Account {
+type Account @server {
     type: String
     provider: Provider
     providerAccountId: String
@@ -93,24 +106,27 @@ type Account {
     scope: String
     id_token: String
     session_state: String
-    user: User
-}
-type Session{
-    expires: DateTime
-    sessionToken: String
-    user: User
-}
-type User {
-    id: ID
-    name: String
-    email: String
-    emailVerified: DateTime
-    image: String
-    accounts: [Account]
-    sessions: [Session]
+    user(id: ID!): User!
 }
 
-type VerificationToken {
+type Session @server {
+    expires: DateTime!
+    sessionToken: String!
+    user(id: ID!): User!
+}
+
+
+type User {
+    id: ID!
+    name: String @private
+    email: String!
+    emailVerified: DateTime @server
+    image: String
+    accounts: [Account] @private
+    sessions: [Session] @server
+}
+
+type VerificationToken @server {
     identifier: String
     token: String
     expires: DateTime

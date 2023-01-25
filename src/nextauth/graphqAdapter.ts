@@ -49,8 +49,12 @@ export default function GraphqlAdapter(client: ApolloClient<any>, options = {}) 
         async updateUser(user) {
             return
         },
-        async deleteUser(userId) {
-            return
+        async deleteUser(userId: string) {
+            return await client.mutate({
+                mutation: gql`mutation DeleteUser($id: ID!) {
+                    deleteUser(id: $id)
+                }`, variables: {id: userId}
+            });
         },
         async linkAccount(account) {
             return

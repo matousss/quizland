@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import styles from '../../styles/Home.module.css'
+import styles from '../styles/Home.module.css'
 import { NavBar } from "../components/navigation/NavBar";
 import { NavButton } from "../components/navigation/NavButton";
 import Image from "next/image"

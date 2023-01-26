@@ -22,15 +22,5 @@ export const getMutationResolvers = (db: AuthDB) => ({
                 db.Users.deleteOne({_id: objId})
             ]
         );
-    },
-
-    authenticateUser: async (args: any, {provider, secret}: { provider: ProviderType, secret: string }) => {
-        return {token: secret};
-        switch (provider) {
-            case ProviderType.Google:
-                //todo
-
-            default: return null;
-        }
     }
 })

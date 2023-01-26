@@ -7,11 +7,14 @@ directive @server on FIELD_DEFINITION | QUERY | MUTATION | OBJECT | INPUT_FIELD_
 directive @internal on FIELD_DEFINITION | OBJECT # only for internal usage eg. data structure, only relevant for database
 
 type Query {
+    # users
     getUsers: [User] @server
     getUserByID(id: ID!): User
     getUserByEmail(email: String!): User
     getUserByAccount(providerAccountId: ID!, provider: ProviderType!): User @server
+    getUser: User @private
 
+    # cardSets
     getCardSet(id: ID!): CardSet
 
 }
@@ -25,7 +28,7 @@ type Mutation {
     # accounts
 
     # auth
-    authenticateUser(input: AuthenticateUserInput): VerificationToken
+    authenticateUser(input: AuthenticateUserInput): Token
 
 
     # cardSets
@@ -152,10 +155,10 @@ type User {
     emailVerified: DateTime @server
     #image: String
     accounts: [Account] @private
-    tokens: [VerificationToken] @server
+    tokens: [Token] @server
 }
 
-type VerificationToken @server {
+type Token @server {
     token: String
     expires: DateTime
 }

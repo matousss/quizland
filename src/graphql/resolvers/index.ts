@@ -1,20 +1,5 @@
 import type {MongoClient} from "mongodb"
-import {getAuthResolvers} from "./auth";
-
-const users = [
-    {
-        id: '1',
-        name: 'user001',
-        email: 'a@b.c',
-        emailVerified: null,
-    },
-    {
-        id: '2',
-        name: 'user002',
-        email: 'x@y.z',
-        emailVerified: null,
-    }
-]
+import {getAuthResolvers} from "src/graphql/resolvers/auth";
 
 
 export const getResolvers = (client: MongoClient) => {

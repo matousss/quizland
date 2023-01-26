@@ -1,15 +1,19 @@
-import {MongoClient, ObjectId} from "mongodb";
+import {Collection, MongoClient, ObjectId} from "mongodb";
+import type {User, Account, Token} from "src/__generated__/resolvers-types";
 
 
 const AUTH_COLLECTIONS = {
-    users: "users",
-    accounts: "accounts",
-    sessions: "sessions",
-    verificationTokens: "verification_tokens",
+    USERS: "users",
+    ACCOUNTS: "accounts",
+    //sessions: "sessions",
+    //tokens: "tokens",
 };
 const AUTH_DB: string = 'auth';
 
-export {AUTH_COLLECTIONS, AUTH_DB};
+
+
+
+
 
 const setupDB = (connection: MongoClient) => (async () => {
 
@@ -66,6 +70,20 @@ const toMongo = (object: {}) => {
     return newObject;
 }
 
-const mongoClient = new MongoClient(process.env.DB_URL || 'mongodb://localhost:27017');
+declare type AuthDB = {
+    Users: Collection<User>;
+    Accounts: Collection<Account>;
+};
+const getAuthDB = (client: MongoClient): AuthDB => {
+    const _db = client.db(AUTH_DB);
+    const c = AUTH_COLLECTIONS;
+    return {
+        Users: _db.collection<User>(c.USERS),
+        Accounts: _db.collection<Account>(c.ACCOUNTS)
+    };
+}
 
+const mongoClient = new MongoClient(process.env.DB_URL || 'mongodb://localhost:27017');
 export default mongoClient;
+export {getAuthDB, to__id, AUTH_DB, AUTH_COLLECTIONS}
+export type {AuthDB}

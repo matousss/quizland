@@ -63,7 +63,7 @@ interface Permit {
 }
 
 interface Item {
-    id: ID!
+    id: ID
     name: String!
     description: String
     owner(id: ID!): User
@@ -76,7 +76,7 @@ interface Card {
 }
 
 type CardSet implements Item {
-    id: ID!
+    id: ID
     name: String!
     description: String
     owner(id: ID!): User
@@ -85,7 +85,7 @@ type CardSet implements Item {
 }
 
 type Folder implements Item {
-    id: ID!
+    id: ID
     name: String!
     description: String
     owner(id: ID!): User
@@ -117,7 +117,7 @@ type Session @server {
 
 
 type User {
-    id: ID!
+    id: ID
     name: String @private
     email: String!
     emailVerified: DateTime @server

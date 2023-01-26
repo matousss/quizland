@@ -12,18 +12,27 @@ type Query {
     getUserByEmail(email: String!): User
     getUserByAccount(providerAccountId: ID!, provider: ProviderType!): User @server
 
-
+    getCardSet(id: ID!): CardSet
 
 }
 
 type Mutation {
-    # database mutations
+    # users
     createUser(input: CreateUserInput!): User
     updateUser(input: UpdateUserInput!): User @private
     deleteUser(id: ID!): Void @private
 
-    # 
+    # accounts
+
+    # auth
     authenticateUser(input: AuthenticateUserInput): VerificationToken
+
+
+    # cardSets
+    createCardSet(input: CreateCardSetInput): Boolean
+    removeCardSet(input: RemoveCardSetInput): Boolean
+    addCard(input: AddCardInput): Boolean
+    removeCard(input: RemoveCardInput): Boolean
 }
 
 input AuthenticateUserInput {
@@ -43,6 +52,30 @@ input CreateUserInput {
     email: String!
     name: String!
     image: String
+}
+
+input CreateCardSetInput {
+    cards: [CardInput]
+}
+
+input RemoveCardSetInput {
+    id: ID!
+}
+
+input CardInput {
+    term: String!
+    definition: [String!]!
+}
+
+input AddCardInput {
+    id: ID! # CardSet id
+    index: Int!
+    card: CardInput!
+}
+
+input RemoveCardInput {
+    id: ID! # CardSet id
+    index: Int!
 }
 
 enum Permission {
@@ -75,7 +108,7 @@ interface Item {
     permissions: [Permit!] @permitted(required: M)
 }
 
-interface Card {
+type Card @internal {
     term: String
     definition: [String]
 }

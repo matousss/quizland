@@ -1,0 +1,32 @@
+{
+  "name": "quizland-gql",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "gentypes": "graphql-codegen --config modules/quizland-gql/codegen.yml",
+    "dev": "nodemon src/index.ts",
+    "start": "ts-node-esm src/index.ts",
+    "compile": "tsc && tsc-alias",
+    "build": "gentypes && tsc"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.3.2",
+    "dotenv": "^16.0.3",
+    "google-auth-library": "^8.7.0",
+    "graphql": "^16.6.0",
+    "graphql-tools": "^8.3.16",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^4.13.0",
+    "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.2"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.16.1",
+    "@graphql-codegen/typescript": "^2.8.5",
+    "@graphql-codegen/typescript-resolvers": "^2.7.10",
+    "@types/node": "18.11.0",
+    "nodemon": "^2.0.4",
+    "typescript": "4.8.4"
+  },
+  "license": "MIT"
+}

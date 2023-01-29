@@ -4,5 +4,8 @@
   "workspaces": [
     "./packages/quizland-gql",
     "./packages/quizland-web"
-  ]
+  ],
+  "scripts": {
+    "dev": "yarn workspace quizland-web dev"
+  }
 }

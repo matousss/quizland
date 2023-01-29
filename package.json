@@ -1,0 +1,8 @@
+{
+  "name": "quizland",
+  "private": true,
+  "workspaces": [
+    "./packages/quizland-gql",
+    "./packages/quizland-web"
+  ]
+}

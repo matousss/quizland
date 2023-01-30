@@ -18,7 +18,7 @@
     "**/*.ts",
     "**/*.tsx",
     "schema.graphql",
-    "src/__generated__"
+    "src/__generated__",
   ],
   "exclude": [
     "node_modules",

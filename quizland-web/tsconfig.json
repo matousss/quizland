@@ -20,8 +20,8 @@
     "incremental": true,
     "baseUrl": "./",
     "paths": {
-      "@ql/*": [
-        "../*"
+      "@lib/*": [
+        "./lib/*"
       ]
     }
   },

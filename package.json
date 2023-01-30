@@ -2,8 +2,8 @@
   "name": "quizland",
   "private": true,
   "workspaces": [
-    "./packages/quizland-gql",
-    "./packages/quizland-web"
+    "./quizland-web",
+    "./quizland-web/lib/apollo_server"
   ],
   "scripts": {
     "dev": "yarn workspace quizland-web dev"

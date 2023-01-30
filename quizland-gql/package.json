@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "gentypes": "graphql-codegen --config modules/quizland-gql/codegen.yml",
+    "gentypes": "graphql-codegen --config ./codegen.yml",
     "dev": "nodemon src/index.ts",
     "start": "ts-node-esm src/index.ts",
     "compile": "tsc && tsc-alias",

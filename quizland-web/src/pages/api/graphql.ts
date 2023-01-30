@@ -1,6 +1,6 @@
 // import getServer from "quizland-gql/src/apollo";
 
-import getServer from "@ql/quizland-gql/src/apollo";
+import getServer from "src/apollo_server/src/apollo";
 import {startServerAndCreateNextHandler} from "@as-integrations/next";
 
 const startApolloServerAndCreateNextHandler = async () => {

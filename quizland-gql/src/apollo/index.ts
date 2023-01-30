@@ -1,12 +1,11 @@
 import {ApolloServer, BaseContext} from '@apollo/server';
-import {getResolvers} from '@/graphql/resolvers';
-import {typeDefs} from '@/graphql/typedefs';
-import mongoClient, {AUTH_COLLECTIONS, AUTH_DB, to__id} from '@lib/mongodb';
-import {verifyJWT} from "@/auth/util";
+import {getResolvers, typeDefs} from '../graphql';
+import mongoClient, {AUTH_COLLECTIONS, AUTH_DB, to__id} from '../../lib/mongodb';
+import {verifyJWT} from "../auth/util";
 
 import type {MongoClient} from "mongodb";
 //import type {NextApiRequest, NextApiResponse} from 'next';
-import type {User} from "@/__generated__/resolvers-types";
+import type {User} from "../__generated__/resolvers-types";
 import {IncomingMessage, ServerResponse} from "http";
 
 interface Context extends BaseContext {
@@ -47,13 +46,27 @@ const resolveContext = async (mongo: MongoClient, req: IncomingMessage, res: Ser
 
 
 const getServer = async () => {
-    let connection = await mongoClient.connect();
+    console.log('Connecting to mongo...');
+    let connection;
+    try {
+        connection = await mongoClient.connect();
+    } catch (e) {
+        console.error('Could not connect to mongo', e);
+        process.exit(1);
+    }
     const resolvers = getResolvers(connection);
     const apolloServer = new ApolloServer<Context>({typeDefs: typeDefs, resolvers: resolvers});
     // noinspection JSUnusedGlobalSymbols
     return {
         server: apolloServer,
-        options: {context: async (req: IncomingMessage, res: ServerResponse) => await resolveContext(connection, req, res)}
+        options: {
+            context: async (req: IncomingMessage, res: ServerResponse) => await resolveContext(connection, req, res),
+            cors: {
+                origin: '*',
+                introspection: true,
+                credentials: true
+            }
+        }
     }
 }
 export default getServer;

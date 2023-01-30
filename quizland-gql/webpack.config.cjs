@@ -1,6 +1,6 @@
 const path = require("path");
 module.exports = {
-    entry: './src/index.ts',
+    entry: './start.ts',
     mode: 'development',
     target: 'node',
     module: {
@@ -11,6 +11,10 @@ module.exports = {
                 exclude: /node_modules/,
             },
         ],
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js', 'jsx']/*,
+        modules: [path.join(__dirname, './'), path.join(__dirname, 'node_modules') ]*/
     },
     output: {
         path: path.resolve(__dirname, './dist'),

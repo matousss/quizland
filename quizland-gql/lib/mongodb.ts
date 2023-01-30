@@ -1,5 +1,7 @@
 import {Collection, MongoClient, ObjectId} from "mongodb";
-import type {User, Account} from "@/__generated__/resolvers-types";
+import {DB_URL} from "./config";
+
+import type {User, Account} from "../src/__generated__/resolvers-types";
 
 
 const AUTH_COLLECTIONS = {
@@ -83,7 +85,7 @@ const getAuthDB = (client: MongoClient): AuthDB => {
     };
 }
 
-const mongoClient = new MongoClient(process.env.DB_URL || 'mongodb://localhost:27017');
+const mongoClient = new MongoClient(DB_URL || 'mongodb://localhost:27017');
 export default mongoClient;
 export {getAuthDB, to__id, AUTH_DB, AUTH_COLLECTIONS}
 export type {AuthDB}

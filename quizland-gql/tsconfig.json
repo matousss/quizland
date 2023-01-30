@@ -2,33 +2,28 @@
   "compilerOptions": {
     "rootDirs": ["src"],
     "outDir": "dist",
-    "lib": ["es2020"],
-    "target": "es2020",
-    "module": "esnext",
+    "lib": ["ES6"],
+    "target": "ES6",
+    "module": "ESNext",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "types": ["node"],
-    "paths": {
-      "@/*": ["./src/*"],
-      "@lib/*": ["./lib/*"]
-    },
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     "schema.graphql",
-    "src/__generated__",
+    "src/__generated__"
   ],
   "exclude": [
-    "node_modules",
+    "node_modules"
   ],
   "watchOptions": {
     "watchFile": "useFsEvents",
     "watchDirectory": "useFsEvents",
     "fallbackPolling": "dynamicPriority",
     "synchronousWatchDirectory": true,
-    "excludeDirectories": ["**/node_modules", "dist"],
-
+    "excludeDirectories": ["**/node_modules", "dist"]
   }
 }

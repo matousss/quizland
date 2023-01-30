@@ -1,11 +1,11 @@
-import {ProviderType, User} from "@/__generated__/resolvers-types";
-import {to__id} from "@lib/mongodb";
-import {AuthDB} from "@lib/mongodb";
+import {ProviderType, User} from "../../../__generated__/resolvers-types";
+import {to__id} from "../../../../lib/mongodb";
+import {AuthDB} from "../../../../lib/mongodb";
 
 import {QueryResolvers} from "../types";
-import {oauth2Client} from "@/auth/providers/Google";
+import {oauth2Client} from "../../../auth/providers/Google";
 import {TokenPayload} from "google-auth-library";
-import {generateJWT} from "@/auth/util";
+import {generateJWT} from "../../../auth/util";
 
 
 const _id = to__id;

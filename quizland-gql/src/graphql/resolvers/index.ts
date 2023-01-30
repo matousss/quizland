@@ -1,5 +1,5 @@
 import type {MongoClient} from "mongodb"
-import {getAuthResolvers} from "@/graphql/resolvers/auth";
+import {getAuthResolvers} from "./auth";
 
 
 export const getResolvers = (client: MongoClient) => {

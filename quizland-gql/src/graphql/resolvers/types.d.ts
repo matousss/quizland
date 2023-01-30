@@ -1,4 +1,4 @@
-import type {Context} from "@/apollo";
+import type {Context} from "src/apollo";
 import type {GraphQLResolveInfo} from "graphql/type";
 
 interface QueryResolvers {

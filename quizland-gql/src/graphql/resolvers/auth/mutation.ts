@@ -1,6 +1,6 @@
-import type {CreateUserInput, User} from "@/__generated__/resolvers-types";
-import type {AuthDB} from "@lib/mongodb";
-import {to__id} from "@lib/mongodb";
+import type {CreateUserInput, User} from "../../../__generated__/resolvers-types";
+import type {AuthDB} from "../../../../lib/mongodb";
+import {to__id} from "../../../../lib/mongodb";
 
 const _id = to__id;
 export const getMutationResolvers = (db: AuthDB) => ({

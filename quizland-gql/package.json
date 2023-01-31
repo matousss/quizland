@@ -19,7 +19,7 @@
     "graphql-tools": "^8.3.16",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.13.0",
-    "quizland-gql": "1.0.0"
+    "quizland-gql": "file:../quizland-gql"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.16.1",
@@ -30,6 +30,7 @@
     "nodemon": "^2.0.4",
     "resolve-tspaths": "^0.8.3",
     "ts-loader": "^9.4.2",
+    "ts-node": "^10.9.1",
     "tsc-alias": "^1.8.2",
     "tspath": "^2.6.8",
     "typescript": "^4.9.4",

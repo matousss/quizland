@@ -71,6 +71,9 @@ export type CardSetOwnerArgs = {
 
 export type CreateCardSetInput = {
   cards?: InputMaybe<Array<InputMaybe<CardInput>>>;
+  description?: InputMaybe<Scalars['String']>;
+  folder?: InputMaybe<Scalars['ID']>;
+  name: Scalars['String'];
 };
 
 export type CreateUserInput = {
@@ -110,9 +113,11 @@ export type ItemOwnerArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   addCard?: Maybe<Scalars['Boolean']>;
+  connectAccount?: Maybe<Scalars['Boolean']>;
   createCardSet?: Maybe<Scalars['Boolean']>;
   createUser?: Maybe<User>;
   deleteUser?: Maybe<Scalars['Void']>;
+  registerUser?: Maybe<Token>;
   removeCard?: Maybe<Scalars['Boolean']>;
   removeCardSet?: Maybe<Scalars['Boolean']>;
   updateUser?: Maybe<User>;
@@ -121,6 +126,11 @@ export type Mutation = {
 
 export type MutationAddCardArgs = {
   input?: InputMaybe<AddCardInput>;
+};
+
+
+export type MutationConnectAccountArgs = {
+  input: AuthenticateUserInput;
 };
 
 
@@ -136,6 +146,11 @@ export type MutationCreateUserArgs = {
 
 export type MutationDeleteUserArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationRegisterUserArgs = {
+  input: AuthenticateUserInput;
 };
 
 
@@ -171,7 +186,7 @@ export type PermitUserArgs = {
 
 export enum ProviderType {
   Discord = 'DISCORD',
-  Credentials = 'CREDENTIALS',
+  Email = 'EMAIL',
   Facebook = 'FACEBOOK',
   Github = 'GITHUB',
   Google = 'GOOGLE',
@@ -447,9 +462,11 @@ export type ItemResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   addCard?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationAddCardArgs>>;
+  connectAccount?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationConnectAccountArgs, 'input'>>;
   createCardSet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationCreateCardSetArgs>>;
   createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   deleteUser?: Resolver<Maybe<ResolversTypes['Void']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
+  registerUser?: Resolver<Maybe<ResolversTypes['Token']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
   removeCard?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationRemoveCardArgs>>;
   removeCardSet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationRemoveCardSetArgs>>;
   updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;

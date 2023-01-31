@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDirs": ["src"],
+    "rootDirs": ["src", "lib"],
     "outDir": "dist",
     "lib": ["ES6"],
     "target": "ES6",

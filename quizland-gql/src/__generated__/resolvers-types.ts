@@ -171,7 +171,7 @@ export type PermitUserArgs = {
 
 export enum ProviderType {
   Discord = 'DISCORD',
-  Email = 'EMAIL',
+  Credentials = 'CREDENTIALS',
   Facebook = 'FACEBOOK',
   Github = 'GITHUB',
   Google = 'GOOGLE',

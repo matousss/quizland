@@ -1,4 +1,4 @@
-import type {CreateUserInput, User} from "../../../__generated__/resolvers-types";
+import type {AuthenticateUserInput, CreateUserInput, User} from "../../../__generated__/resolvers-types";
 import type {AuthDB} from "../../../../lib/mongodb";
 import {to__id} from "../../../../lib/mongodb";
 
@@ -21,5 +21,8 @@ export const getMutationResolvers = (db: AuthDB) => ({
                 db.Users.deleteOne({_id: objId})
             ]
         );
+    },
+    registerUser: async (args: any, {input}: { input: AuthenticateUserInput }) => {
+
     }
 })

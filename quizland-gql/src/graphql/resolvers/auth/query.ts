@@ -3,10 +3,8 @@ import {to__id} from "../../../../lib/mongodb";
 import {AuthDB} from "../../../../lib/mongodb";
 
 import {QueryResolvers} from "../types";
-import {oauth2Client} from "../../../auth/providers/Google";
-import {TokenPayload} from "google-auth-library";
 import {generateJWT} from "../../../auth/util";
-
+import {resolvers as auth_resolvers} from "../../../auth";
 
 const _id = to__id;
 
@@ -29,28 +27,7 @@ export const getQueryResolvers = (db: AuthDB): QueryResolvers => ({
         let signup = false;
         let userInfo = null;
 
-        switch (provider) {
-            case ProviderType.Google:
-                let ticket
-                let payload: TokenPayload;
-                console.log({code})
-                try {
-                    ticket = await oauth2Client.verifyIdToken(
-                        {
-                            idToken: code,
-                            audience: process.env.GOOGLE_CLIENT_ID,
-                        }
-                    )
-                    console.log({ticket})
-                    payload = ticket.getPayload() as TokenPayload;
-                } catch (e) {
-                    return null;
-                }
-
-                provider_account_id = ticket.getUserId();
-            default:
-                return null;
-        }
+        userInfo = await auth_resolvers[provider](code);
 
         let account = await db.Accounts.findOne({provider_account_id: provider_account_id});
 

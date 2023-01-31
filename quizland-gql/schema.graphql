@@ -1,7 +1,7 @@
 scalar DateTime
 scalar Void
 
-directive @permitted (required: Permission) on FIELD_DEFINITION
+directive @permitted (required: Permission) on FIELD_DEFINITION | QUERY | MUTATION # available only for user with permission
 directive @private on FIELD_DEFINITION | QUERY # visible only to user who owns the item
 directive @server on FIELD_DEFINITION | QUERY | MUTATION | OBJECT | INPUT_FIELD_DEFINITION # only for server side
 directive @internal on FIELD_DEFINITION | OBJECT # only for internal usage eg. data structure, only relevant for database
@@ -9,8 +9,8 @@ directive @internal on FIELD_DEFINITION | OBJECT # only for internal usage eg. d
 type Query {
     # users
     getUsers: [User] @server
-    getUserByID(id: ID!): User
-    getUserByEmail(email: String!): User
+    getUserByID(id: ID!): User @server
+    getUserByEmail(email: String!): User @server
     getUserByAccount(providerAccountId: ID!, provider: ProviderType!): User @server
     getUser: User @private
 
@@ -27,16 +27,18 @@ type Mutation {
     updateUser(input: UpdateUserInput!): User @private
     deleteUser(id: ID!): Void @private
 
+    registerUser(input: AuthenticateUserInput!): Token
     # accounts
+    connectAccount(input: AuthenticateUserInput!): Boolean @private
 
     # auth
 
 
     # cardSets
-    createCardSet(input: CreateCardSetInput): Boolean
-    removeCardSet(input: RemoveCardSetInput): Boolean
-    addCard(input: AddCardInput): Boolean
-    removeCard(input: RemoveCardInput): Boolean
+    createCardSet(input: CreateCardSetInput): Boolean @permitted(required: M)
+    removeCardSet(input: RemoveCardSetInput): Boolean @permitted(required: M)
+    addCard(input: AddCardInput): Boolean @permitted(required: RW)
+    removeCard(input: RemoveCardInput): Boolean @permitted(required: RW)
 }
 
 input AuthenticateUserInput {
@@ -60,6 +62,9 @@ input CreateUserInput {
 
 input CreateCardSetInput {
     cards: [CardInput]
+    folder: ID
+    name: String!
+    description: String
 }
 
 input RemoveCardSetInput {

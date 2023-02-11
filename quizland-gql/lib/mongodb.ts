@@ -1,4 +1,4 @@
-import {Collection, MongoClient, ObjectId} from "mongodb";
+import {Collection, MongoClient, ObjectId, Db} from "mongodb";
 import {DB_URL} from "./config";
 
 import type {User, Account} from "../src/__generated__/resolvers-types";
@@ -75,13 +75,17 @@ const toMongo = (object: {}) => {
 declare type AuthDB = {
     Users: Collection<User>;
     Accounts: Collection<Account>;
+    client: MongoClient;
+    db: Db
 };
 const getAuthDB = (client: MongoClient): AuthDB => {
     const _db = client.db(AUTH_DB);
     const c = AUTH_COLLECTIONS;
     return {
         Users: _db.collection<User>(c.USERS),
-        Accounts: _db.collection<Account>(c.ACCOUNTS)
+        Accounts: _db.collection<Account>(c.ACCOUNTS),
+        client: client,
+        db: _db
     };
 }
 

@@ -1,7 +1,7 @@
 import Script from "next/script";
 import React, {FC} from "react";
 
-export const GoogleButton: FC<{context?: "signin"|"signup"}> = ({context = "signin"}) => {
+export const GoogleButton: FC<{context?: string}> = ({context = ""}) => {
     return <>
         <Script src="https://accounts.google.com/gsi/client" strategy={"lazyOnload"}></Script>
         <div id="g_id_onload"

@@ -1,4 +1,4 @@
-import {OAuth2Client} from "google-auth-library";
+import {LoginTicket, OAuth2Client} from "google-auth-library";
 import {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI} from "../../../lib/config";
 
 import type {TokenPayload} from "google-auth-library"
@@ -26,7 +26,7 @@ const default_options = {
 }
 
 const resolve_code = async (code: string) => {
-    let ticket
+    let ticket: LoginTicket
     let payload: TokenPayload;
     console.log({code})
     try {
@@ -36,11 +36,18 @@ const resolve_code = async (code: string) => {
                 audience: process.env.GOOGLE_CLIENT_ID,
             }
         )
-        console.log({ticket})
         payload = ticket.getPayload() as TokenPayload;
     } catch (e) {
         console.log("Error while resolving google auth", e)
         return null;
+    }
+    return {
+        id: payload.sub,
+        email: payload.email,
+        emailVerified: payload.email_verified,
+        surname: payload.given_name,
+        lastname: payload.family_name,
+        picture: payload.picture
     }
 }
 

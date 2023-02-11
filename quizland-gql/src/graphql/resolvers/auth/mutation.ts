@@ -1,6 +1,10 @@
-import type {AuthenticateUserInput, CreateUserInput, User} from "../../../__generated__/resolvers-types";
+import type {Account, AuthenticateUserInput, CreateUserInput, User} from "../../../__generated__/resolvers-types";
 import type {AuthDB} from "../../../../lib/mongodb";
 import {to__id} from "../../../../lib/mongodb";
+import {resolvers as auth_resolvers} from "../../../auth";
+import {generateJWT} from "../../../auth/util";
+import {GraphQLError} from "graphql/error";
+import {DuplicitEmailError, DuplicitAccountError, ERROR_CODES, ProviderUserNotFound} from "../../../../lib/graphql/errors";
 
 const _id = to__id;
 export const getMutationResolvers = (db: AuthDB) => ({
@@ -22,7 +26,65 @@ export const getMutationResolvers = (db: AuthDB) => ({
             ]
         );
     },
-    registerUser: async (args: any, {input}: { input: AuthenticateUserInput }) => {
+    registerUser: async (args: any, {provider, code, state}) => {
+        let externalUser;
+        try {
+            externalUser = await auth_resolvers[provider](code);
+        } catch (e) {
+            console.log(e)
+        }
+        if (!externalUser) {
+            throw new ProviderUserNotFound(provider)
+        }
 
+        let user: User = await db.Users.findOne({email: externalUser.email});
+
+        if (user) throw new DuplicitEmailError(externalUser.email)
+
+        let account: Account = await db.Accounts.findOne({providerAccountId: externalUser.id});
+
+        if (account) throw new DuplicitAccountError()
+
+        console.log({externalUser})
+
+        user = {
+            email: externalUser.email,
+            surname: externalUser.surname,
+            lastname: externalUser.lastname,
+
+            emailVerified: externalUser.emailVerified
+        }
+        if (externalUser.image) {
+            user.image = externalUser.image;
+        }
+
+        account = {
+            provider: provider,
+            providerAccountId: externalUser.id
+        }
+        let user_id
+        let session = await db.client.startSession();
+        let response;
+        try {
+            response = await session.withTransaction(async () => {
+                console.log(user)
+                let user_result = await db.Users.insertOne(user, {session});
+                user_id = user_result.insertedId;
+                // @ts-ignore
+                account.user = user_id;
+                await db.Accounts.insertOne(account, {session});
+            })
+        } finally {
+            session.endSession()
+        }
+
+        console.log(response)
+        // if (session.acknowledged === false) {
+        //     throw new GraphQLError("Could not create account", {code: ERROR_CODES.WRITE_ERROR})
+        // }
+
+        if (response.ok) {
+            return generateJWT(user_id)
+        }
     }
 })

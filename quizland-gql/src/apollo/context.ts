@@ -44,3 +44,4 @@ const resolveContext = async (mongo: MongoClient, req: IncomingMessage, res: Ser
 
 
 export type {Context};
+export {resolveContext}

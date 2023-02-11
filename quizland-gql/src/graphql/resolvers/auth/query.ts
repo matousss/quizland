@@ -23,25 +23,22 @@ export const getQueryResolvers = (db: AuthDB): QueryResolvers => ({
         return await db.Users.findOne({email: email});
     },
     authenticateUser: async (_: any, {provider, code, state}) => {
-        let provider_account_id = null
-        let signup = false;
-        let userInfo = null;
-
-        userInfo = await auth_resolvers[provider](code);
-
-        let account = await db.Accounts.findOne({provider_account_id: provider_account_id});
-
-        if (signup) {
-
-
-        }
-        else if (!account) {
+        let externalUser = await auth_resolvers[provider](code);
+        if (!externalUser) {
             return null;
         }
 
+        console.log("asking for account")
+        let account = await db.Accounts.findOne({providerAccountId: externalUser.id});
 
+        if (!account) {
+            return null;
+        }
 
         let jwt = generateJWT(account.user);
+
+        return jwt
+
     }
 })
 

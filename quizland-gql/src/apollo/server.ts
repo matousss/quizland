@@ -2,7 +2,7 @@ import mongoClient from "../../lib/mongodb";
 import {getResolvers, typeDefs} from "../graphql";
 import {ApolloServer} from "@apollo/server";
 import {IncomingMessage, ServerResponse} from "http";
-import {Context, resolveContext} from "./context";
+import {Context, resolveContext} from "../graphql/context";
 import {GraphQLFormattedError} from "graphql";
 
 const getServer = async () => {

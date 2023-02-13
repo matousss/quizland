@@ -1,4 +1,4 @@
-import {Collection, MongoClient, ObjectId, Db} from "mongodb";
+import {Collection, MongoClient, ObjectId, Db, ServerApiVersion} from "mongodb";
 import {DB_URL} from "./config";
 
 import type {User, Account} from "../src/__generated__/resolvers-types";
@@ -11,10 +11,6 @@ const AUTH_COLLECTIONS = {
     //tokens: "tokens",
 };
 const AUTH_DB: string = 'auth';
-
-
-
-
 
 
 const setupDB = (connection: MongoClient) => (async () => {
@@ -36,12 +32,10 @@ const toJS = (object: {}) => {
         if (key === "_id") {
             // @ts-ignore
             newObject.id = value.toHexString();
-        }
-        else if (key === "userId") {
+        } else if (key === "userId") {
             // @ts-ignore
             newObject[key] = value.toHexString();
-        }
-        else {
+        } else {
             // @ts-ignore
             newObject[key] = value;
         }
@@ -58,8 +52,8 @@ const to__id = (id: string | null | void) => {
 
 const toMongo = (object: {}) => {
 
-        const newObject = {
-            // @ts-ignore
+    const newObject = {
+        // @ts-ignore
         _id: to__id(object.id)
     };
     for (const key in object) {
@@ -89,7 +83,9 @@ const getAuthDB = (client: MongoClient): AuthDB => {
     };
 }
 
-const mongoClient = new MongoClient(DB_URL || 'mongodb://localhost:27017');
+const mongoClient = new MongoClient(DB_URL || 'mongodb://localhost:27017',
+    // @ts-ignore
+    {useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1});
 export default mongoClient;
 export {getAuthDB, to__id, AUTH_DB, AUTH_COLLECTIONS}
 export type {AuthDB}

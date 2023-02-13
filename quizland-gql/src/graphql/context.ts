@@ -5,11 +5,12 @@ import {User} from "../__generated__/resolvers-types";
 import {verifyJWT, JWTPayload} from "../auth/util";
 import {AUTH_COLLECTIONS, AUTH_DB, to__id} from "../../lib/mongodb";
 
+
 interface Context extends BaseContext {
     user: {} | null;
 }
 
-const resolveContext = async (mongo: MongoClient, req: IncomingMessage, res: ServerResponse): Promise<Context> => {
+const resolveContext = async (mongo: MongoClient, req: IncomingMessage | Request, res?: ServerResponse): Promise<Context> => {
     const getUserFromRequest = async (): Promise<User | null> => {
         // extract token
         let headers = req.headers;

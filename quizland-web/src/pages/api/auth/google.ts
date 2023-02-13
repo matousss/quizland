@@ -4,6 +4,7 @@ import {gql} from "@apollo/client";
 
 import {ERROR_CODES} from "quizland-gql";
 import { useSession } from "next-auth/react";
+import Script from "next/script";
 
 const PROVIDER = "GOOGLE"
 
@@ -19,13 +20,11 @@ const Google = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log(res)*/
     let success = res.redirect(200, "/account")
 
-    const { data: session } = useSession()
-
-    if (session) return success
 
     if (!req.body.credential) {
         // todo add redirect
-        return res.status(400).json({error: "No credential provided"})
+       // return <Script>res.redirect(400, "/login").send({error: "No credential provided"})</Scirpt>
+        return
     }
 
     const variables = {
@@ -52,12 +51,12 @@ const Google = async (req: NextApiRequest, res: NextApiResponse) => {
         })}
         catch (e) {
             console.log(e)
-            return res.redirect(400, "/")
+            res.redirect(400, "/").send({error: "Failed to register user"})
         }
     }
     // .setItem('TOKEN', response.data.token)
 
-    return success
+    success.send({})
 }
 
 export default Google

@@ -1,10 +1,9 @@
-import type {Account, AuthenticateUserInput, CreateUserInput, User} from "../../../__generated__/resolvers-types";
+import type {Account, CreateUserInput, User} from "../../../__generated__/resolvers-types";
 import type {AuthDB} from "../../../../lib/mongodb";
 import {to__id} from "../../../../lib/mongodb";
 import {resolvers as auth_resolvers} from "../../../auth";
 import {generateJWT} from "../../../auth/util";
-import {GraphQLError} from "graphql/error";
-import {DuplicitEmailError, DuplicitAccountError, ERROR_CODES, ProviderUserNotFound} from "../../../../lib/graphql/errors";
+import {DuplicitEmailError, DuplicitAccountError, ERROR_CODES, ProviderUserNotFound} from "../../../../lib/graphql/error";
 
 const _id = to__id;
 export const getMutationResolvers = (db: AuthDB) => ({
@@ -17,7 +16,6 @@ export const getMutationResolvers = (db: AuthDB) => ({
         return await db.Users.updateOne({_id: _id(user.id)}, {$set: user});
     },
     deleteUser: async ({id}: { id: string }) => {
-        console.log({id});
         let objId = _id(id);
         await Promise.all([
                 db.Accounts.deleteMany({userId: objId}),
@@ -67,18 +65,17 @@ export const getMutationResolvers = (db: AuthDB) => ({
         let response;
         try {
             response = await session.withTransaction(async () => {
-                console.log(user)
                 let user_result = await db.Users.insertOne(user, {session});
                 user_id = user_result.insertedId;
                 // @ts-ignore
                 account.user = user_id;
+                console.log("inserting account")
                 await db.Accounts.insertOne(account, {session});
             })
         } finally {
             session.endSession()
         }
 
-        console.log(response)
         // if (session.acknowledged === false) {
         //     throw new GraphQLError("Could not create account", {code: ERROR_CODES.WRITE_ERROR})
         // }

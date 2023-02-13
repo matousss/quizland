@@ -22,7 +22,7 @@ export const getQueryResolvers = (db: AuthDB): QueryResolvers => ({
     getUserByEmail: async (_, {email}, ctx) => {
         return await db.Users.findOne({email: email});
     },
-    authenticateUser: async (_: any, {provider, code, state}) => {
+    authenticateUser: async (_: any, {provider, code}) => {
         let externalUser = await auth_resolvers[provider](code);
         if (!externalUser) {
             return null;

@@ -10,16 +10,16 @@ import client from "src/apollo_client";
 
 
 
-function MyApp({Component, pageProps}: AppProps) {
+function MyApp({Component, pageProps: {session, ...pageProps}}: AppProps) {
 
     // @ts-ignore
-    return <>
+    return <SessionProvider session={session}>
         <Head>
 
 
         </Head>
         <Component {...pageProps} />
-    </>
+    </SessionProvider>
 
 }
 export default await MyApp

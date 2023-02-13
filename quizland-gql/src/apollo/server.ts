@@ -3,6 +3,7 @@ import {getResolvers, typeDefs} from "../graphql";
 import {ApolloServer} from "@apollo/server";
 import {IncomingMessage, ServerResponse} from "http";
 import {Context, resolveContext} from "./context";
+import {GraphQLFormattedError} from "graphql";
 
 const getServer = async () => {
     console.log('Connecting to mongo...');
@@ -15,7 +16,18 @@ const getServer = async () => {
     }
     console.log('Client connected to mongo')
     const resolvers = getResolvers(connection);
-    const apolloServer = new ApolloServer<Context>({typeDefs: typeDefs, resolvers: resolvers});
+    const apolloServer = new ApolloServer<Context>(
+        {
+            typeDefs: typeDefs,
+            resolvers: resolvers,
+            formatError: (formatted: GraphQLFormattedError, error) => {
+                return {
+                    message: formatted.message,
+                    code: formatted.extensions
+                }
+            }
+        }
+    );
     // noinspection JSUnusedGlobalSymbols
     return {
         server: apolloServer,
@@ -26,6 +38,7 @@ const getServer = async () => {
             //     introspection: true,
             //     credentials: true
             // }
+
         }
     }
 }

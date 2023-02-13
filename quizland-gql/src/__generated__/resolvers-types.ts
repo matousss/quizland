@@ -13,17 +13,14 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
+  Token: any;
   Void: any;
 };
 
 export type Account = {
   __typename?: 'Account';
-  accessToken?: Maybe<Scalars['String']>;
-  expiresAt?: Maybe<Scalars['DateTime']>;
-  idToken?: Maybe<Scalars['String']>;
   provider?: Maybe<ProviderType>;
   providerAccountId?: Maybe<Scalars['String']>;
-  refreshToken?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
@@ -36,11 +33,6 @@ export type AddCardInput = {
   card: CardInput;
   id: Scalars['ID'];
   index: Scalars['Int'];
-};
-
-export type AuthenticateUserInput = {
-  provider: ProviderType;
-  secret: Scalars['String'];
 };
 
 export type Card = {
@@ -113,11 +105,11 @@ export type ItemOwnerArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   addCard?: Maybe<Scalars['Boolean']>;
-  connectAccount?: Maybe<Scalars['Boolean']>;
+  connectAccount?: Maybe<Scalars['Void']>;
   createCardSet?: Maybe<Scalars['Boolean']>;
   createUser?: Maybe<User>;
   deleteUser?: Maybe<Scalars['Void']>;
-  registerUser?: Maybe<Token>;
+  registerUser?: Maybe<Scalars['Token']>;
   removeCard?: Maybe<Scalars['Boolean']>;
   removeCardSet?: Maybe<Scalars['Boolean']>;
   updateUser?: Maybe<User>;
@@ -130,7 +122,8 @@ export type MutationAddCardArgs = {
 
 
 export type MutationConnectAccountArgs = {
-  input: AuthenticateUserInput;
+  code: Scalars['String'];
+  provider: ProviderType;
 };
 
 
@@ -150,7 +143,8 @@ export type MutationDeleteUserArgs = {
 
 
 export type MutationRegisterUserArgs = {
-  input: AuthenticateUserInput;
+  code: Scalars['String'];
+  provider: ProviderType;
 };
 
 
@@ -197,7 +191,7 @@ export enum ProviderType {
 
 export type Query = {
   __typename?: 'Query';
-  authenticateUser?: Maybe<Token>;
+  authenticateUser?: Maybe<Scalars['Token']>;
   getCardSet?: Maybe<CardSet>;
   getUser?: Maybe<User>;
   getUserByAccount?: Maybe<User>;
@@ -242,12 +236,6 @@ export type RemoveCardSetInput = {
   id: Scalars['ID'];
 };
 
-export type Token = {
-  __typename?: 'Token';
-  expires?: Maybe<Scalars['DateTime']>;
-  token?: Maybe<Scalars['String']>;
-};
-
 export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']>;
   emailVerified?: InputMaybe<Scalars['DateTime']>;
@@ -262,8 +250,10 @@ export type User = {
   email: Scalars['String'];
   emailVerified?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  tokens?: Maybe<Array<Maybe<Token>>>;
+  image?: Maybe<Scalars['String']>;
+  lastname?: Maybe<Scalars['String']>;
+  surname?: Maybe<Scalars['String']>;
+  tokens?: Maybe<Array<Maybe<Scalars['Token']>>>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -338,7 +328,6 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Account: ResolverTypeWrapper<Account>;
   AddCardInput: AddCardInput;
-  AuthenticateUserInput: AuthenticateUserInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Card: ResolverTypeWrapper<Card>;
   CardInput: CardInput;
@@ -358,7 +347,7 @@ export type ResolversTypes = ResolversObject<{
   RemoveCardInput: RemoveCardInput;
   RemoveCardSetInput: RemoveCardSetInput;
   String: ResolverTypeWrapper<Scalars['String']>;
-  Token: ResolverTypeWrapper<Token>;
+  Token: ResolverTypeWrapper<Scalars['Token']>;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
   Void: ResolverTypeWrapper<Scalars['Void']>;
@@ -368,7 +357,6 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Account: Account;
   AddCardInput: AddCardInput;
-  AuthenticateUserInput: AuthenticateUserInput;
   Boolean: Scalars['Boolean'];
   Card: Card;
   CardInput: CardInput;
@@ -386,7 +374,7 @@ export type ResolversParentTypes = ResolversObject<{
   RemoveCardInput: RemoveCardInput;
   RemoveCardSetInput: RemoveCardSetInput;
   String: Scalars['String'];
-  Token: Token;
+  Token: Scalars['Token'];
   UpdateUserInput: UpdateUserInput;
   User: User;
   Void: Scalars['Void'];
@@ -411,12 +399,8 @@ export type ServerDirectiveArgs = { };
 export type ServerDirectiveResolver<Result, Parent, ContextType = any, Args = ServerDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type AccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['Account'] = ResolversParentTypes['Account']> = ResolversObject<{
-  accessToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  expiresAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  idToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   provider?: Resolver<Maybe<ResolversTypes['ProviderType']>, ParentType, ContextType>;
   providerAccountId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  refreshToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<AccountUserArgs, 'id'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -462,11 +446,11 @@ export type ItemResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   addCard?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationAddCardArgs>>;
-  connectAccount?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationConnectAccountArgs, 'input'>>;
+  connectAccount?: Resolver<Maybe<ResolversTypes['Void']>, ParentType, ContextType, RequireFields<MutationConnectAccountArgs, 'code' | 'provider'>>;
   createCardSet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationCreateCardSetArgs>>;
   createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   deleteUser?: Resolver<Maybe<ResolversTypes['Void']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
-  registerUser?: Resolver<Maybe<ResolversTypes['Token']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
+  registerUser?: Resolver<Maybe<ResolversTypes['Token']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'code' | 'provider'>>;
   removeCard?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationRemoveCardArgs>>;
   removeCardSet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationRemoveCardSetArgs>>;
   updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
@@ -488,18 +472,18 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
 }>;
 
-export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{
-  expires?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
+export interface TokenScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Token'], any> {
+  name: 'Token';
+}
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   accounts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Account']>>>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   emailVerified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  surname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tokens?: Resolver<Maybe<Array<Maybe<ResolversTypes['Token']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -518,7 +502,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   Permit?: PermitResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  Token?: TokenResolvers<ContextType>;
+  Token?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   Void?: GraphQLScalarType;
 }>;

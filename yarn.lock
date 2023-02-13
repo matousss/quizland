@@ -1939,6 +1939,13 @@
   dependencies:
     glob "7.1.7"
 
+"@next/eslint-plugin-next@^13.1.6":
+  version "13.1.6"
+  resolved "https://registry.yarnpkg.com/@next/eslint-plugin-next/-/eslint-plugin-next-13.1.6.tgz#ad8be22dd3d8aee9a9bd9a2507e2c55a2f7ebdd9"
+  integrity sha512-o7cauUYsXjzSJkay8wKjpKJf2uLzlggCsGUkPu3lP09Pv97jYlekTC20KJrjQKmSv5DXV0R/uks2ZXhqjNkqAw==
+  dependencies:
+    glob "7.1.7"
+
 "@next/swc-android-arm-eabi@13.1.6":
   version "13.1.6"
   resolved "https://registry.yarnpkg.com/@next/swc-android-arm-eabi/-/swc-android-arm-eabi-13.1.6.tgz#d766dfc10e27814d947b20f052067c239913dbcc"
@@ -6780,7 +6787,7 @@ quick-lru@^5.1.1:
     graphql-tools "^8.3.16"
     jsonwebtoken "^9.0.0"
     mongodb "^4.13.0"
-    quizland-gql "file:../../../../home/matousss/.cache/yarn/v6/npm-quizland-gql-1.0.0-c78be5b3-bb42-481c-92a2-c4d93f39ee8f-1676120195179/node_modules/quizland-gql"
+    quizland-gql "file:../../AppData/Local/Yarn/Cache/v6/npm-quizland-gql-1.0.0-573926c9-b515-4b1e-bc5c-3d02b95e9f87-1676271131042/node_modules/quizland-gql"
 
 radio-symbol@^2.0.0:
   version "2.0.0"

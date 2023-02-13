@@ -28,7 +28,6 @@ const default_options = {
 const resolve_code = async (code: string) => {
     let ticket: LoginTicket
     let payload: TokenPayload;
-    console.log({code})
     try {
         ticket = await oauth2Client.verifyIdToken(
             {

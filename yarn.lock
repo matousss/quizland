@@ -6787,7 +6787,7 @@ quick-lru@^5.1.1:
     graphql-tools "^8.3.16"
     jsonwebtoken "^9.0.0"
     mongodb "^4.13.0"
-    quizland-gql "file:../../AppData/Local/Yarn/Cache/v6/npm-quizland-gql-1.0.0-573926c9-b515-4b1e-bc5c-3d02b95e9f87-1676271131042/node_modules/quizland-gql"
+    quizland-gql "file:C:/Users/Jarda/AppData/Local/Yarn/Cache/v6/npm-quizland-gql-1.0.0-39a1c797-6265-4798-a3a8-ce1962879e1d-1676315202641/node_modules/quizland-gql"
 
 radio-symbol@^2.0.0:
   version "2.0.0"

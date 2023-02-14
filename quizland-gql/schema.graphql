@@ -14,7 +14,8 @@ type Query {
     getUserByAccount(providerAccountId: ID!, provider: ProviderType!): User @server
     getUser: User @private
 
-    authenticateUser(provider: ProviderType!, code: String!): Token
+    authenticateUser(provider: ProviderType!, code: String!): AuthenticateUserPayload
+
 
     # cardSets
     getCardSet(id: ID!): CardSet
@@ -39,6 +40,11 @@ type Mutation {
     removeCardSet(input: RemoveCardSetInput): Boolean @permitted(required: M)
     addCard(input: AddCardInput): Boolean @permitted(required: RW)
     removeCard(input: RemoveCardInput): Boolean @permitted(required: RW)
+}
+
+type AuthenticateUserPayload {
+    user: User
+    token: Token
 }
 
 input UpdateUserInput {
@@ -149,13 +155,12 @@ type Account @server {
 
 type User {
     id: ID
+    username: String
     surname: String @private
     lastname: String @private
     email: String!
-    emailVerified: DateTime @server
     image: String
     accounts: [Account] @private
-    tokens: [Token] @server
 }
 
 scalar Token

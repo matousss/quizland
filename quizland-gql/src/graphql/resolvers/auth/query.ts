@@ -34,10 +34,12 @@ export const getQueryResolvers = (db: AuthDB): QueryResolvers => ({
         if (!account) {
             return null;
         }
+        console.log(account)
+        let user = await db.Users.findOne({_id: account.user});
 
         let jwt = generateJWT(account.user);
 
-        return jwt
+        return {token: jwt, user: user}
 
     }
 })

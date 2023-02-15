@@ -81,7 +81,11 @@ export const getMutationResolvers = (db: AuthDB) => ({
         // }
 
         if (response.ok) {
-            return generateJWT(user_id)
+            return {
+                token: generateJWT(user_id),
+                user: user
+            }
         }
+
     }
 })

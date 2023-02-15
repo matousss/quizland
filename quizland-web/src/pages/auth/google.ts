@@ -9,7 +9,16 @@ import Script from "next/script";
 const PROVIDER = "GOOGLE"
 
 const AUTH_QUERY = gql`query Query($provider: ProviderType!, $code: String!) {
-    token: authenticateUser(provider: $provider, code: $code)
+    authenticateUser(provider: $provider, code: $code) {
+        token
+        user {
+            id
+            username
+            surname
+            lastname
+            email
+        }
+    }
 }`
 
 const REGISTER_MUTATION = gql`mutation Mutation($provider: ProviderType!, $code: String!) {
@@ -56,7 +65,7 @@ const Google = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     // .setItem('TOKEN', response.data.token)
 
-    success.send({})
+    Router.push('/account')
 }
 
 export default Google

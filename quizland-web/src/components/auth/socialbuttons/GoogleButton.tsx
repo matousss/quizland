@@ -1,5 +1,6 @@
 import Script from "next/script";
 import React, {FC} from "react";
+import * as process from "process";
 
 export const GoogleButton: FC<{context?: string}> = ({context = ""}) => {
     return <>
@@ -8,7 +9,7 @@ export const GoogleButton: FC<{context?: string}> = ({context = ""}) => {
              data-client_id={process.env.GOOGLE_CLIENT_ID}
              data-context={context}
              data-ux_mode="redirect"
-             data-login_uri="http://localhost:3000/api/auth/google"
+             data-login_uri={process.env.GOOGLE_REDIRECT_URL}
              data-itp_support="true">
         </div>
 

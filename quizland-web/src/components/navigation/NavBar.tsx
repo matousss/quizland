@@ -10,6 +10,7 @@ interface Item {
     href: string
 
 }
+
 interface Submenu {
     subMenu?: Array<Item>
 }
@@ -51,32 +52,42 @@ const ToggleButton = ({open}: { open: boolean }) => (
     </Disclosure.Button>
 )
 
+const SmallNavBarItem: FC<{ active: boolean } & Item> = ({active, ...item}) => (<Disclosure.Button
+    key={item.label}
+    as={Link}
+    href={item.href}
+    className={
+        active ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' + 'block px-3 py-2 rounded-md text-base font-medium'
+    }
+    aria-current={active ? 'page' : undefined}
+>
+    {item.label}
+</Disclosure.Button>)
 
 // menu for mobile
 const SmallNavBar = ({pathName}: { pathName: string | null }) => (
-    <Disclosure.Panel className={"sm:hidden"}>
-        <div className={"space-y-1 px-2 pt-2 pb-3"}>
-            {
-                navigation.map((item) => {
-                    let active = item.href === pathName
+    <Transition
+        enter="transition ease-in duration-150"
+        enterFrom="opacity-0 translate-y-0"
+        enterTo="opacity-100 translate-y-1"
+        leave="transition ease-out duration-150"
+        leaveFrom="opacity-100 translate-y-1"
+        leaveTo="opacity-0 translate-y-0"
+    >
+        <Disclosure.Panel className={"sm:hidden"}>
+            <div className={"space-y-1 px-2 pt-2 pb-3"}>
+                {
+                    navigation.map((item) => {
+                        let active = item.href === pathName
 
-                    return (
-                        <Disclosure.Button
-                            key={item.label}
-                            as={Link}
-                            href={item.href}
-                            className={
-                                active ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' + 'block px-3 py-2 rounded-md text-base font-medium'
-                            }
-                            aria-current={active ? 'page' : undefined}
-                        >
-                            {item.label}
-                        </Disclosure.Button>
-                    )
-                })
-            }
-        </div>
-    </Disclosure.Panel>
+                        return (
+                            <SmallNavBarItem key={item.label} active={active} {...item}/>
+                        )
+                    })
+                }
+            </div>
+        </Disclosure.Panel>
+    </Transition>
 )
 
 const BodyBtn: FC<{
@@ -97,80 +108,52 @@ const BodyBtn: FC<{
     </Link>
 )
 
-const BodyMenu = ({active, items, ...props}: Item & {active: boolean, items: Array<Item>}) => {
-    const timeoutLength = 250
-
-    const buttonRef = useRef(null);
-    let timeout: NodeJS.Timeout
-
-    const enter = (open: boolean) => {
-        clearTimeout(timeout)
-        if (open) return
-        // @ts-ignore
-        buttonRef.current?.click()
-    }
-    const leave = (open: boolean, close: () => void) => {
-        if (open) {
-            timeout = setTimeout(close, timeoutLength)
-        }
-    }
-
+const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Array<Item> }) => {
     return (
-        <Popover className={"realtive m-auto"} >
+        <Popover className={"realtive m-auto"}>
 
-            {({open, close}) => (
-                <>
-                    <BodyBtn onMouseEnter={() => enter(open)}
-                             onMouseLeave={() => leave(open, close)}
-                             active={active}
-                             {...props}>
-                        <ChevronDownIcon
-                            className={'h-5 w-5 ui-open:rotate-180 ui-open:transform transition duration-150 ease-in-out'}
-                            aria-hidden
-                        />
-                        <Popover.Button ref={buttonRef}>
-                        </Popover.Button>
-                    </BodyBtn>
+            <>
+                <Popover.Button as={BodyBtn} active={active} {...props}>
+                    <ChevronDownIcon
+                        className={'h-5 w-5 ui-open:rotate-180 ui-open:transform transition duration-150 ease-in-out'}
+                        aria-hidden
+                    />
+                </Popover.Button>
+                <Transition
+                    enter="transition ease-out duration-150"
+                    enterFrom="opacity-0 translate-y-0"
+                    enterTo="opacity-100 translate-y-1"
+                    leave="transition ease-in duration-150"
+                    leaveFrom="opacity-100 translate-y-1"
+                    leaveTo="opacity-0 translate-y-0"
+                >
 
-                    <Transition
-                        enter="transition ease-out duration-150"
-                        enterFrom="opacity-0 translate-y-0"
-                        enterTo="opacity-100 translate-y-1"
-                        leave="transition ease-in duration-150"
-                        leaveFrom="opacity-100 translate-y-1"
-                        leaveTo="opacity-0 translate-y-0"
-                    >
-
-                        <Popover.Panel>
-                            <div onMouseEnter={() => enter(open)}
-                                 onMouseLeave={() => leave(open, close)}
-                                 className={
-                                'absolute rounded-md text-sm font-medium mt-.5 shadow-md' +
-                                ' bg-gray-800 border-2 border-gray-700 divide-y divide-gray-100 flex flex-col text-gray-300'}
-                            >
+                    <Popover.Panel>
+                        <div
+                            className={
+                                'absolute z-50 rounded-md text-sm font-medium mt-.5 shadow-md bg-gray-800 border-2 border-gray-700 divide-y divide-gray-100 flex flex-col text-gray-300'}
+                        >
 
 
-                                {items.map((item) => {
-                                    return (
-                                        <Link href={item.href} key={item.label}
-                                            className={'px-3 py-2 w-full hover:bg-gray-700 hover:text-white'}
-                                        >
-                                            {item.label}
-                                        </Link>
-                                    )
-                                })}
-                            </div>
+                            {items.map((item) => {
+                                return (
+                                    <Link href={item.href} key={`${props.label}-${item.label}`}
+                                          className={'px-3 py-2 w-full hover:bg-gray-700 hover:text-white'}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                )
+                            })}
+                        </div>
 
-                        </Popover.Panel>
-                    </Transition>
-
-                </>
-            )}
-
+                    </Popover.Panel>
+                </Transition>
+            </>
 
         </Popover>
     )
 }
+
 
 const NavBarBody = ({
                         pathName, open

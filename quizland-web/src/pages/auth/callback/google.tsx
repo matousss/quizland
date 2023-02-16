@@ -1,5 +1,5 @@
 import {GetServerSideProps, NextApiRequest, NextApiResponse, NextPage} from "next";
-import apolloClient from "src/apollo_client";
+import apolloClient from "src/graphql";
 import {gql} from "@apollo/client";
 
 import {ERROR_CODES} from "quizland-gql";
@@ -39,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
     }
 
     if (!body.credential) {
+        console.log("no credential")
         return error_redirect
     }
 
@@ -79,9 +80,9 @@ export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
         sameSite: "strict", secure: true, res: res, req: req
     })
 
-    setCookie("user", JSON.stringify(response.data.authenticateUser.user), {
-        sameSite: "strict", secure: false, res: res, req: req
-    })
+    // setCookie("user", JSON.stringify(response.data.authenticateUser.user), {
+    //     sameSite: "strict", secure: false, res: res, req: req
+    // })
 
     console.log(getCookies({res: res, req: req}))
     return {

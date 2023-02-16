@@ -105,6 +105,12 @@ enum ProviderType {
     EMAIL
 }
 
+enum Role {
+    ADMIN
+    USER
+    SERVER
+}
+
 interface Permit {
     user(id: ID!): User
     permission: Permission
@@ -161,6 +167,7 @@ type User {
     email: String!
     image: String
     accounts: [Account] @private
+    role: Role @server
 }
 
 scalar Token

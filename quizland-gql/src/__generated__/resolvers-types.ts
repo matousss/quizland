@@ -35,6 +35,12 @@ export type AddCardInput = {
   index: Scalars['Int'];
 };
 
+export type AuthenticateUserPayload = {
+  __typename?: 'AuthenticateUserPayload';
+  token?: Maybe<Scalars['Token']>;
+  user?: Maybe<User>;
+};
+
 export type Card = {
   __typename?: 'Card';
   definition?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -191,7 +197,7 @@ export enum ProviderType {
 
 export type Query = {
   __typename?: 'Query';
-  authenticateUser?: Maybe<Scalars['Token']>;
+  authenticateUser?: Maybe<AuthenticateUserPayload>;
   getCardSet?: Maybe<CardSet>;
   getUser?: Maybe<User>;
   getUserByAccount?: Maybe<User>;
@@ -236,6 +242,12 @@ export type RemoveCardSetInput = {
   id: Scalars['ID'];
 };
 
+export enum Role {
+  Admin = 'ADMIN',
+  Server = 'SERVER',
+  User = 'USER'
+}
+
 export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']>;
   emailVerified?: InputMaybe<Scalars['DateTime']>;
@@ -248,12 +260,12 @@ export type User = {
   __typename?: 'User';
   accounts?: Maybe<Array<Maybe<Account>>>;
   email: Scalars['String'];
-  emailVerified?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
   image?: Maybe<Scalars['String']>;
   lastname?: Maybe<Scalars['String']>;
+  role?: Maybe<Role>;
   surname?: Maybe<Scalars['String']>;
-  tokens?: Maybe<Array<Maybe<Scalars['Token']>>>;
+  username?: Maybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -328,6 +340,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Account: ResolverTypeWrapper<Account>;
   AddCardInput: AddCardInput;
+  AuthenticateUserPayload: ResolverTypeWrapper<AuthenticateUserPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Card: ResolverTypeWrapper<Card>;
   CardInput: CardInput;
@@ -346,6 +359,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   RemoveCardInput: RemoveCardInput;
   RemoveCardSetInput: RemoveCardSetInput;
+  Role: Role;
   String: ResolverTypeWrapper<Scalars['String']>;
   Token: ResolverTypeWrapper<Scalars['Token']>;
   UpdateUserInput: UpdateUserInput;
@@ -357,6 +371,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Account: Account;
   AddCardInput: AddCardInput;
+  AuthenticateUserPayload: AuthenticateUserPayload;
   Boolean: Scalars['Boolean'];
   Card: Card;
   CardInput: CardInput;
@@ -402,6 +417,12 @@ export type AccountResolvers<ContextType = any, ParentType extends ResolversPare
   provider?: Resolver<Maybe<ResolversTypes['ProviderType']>, ParentType, ContextType>;
   providerAccountId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<AccountUserArgs, 'id'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type AuthenticateUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthenticateUserPayload'] = ResolversParentTypes['AuthenticateUserPayload']> = ResolversObject<{
+  token?: Resolver<Maybe<ResolversTypes['Token']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -463,7 +484,7 @@ export type PermitResolvers<ContextType = any, ParentType extends ResolversParen
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  authenticateUser?: Resolver<Maybe<ResolversTypes['Token']>, ParentType, ContextType, RequireFields<QueryAuthenticateUserArgs, 'code' | 'provider'>>;
+  authenticateUser?: Resolver<Maybe<ResolversTypes['AuthenticateUserPayload']>, ParentType, ContextType, RequireFields<QueryAuthenticateUserArgs, 'code' | 'provider'>>;
   getCardSet?: Resolver<Maybe<ResolversTypes['CardSet']>, ParentType, ContextType, RequireFields<QueryGetCardSetArgs, 'id'>>;
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   getUserByAccount?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByAccountArgs, 'provider' | 'providerAccountId'>>;
@@ -479,12 +500,12 @@ export interface TokenScalarConfig extends GraphQLScalarTypeConfig<ResolversType
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   accounts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Account']>>>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  emailVerified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   lastname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  role?: Resolver<Maybe<ResolversTypes['Role']>, ParentType, ContextType>;
   surname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  tokens?: Resolver<Maybe<Array<Maybe<ResolversTypes['Token']>>>, ParentType, ContextType>;
+  username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -494,6 +515,7 @@ export interface VoidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   Account?: AccountResolvers<ContextType>;
+  AuthenticateUserPayload?: AuthenticateUserPayloadResolvers<ContextType>;
   Card?: CardResolvers<ContextType>;
   CardSet?: CardSetResolvers<ContextType>;
   DateTime?: GraphQLScalarType;

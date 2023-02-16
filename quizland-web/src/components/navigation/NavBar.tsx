@@ -175,7 +175,7 @@ const NavBarBody = ({
                             {navigation.map((item) => {
                                 let active = item.href === pathName;
                                 if (item.subMenu === undefined) {
-                                    return <BodyBtn {...item} active={active}/>;
+                                    return <BodyBtn {...item} active={active} key={item.label}/>;
                                 }
 
                                 const {subMenu, ...props} = item;

@@ -1,10 +1,19 @@
 import {BaseContext} from "@apollo/server";
 import {MongoClient} from "mongodb";
 import {IncomingMessage, ServerResponse} from "http";
-import {User} from "../__generated__/resolvers-types";
-import {verifyJWT, JWTPayload} from "../auth/util";
+import {Role, User} from "../__generated__/resolvers-types";
+import {verifyJWT} from "../auth/util";
 import {AUTH_COLLECTIONS, AUTH_DB, to__id} from "../../lib/mongodb";
 
+const nextClient: User = {
+    id: '@next',
+    role: Role.Server,
+    username: 'QuitLand',
+}
+
+const specialUsers = {
+    next: nextClient
+}
 
 interface Context extends BaseContext {
     user: {} | null;
@@ -20,6 +29,10 @@ const resolveContext = async (mongo: MongoClient, req: IncomingMessage | Request
         // verify token
         let info = await verifyJWT(token);
         if (!info) return null;
+
+        if (info.id.startsWith('@')) {
+            return specialUsers[info.id.substr(1)];
+        }
 
         // get user
         // noinspection UnnecessaryLocalVariableJS
@@ -41,7 +54,6 @@ const resolveContext = async (mongo: MongoClient, req: IncomingMessage | Request
 
     return {user: user};
 }
-
 
 
 export type {Context};

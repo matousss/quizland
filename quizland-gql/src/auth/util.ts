@@ -31,7 +31,7 @@ const verifyJWT = async (raw: string): Promise<JWTPayload | null> => {
 
 
 const generateJWT = (user: User, exp = DEFAULT_TOKEN_LIFESPAN): string => {
-    return jwt.sign({id: user.id}, process.env.JWT_SECRET as string, {expiresIn: exp});
+    return jwt.sign({role: 'User', id: user.id}, process.env.JWT_SECRET as string, {expiresIn: exp});
 }
 
 export {verifyJWT, generateJWT}

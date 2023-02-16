@@ -1,17 +1,24 @@
 import {readFileSync} from "fs";
 import {buildSchema} from "graphql/utilities";
-import {ApolloClient, InMemoryCache} from "@apollo/client";
+import {ApolloClient, createHttpLink, InMemoryCache, MutationOptions, QueryOptions} from "@apollo/client";
 import {SchemaLink} from "@apollo/client/link/schema";
 
-const apolloClient = async () => {
-    const cl = new ApolloClient({
-        ssrMode: true,
-        //link: new SchemaLink({schema: schema}),
-        uri: 'http://localhost:3000/api/graphql',
-        cache: new InMemoryCache()
-    })
 
-    return cl
-}
+const apolloClient = new ApolloClient({
+    ssrMode: true,
+    //link: new SchemaLink({schema: schema}),
+    cache: new InMemoryCache(),
+    link: createHttpLink(
+        {
+            uri: process.env.GRAPHQL_ENDPOINT,
+            headers: {
+                Authorization: `Bearer ${process.env.GRAPHQL_TOKEN}`
+            }
+        }
+    )
+})
 
-export default await apolloClient()
+const queryFetcher = (options: QueryOptions) => apolloClient.query(options)
+const mutationFetcher = (options: MutationOptions) => apolloClient.mutate(options)
+
+export default apolloClient

@@ -94,7 +94,7 @@ const BodyBtn: FC<BodyBtnProps & PropsWithChildren> = ({active, ...props}) => (
     <div
         key={props.label}
         className={
-            active ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:text-white' +
+            active ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' +
                 ' px-3 py-2 rounded-md text-sm font-medium flex transition duration-150 ease-in-out'
         }
         aria-current={active ? 'page' : undefined}

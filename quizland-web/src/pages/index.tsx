@@ -13,14 +13,7 @@ import {options} from "tsconfig-paths/lib/options";
 interface Props {
     clientId: string
 }
-export const getStaticProps = async ():Promise<{props: Props}> => {
-    return {
-        props: {
-            clientId: process.env.GOOGLE_CLIENT_ID as string
-        }
-    }
 
-}
 const Home: NextPage<Props, any> = (props) => {
 
 
@@ -30,9 +23,7 @@ const Home: NextPage<Props, any> = (props) => {
             <NavBar/>
 
             {/*<SocialButton provider={'Google'} onClick={login} icon={'/assets/google-icon.svg'}/>*/}
-            <GoogleOAuthProvider clientId={props.clientId}>
-                <GoogleButton/>
-            </GoogleOAuthProvider>
+
         </>
     )
 }

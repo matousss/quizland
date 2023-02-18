@@ -29,7 +29,7 @@ const REGISTER_MUTATION = gql`mutation Mutation($provider: ProviderType!, $code:
 const error_redirect = (errorType?: AuthError) => ({
     redirect: {
         permanent: false,
-        destination: "/login?error" + errorType ? '=' + errorType : ''
+        destination: "/auth?error" + errorType ? '=' + errorType : '',
     }
 })
 export const getServerSideProps: GetServerSideProps = async ({query, req, res}) => {

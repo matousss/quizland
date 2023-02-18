@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import 'src/styles/global.css'
 import type {AppProps} from 'next/app'
 import React from "react";
 import Head from "next/head";
@@ -13,12 +13,8 @@ function MyApp({Component, pageProps: {session, ...pageProps}}: AppProps) {
 
     // @ts-ignore
     return <SWRConfig value={{}}>
+        <Component {...pageProps} />
 
-            <Head>
-
-
-            </Head>
-            <Component {...pageProps} />
 
     </SWRConfig>
 

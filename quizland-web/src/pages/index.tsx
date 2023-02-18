@@ -5,13 +5,23 @@ import {NavBar} from "src/components/navigation/NavBar";
 
 import React from "react";
 
-import {useGoogleLogin} from "@react-oauth/google";
-import SocialButton from "../components/auth/socialbuttons/SocialButton";
+import {GoogleLogin, GoogleOAuthProvider, useGoogleLogin} from "@react-oauth/google";
+import {GoogleButton} from "../components/auth/socialbuttons";
+import {useRouter} from "next/router";
+import {options} from "tsconfig-paths/lib/options";
 
-const Home: NextPage = (props) => {
-    const login = useGoogleLogin({
-        onSuccess: tokenResponse => console.log(tokenResponse),
-    });
+interface Props {
+    clientId: string
+}
+export const getStaticProps = async ():Promise<{props: Props}> => {
+    return {
+        props: {
+            clientId: process.env.GOOGLE_CLIENT_ID as string
+        }
+    }
+
+}
+const Home: NextPage<Props, any> = (props) => {
 
 
 
@@ -19,8 +29,10 @@ const Home: NextPage = (props) => {
         <>
             <NavBar/>
 
-            <SocialButton provider={'Google'} onClick={login} icon={'/assets/google-icon.svg'}/>
-
+            {/*<SocialButton provider={'Google'} onClick={login} icon={'/assets/google-icon.svg'}/>*/}
+            <GoogleOAuthProvider clientId={props.clientId}>
+                <GoogleButton/>
+            </GoogleOAuthProvider>
         </>
     )
 }

@@ -4,7 +4,8 @@ import {AuthDB} from "../../../../lib/mongodb";
 
 import {QueryResolvers} from "../types";
 import {generateJWT} from "../../../auth/util";
-import {resolvers as auth_resolvers} from "../../../auth";
+import {resolvers as auth_resolvers, UserInfo} from "../../../auth";
+import {ProviderUserNotFound} from "../../../../lib/graphql/error";
 
 const _id = to__id;
 
@@ -23,18 +24,24 @@ export const getQueryResolvers = (db: AuthDB): QueryResolvers => ({
         return await db.Users.findOne({email: email});
     },
     authenticateUser: async (_: any, {provider, code}) => {
-        let externalUser = await auth_resolvers[provider](code);
+        let externalUser: UserInfo;
+        try {
+            externalUser = await auth_resolvers[provider](code);
+        }
+        catch (e) {
+            externalUser = null;
+        }
         if (!externalUser) {
-            return null;
+            throw new ProviderUserNotFound(provider);
         }
 
-        console.log("asking for account")
         let account = await db.Accounts.findOne({providerAccountId: externalUser.id});
 
         if (!account) {
             return null;
         }
-        console.log(account)
+
+        // @ts-ignore
         let user = await db.Users.findOne({_id: account.user});
 
         let jwt = generateJWT(account.user);

@@ -5152,10 +5152,17 @@ node-fetch@2.6.7:
   dependencies:
     whatwg-url "^5.0.0"
 
-node-fetch@^2.6.1, node-fetch@^2.6.7:
+node-fetch@^2.6.1:
   version "2.6.8"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.8.tgz#a68d30b162bc1d8fd71a367e81b997e1f4d4937e"
   integrity sha512-RZ6dBYuj8dRSfxpUSu+NsdF1dpPpluJxwOp+6IoDp/sH2QNDSvurYsAa+F1WxY2RjA1iP93xhcsUoYbF2XBqVg==
+  dependencies:
+    whatwg-url "^5.0.0"
+
+node-fetch@^2.6.7:
+  version "2.6.9"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.9.tgz#7c7f744b5cc6eb5fd404e0c7a9fec630a55657e6"
+  integrity sha512-DJm/CJkZkRjKKj4Zi4BsKVZh3ValV5IR5s7LVZnW+6YMh0W1BfNA8XSs6DLMGYlId5F3KnA70uu2qepcR08Qqg==
   dependencies:
     whatwg-url "^5.0.0"
 
@@ -5688,7 +5695,7 @@ queue-microtask@^1.2.2:
     graphql-yoga "^3.5.1"
     jsonwebtoken "^9.0.0"
     mongodb "^4.13.0"
-    quizland-gql "file:C:/Users/Jarda/AppData/Local/Yarn/Cache/v6/npm-quizland-gql-1.0.0-5084ce90-6664-44ab-a4b7-8fabcf0a3f0d-1676487006505/node_modules/quizland-gql"
+    quizland-gql "file:C:/Users/Jarda/AppData/Local/Yarn/Cache/v6/npm-quizland-gql-1.0.0-00e8de24-b62a-4f14-afb8-9621389d1737-1676729123984/node_modules/quizland-gql"
 
 radio-symbol@^2.0.0:
   version "2.0.0"

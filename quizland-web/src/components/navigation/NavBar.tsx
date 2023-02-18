@@ -2,7 +2,7 @@ import {Disclosure, Menu, Popover, Transition} from '@headlessui/react'
 import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import Link from "next/link";
 import {usePathname} from "next/navigation";
-import React, {Children, FC, forwardRef, Fragment, PropsWithChildren, ReactNode, useRef, useState} from "react";
+import React, {Component, FC, PropsWithChildren} from "react";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 
 interface Item {
@@ -26,10 +26,6 @@ const navigation: Array<Item & Submenu> = [
     },
     {label: 'About', href: '/about'},
 ]
-
-function classNames(...classes: Array<string>) {
-    return classes.filter(Boolean).join(' ')
-}
 
 const Logo = () => (
     <Link href={'/'} className={"flex flex-shrink-0 items-center"}>
@@ -90,21 +86,28 @@ const SmallNavBar = ({pathName}: { pathName: string | null }) => (
     </Transition>
 )
 
-const BodyBtn: FC<{
-    active: boolean, label: string, href: string,
+interface BodyBtnProps {
+    active: boolean, label: string
     onMouseEnter?: () => void, onMouseLeave?: () => void
-} & PropsWithChildren> = ({active, ...props}) => (
-    <Link
+}
+const BodyBtn: FC<BodyBtnProps & PropsWithChildren> = ({active, ...props}) => (
+    <div
         key={props.label}
-        className={classNames(
-            active ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:text-white',
-            'px-3 py-2 rounded-md text-sm font-medium flex transition duration-150 ease-in-out'
-        )}
+        className={
+            active ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:text-white' +
+                ' px-3 py-2 rounded-md text-sm font-medium flex transition duration-150 ease-in-out'
+        }
         aria-current={active ? 'page' : undefined}
         {...props}
     >
         {props.label}
         {props.children}
+    </div>
+)
+
+const BodyBtnLink: FC<{ href: string } & BodyBtnProps> = ({href, ...props}) => (
+    <Link href={href}>
+        <BodyBtn {...props}/>
     </Link>
 )
 
@@ -113,11 +116,13 @@ const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Ar
         <Popover className={"realtive m-auto"}>
 
             <>
-                <Popover.Button as={BodyBtn} active={active} {...props}>
-                    <ChevronDownIcon
-                        className={'h-5 w-5 ui-open:rotate-180 ui-open:transform transition duration-150 ease-in-out'}
-                        aria-hidden
-                    />
+                <Popover.Button>
+                    <BodyBtn active={active} {...props}>
+                        <ChevronDownIcon
+                            className={'h-5 w-5 ui-open:rotate-180 ui-open:transform transition duration-150 ease-in-out'}
+                            aria-hidden
+                        />
+                    </BodyBtn>
                 </Popover.Button>
                 <Transition
                     enter="transition ease-out duration-150"
@@ -175,12 +180,12 @@ const NavBarBody = ({
                             {navigation.map((item) => {
                                 let active = item.href === pathName;
                                 if (item.subMenu === undefined) {
-                                    return <BodyBtn {...item} active={active} key={item.label}/>;
+                                    return <BodyBtnLink {...item} active={active} key={item.label}/>;
                                 }
 
                                 const {subMenu, ...props} = item;
 
-                                return (<BodyMenu active={active} items={subMenu} {...props}/>)
+                                return (<BodyMenu active={active} items={subMenu} {...props} key={item.label}/>)
                             })}
 
 

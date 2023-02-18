@@ -1,0 +1,5 @@
+export enum AuthError {
+    NO_CREDENTIALS,
+    PROVIDER_ERROR,
+    PROVIDER_USER_NOT_FOUND,
+}

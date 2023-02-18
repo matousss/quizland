@@ -1,16 +1,13 @@
 import {GetServerSideProps, NextApiRequest, NextApiResponse, NextPage} from "next";
 import apolloClient from "src/graphql";
-import {gql} from "@apollo/client";
+import {ApolloError, gql} from "@apollo/client";
 
 import {ERROR_CODES} from "quizland-gql";
-import Router from "next/router";
 import {parseBody} from "next/dist/server/api-utils/node";
 import {getCookies, setCookie, setCookies} from "cookies-next";
-import {NextIncomingMessage} from "next/dist/server/request-meta";
-import {IncomingMessage, ServerResponse } from "node:http";
-import {redirect} from "next/navigation";
+import {AuthError} from "lib/auth/errors";
 
-const PROVIDER = "GOOGLE"
+const Google = "GOOGLE"
 
 const AUTH_QUERY = gql`query Query($provider: ProviderType!, $code: String!) {
     authenticateUser(provider: $provider, code: $code) {
@@ -29,40 +26,40 @@ const REGISTER_MUTATION = gql`mutation Mutation($provider: ProviderType!, $code:
     token: registerUser(provider: $provider, code: $code)
 }`
 
-export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
+const error_redirect = (errorType?: AuthErrors) => ({
+    redirect: {
+        permanent: false,
+        destination: "/login?error" + errorType ? '=' + errorType : ''
+    }
+})
+export const getServerSideProps: GetServerSideProps = async ({query, req, res}) => {
     const body = await parseBody(req, '12mb')
-    const error_redirect = {
-        redirect: {
-            permanent: false,
-            destination: "/login?error"
-        }
-    }
 
-    if (!body.credential) {
-        console.log("no credential")
-        return error_redirect
-    }
 
     const variables = {
-        provider: PROVIDER,
-        code: body.credential
+        provider: Google,
+        code: body.credential || query.code
     }
-    console.log("achjo")
+
+    if (!variables.code) {
+        return error_redirect(AuthError.NO_CREDENTIALS_PROVIDED)
+    }
+
     let response;
-    console.log("negrovina")
+
     try {
-        console.log("loggin in")
-        console.log("loggin in")
         response = await apolloClient.query({
             query: AUTH_QUERY,
             variables: variables
         })
     } catch (e) {
-        console.log(e)
-        response = null
+        if (e instanceof ApolloError) {
+            if (e.graphQLErrors[0].extensions.code === ERROR_CODES.USER_NOT_FOUND) {
+                return error_redirect(AuthError.USER_NOT_FOUND)
+            }
+        }
     }
-    console.log("co to kurba")
-    console.log(response)
+
     if (!response || !response.data.authenticateUser.token)
         try {
             response = await apolloClient.mutate({
@@ -70,8 +67,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
                 variables: variables
             })
         } catch (e) {
-            console.log(e)
-            return error_redirect
+            return error_redirect()
         }
 
 

@@ -1,9 +1,10 @@
 import type {Account, CreateUserInput, User} from "../../../__generated__/resolvers-types";
+import {Role} from "../../../__generated__/resolvers-types";
 import type {AuthDB} from "../../../../lib/mongodb";
 import {to__id} from "../../../../lib/mongodb";
 import {resolvers as auth_resolvers} from "../../../auth";
 import {generateJWT} from "../../../auth/util";
-import {DuplicitEmailError, DuplicitAccountError, ERROR_CODES, ProviderUserNotFound} from "../../../../lib/graphql/error";
+import {DuplicitAccountError, DuplicitEmailError, ProviderUserNotFound} from "../../../../lib/graphql/error";
 
 const _id = to__id;
 export const getMutationResolvers = (db: AuthDB) => ({
@@ -49,8 +50,7 @@ export const getMutationResolvers = (db: AuthDB) => ({
             email: externalUser.email,
             surname: externalUser.surname,
             lastname: externalUser.lastname,
-
-            emailVerified: externalUser.emailVerified
+            role: Role.User
         }
         if (externalUser.image) {
             user.image = externalUser.image;

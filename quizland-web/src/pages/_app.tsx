@@ -13,13 +13,13 @@ function MyApp({Component, pageProps: {session, ...pageProps}}: AppProps) {
 
     // @ts-ignore
     return <SWRConfig value={{}}>
-        <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID as string}>
+
             <Head>
 
 
             </Head>
             <Component {...pageProps} />
-        </GoogleOAuthProvider>
+
     </SWRConfig>
 
 }

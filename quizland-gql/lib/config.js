@@ -1,8 +1,8 @@
 import * as dotenv from "dotenv";
 
-dotenv.config();
-
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
+dotenv.config({ path: __dirname + "/../.env"});
+console.log( __dirname + "/../.env")
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID + '.apps.googleusercontent.com'
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
 const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI
 const DB_URL = process.env.DB_URL

@@ -1,11 +1,11 @@
-import {GetServerSideProps, NextApiRequest, NextApiResponse, NextPage} from "next";
+import {GetServerSideProps} from "next";
 import apolloClient from "src/graphql";
 import {ApolloError, gql} from "@apollo/client";
 
 import {ERROR_CODES} from "quizland-gql";
 import {parseBody} from "next/dist/server/api-utils/node";
 import {getCookies, setCookie, setCookies} from "cookies-next";
-import {AuthError} from "lib/auth/errors";
+import {AuthError} from "lib/page_errors/auth";
 
 const Google = "GOOGLE"
 
@@ -26,7 +26,7 @@ const REGISTER_MUTATION = gql`mutation Mutation($provider: ProviderType!, $code:
     token: registerUser(provider: $provider, code: $code)
 }`
 
-const error_redirect = (errorType?: AuthErrors) => ({
+const error_redirect = (errorType?: AuthError) => ({
     redirect: {
         permanent: false,
         destination: "/login?error" + errorType ? '=' + errorType : ''
@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
     }
 
     if (!variables.code) {
-        return error_redirect(AuthError.NO_CREDENTIALS_PROVIDED)
+        return error_redirect(AuthError.NO_CREDENTIALS)
     }
 
     let response;
@@ -55,7 +55,7 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
     } catch (e) {
         if (e instanceof ApolloError) {
             if (e.graphQLErrors[0].extensions.code === ERROR_CODES.USER_NOT_FOUND) {
-                return error_redirect(AuthError.USER_NOT_FOUND)
+                return error_redirect(AuthError.PROVIDER_USER_NOT_FOUND)
             }
         }
     }

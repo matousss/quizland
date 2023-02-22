@@ -34,9 +34,9 @@ const get_auth_url = () => {
 const resolve_code = async (code: string) => {
     let ticket: LoginTicket;
     let payload: TokenPayload;
-
+    console.log(code)
     let {tokens} = await oauth2Client.getToken(code);
-
+    console.log({tokens})
     ticket = await oauth2Client.verifyIdToken(
         {
             idToken: tokens.id_token,

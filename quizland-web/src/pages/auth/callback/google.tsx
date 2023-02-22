@@ -4,7 +4,7 @@ import {ApolloError, gql} from "@apollo/client";
 
 import {ERROR_CODES} from "quizland-gql";
 import {parseBody} from "next/dist/server/api-utils/node";
-import {getCookies, setCookie, setCookies} from "cookies-next";
+import {getCookies, setCookie} from "cookies-next";
 import {AuthError} from "lib/page_errors/auth";
 
 const Google = "GOOGLE"
@@ -29,12 +29,12 @@ const REGISTER_MUTATION = gql`mutation Mutation($provider: ProviderType!, $code:
 const error_redirect = (errorType?: AuthError) => ({
     redirect: {
         permanent: false,
-        destination: "/auth?error" + errorType ? '=' + errorType : '',
+        destination: "/auth/?error" + errorType ? '=' + errorType : '',
     }
 })
 export const getServerSideProps: GetServerSideProps = async ({query, req, res}) => {
     const body = await parseBody(req, '12mb')
-
+    return error_redirect(AuthError.NO_CREDENTIALS)
 
     const variables = {
         provider: Google,
@@ -54,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
         })
     } catch (e) {
         if (e instanceof ApolloError) {
-            if (e.graphQLErrors[0].extensions.code === ERROR_CODES.USER_NOT_FOUND) {
+            if ((e as ApolloError).graphQLErrors[0].extensions.code === ERROR_CODES.USER_NOT_FOUND) {
                 return error_redirect(AuthError.PROVIDER_USER_NOT_FOUND)
             }
         }
@@ -71,14 +71,14 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
         }
 
 
-
     setCookie("token", response.data.authenticateUser.token, {
         sameSite: "strict", secure: true, res: res, req: req
     })
 
-    // setCookie("user", JSON.stringify(response.data.authenticateUser.user), {
-    //     sameSite: "strict", secure: false, res: res, req: req
-    // })
+    /*setCookie("user", JSON.stringify(response.data.authenticateUser.user), {
+         sameSite: "strict", secure: false, res: res, req: req
+    })*/
+
 
     console.log(getCookies({res: res, req: req}))
     return {
@@ -90,4 +90,5 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
     }
 }
 
-export default () => {}
+export default () => {
+}

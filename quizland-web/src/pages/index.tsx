@@ -1,28 +1,24 @@
 import type {NextPage} from 'next'
 import styles from 'src/styles/Home.module.css'
 import React, {useEffect, useState} from "react";
-import {getCookie} from "cookies-next";
+import {getCookie, getCookies} from "cookies-next";
 import {NavBar} from "src/components/navigation/NavBar";
+import {useUser} from "@lib/hooks/user";
 interface Props {
     clientId: string
 }
 
 
 const Home: NextPage<Props, any> = (props) => {
-    const us = getCookie('user') || '{}'
-    const [userCookie, setUserCookie] = useState('')
-    useEffect(() => {
-        setUserCookie(getCookie('user') as string)
-    }, [])
-
-    console.log(us)
+    const user = useUser()
     return (
         <>
             <NavBar/>
 
             {/*<SocialButton provider={'Google'} onClick={login} icon={'/assets/google-icon.svg'}/>*/}
             <div>
-                {userCookie}
+
+                {user.lastname}
             </div>
         </>
     )

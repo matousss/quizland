@@ -1,6 +1,6 @@
 import {AuthError} from "@lib/page_errors/auth";
 import {Tab} from "@headlessui/react";
-import React, {FC} from "react";
+import React, {FC, Fragment} from "react";
 import {GoogleButton, SocialButton} from "../../components/auth/socialbuttons";
 import {useRouter} from "next/router";
 
@@ -30,8 +30,7 @@ const TabBtn: FC<{ label: string }> = ({label}) => (
 const Auth = ({error_codes}: Props) => {
     const query = useRouter().query
     let errorMessage = null
-    console.log(query)
-    if (query.error) {
+    if (query.error !== undefined) {
         switch (parseInt(query.error as string, 10)) {
             case error_codes.PROVIDER_USER_NOT_FOUND:
                 errorMessage = 'User not found at provider, try different provider or try it again in a few minutes'
@@ -45,20 +44,19 @@ const Auth = ({error_codes}: Props) => {
 
         window.history.replaceState(null, document.title, "/auth")
     }
-    console.log(errorMessage)
 
 
     return (
         <div className={'bg-gray-800 md:flex'}>
             <Tab.Group as={"div"}
-                       className={'h-full md:h-1/2 md:w-1/2 text-gray-300 bg-gray-700 bg-white md:rounded-md m-auto divide-y flex flex-col drop-shadow-xl'}>
-                <Tab.List className={'w-full grow-0'}>
+                       className={'h-full md:h-1/2 md:w-1/2 text-gray-300 bg-gray-700 md:rounded-md m-auto divide-y flex flex-col drop-shadow-xl'}>
+                <Tab.List className={'w-full grow-0 bg-gray-700'}>
                     <div className={'flex'}>
                         <TabBtn label={'3rd party account'}/>
                         <TabBtn label={'Credentials'}/>
                     </div>
                 </Tab.List>
-                <Tab.Panels className={'flex flex-col grow'}>
+                <Tab.Panels className={'flex flex-col grow bg-gray-700'}>
                     <Tab.Panel className={'flex flex-col grow'}>
                         <h1 className={'text-xl ml-6 mt-6'}>
                             Use 3rd party auth:

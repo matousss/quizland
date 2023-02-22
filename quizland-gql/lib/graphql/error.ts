@@ -52,3 +52,9 @@ export class ProviderUserNotFound extends ProviderError implements ResourceNotFo
     }
 
 }
+
+export class NotLinkedAccountError extends ProviderError {
+    constructor(provider, options=undefined) {
+        super("Account is not linked to any user", provider, ERROR_CODES.USER_NOT_FOUND, options);
+    }
+}

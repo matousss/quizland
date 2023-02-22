@@ -9,7 +9,6 @@ const LoginBtn = (props: any) => {
         flow: 'auth-code',
         scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
     })
-    console.log(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI)
     return <SocialButton provider={'Google'} onClick={login} icon={'/assets/google-icon.svg'} {...props}/>
 }
 const GoogleButton: FC<{ className: string }> = (props) => {

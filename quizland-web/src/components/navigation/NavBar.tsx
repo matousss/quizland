@@ -4,6 +4,7 @@ import Link from "next/link";
 import {usePathname} from "next/navigation";
 import React, {Component, FC, PropsWithChildren} from "react";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
+import UserMenu from "./user";
 
 interface Item {
     label: string
@@ -191,6 +192,9 @@ const NavBarBody = ({
 
                         </div>
                     </div>
+                </div>
+                <div>
+                    <UserMenu/>
                 </div>
             </div>
         </div>)

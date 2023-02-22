@@ -14,7 +14,7 @@ type Query {
     getUserByAccount(providerAccountId: ID!, provider: ProviderType!): User @server
     getUser: User @private
 
-    authenticateUser(provider: ProviderType!, code: String!): AuthenticateUserPayload
+
 
 
     # cardSets
@@ -28,7 +28,7 @@ type Mutation {
     updateUser(input: UpdateUserInput!): User @private
     deleteUser(id: ID!): Void @private
 
-    registerUser(provider: ProviderType!, code: String!): Token
+    authenticateUser(provider: ProviderType!, code: String!): AuthenticateUserPayload
     # accounts
     connectAccount(provider: ProviderType!, code: String!): Void @private
 

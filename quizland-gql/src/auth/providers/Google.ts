@@ -9,7 +9,6 @@ const oauth2Client = new OAuth2Client(
     GOOGLE_REDIRECT_URI
 )
 
-
 const scopes = [
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
@@ -34,9 +33,7 @@ const get_auth_url = () => {
 const resolve_code = async (code: string) => {
     let ticket: LoginTicket;
     let payload: TokenPayload;
-    console.log(code)
     let {tokens} = await oauth2Client.getToken(code);
-    console.log({tokens})
     ticket = await oauth2Client.verifyIdToken(
         {
             idToken: tokens.id_token,
@@ -45,14 +42,13 @@ const resolve_code = async (code: string) => {
     )
     payload = ticket.getPayload() as TokenPayload;
 
-
     return {
         id: payload.sub,
         email: payload.email,
         email_verified: payload.email_verified,
         surname: payload.given_name,
         lastname: payload.family_name,
-        picture: payload.picture
+        image: payload.picture
     }
 }
 

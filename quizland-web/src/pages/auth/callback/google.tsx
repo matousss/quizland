@@ -9,7 +9,7 @@ import {AuthError} from "lib/page_errors/auth";
 
 const Google = "GOOGLE"
 
-const AUTH_QUERY = gql`query Query($provider: ProviderType!, $code: String!) {
+const AUTH_MUTATION = gql`mutation Mutation($provider: ProviderType!, $code: String!) {
     authenticateUser(provider: $provider, code: $code) {
         token
         user {
@@ -18,23 +18,26 @@ const AUTH_QUERY = gql`query Query($provider: ProviderType!, $code: String!) {
             surname
             lastname
             email
+            image
         }
     }
 }`
 
-const REGISTER_MUTATION = gql`mutation Mutation($provider: ProviderType!, $code: String!) {
-    token: registerUser(provider: $provider, code: $code)
-}`
-
-const error_redirect = (errorType?: AuthError) => ({
-    redirect: {
-        permanent: false,
-        destination: "/auth/?error" + errorType ? '=' + errorType : '',
+const error_redirect = (errorType?: number) => {
+    let dest = "/auth/?error"
+    if (errorType !== undefined) {
+        dest += `=${errorType}`
     }
-})
+
+    return {
+        redirect: {
+            permanent: false,
+            destination: dest
+        }
+    }
+}
 export const getServerSideProps: GetServerSideProps = async ({query, req, res}) => {
     const body = await parseBody(req, '12mb')
-    return error_redirect(AuthError.NO_CREDENTIALS)
 
     const variables = {
         provider: Google,
@@ -48,36 +51,27 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
     let response;
 
     try {
-        response = await apolloClient.query({
-            query: AUTH_QUERY,
+        response = await apolloClient.mutate({
+            mutation: AUTH_MUTATION,
             variables: variables
         })
     } catch (e) {
+        console.log(e)
         if (e instanceof ApolloError) {
-            if ((e as ApolloError).graphQLErrors[0].extensions.code === ERROR_CODES.USER_NOT_FOUND) {
-                return error_redirect(AuthError.PROVIDER_USER_NOT_FOUND)
-            }
-        }
-    }
-
-    if (!response || !response.data.authenticateUser.token)
-        try {
-            response = await apolloClient.mutate({
-                mutation: REGISTER_MUTATION,
-                variables: variables
-            })
-        } catch (e) {
             return error_redirect()
         }
+        return error_redirect(500)
+    }
+
 
 
     setCookie("token", response.data.authenticateUser.token, {
         sameSite: "strict", secure: true, res: res, req: req
     })
 
-    /*setCookie("user", JSON.stringify(response.data.authenticateUser.user), {
+    setCookie("user", JSON.stringify(response.data.authenticateUser.user), {
          sameSite: "strict", secure: false, res: res, req: req
-    })*/
+    })
 
 
     console.log(getCookies({res: res, req: req}))

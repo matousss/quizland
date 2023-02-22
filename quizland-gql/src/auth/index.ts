@@ -1,12 +1,12 @@
 import { ProviderType } from "../__generated__/resolvers-types";
 import { resolve as google } from "./providers/Google";
 
-declare type UserInfo = {
+export declare type UserInfo = {
     id: string;
     email: string;
     surname: string;
     lastname: string;
-    picture?: string;
+    image?: string;
 }
 declare type Resolver = (any) => Promise<UserInfo>;
 interface ResolverMap {

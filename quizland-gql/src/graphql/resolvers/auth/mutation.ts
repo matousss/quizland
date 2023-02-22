@@ -2,9 +2,9 @@ import type {Account, CreateUserInput, User} from "../../../__generated__/resolv
 import {Role} from "../../../__generated__/resolvers-types";
 import type {AuthDB} from "../../../../lib/mongodb";
 import {to__id} from "../../../../lib/mongodb";
-import {resolvers as auth_resolvers} from "../../../auth";
+import {resolvers as auth_resolvers, UserInfo} from "../../../auth";
 import {generateJWT} from "../../../auth/util";
-import {DuplicitAccountError, DuplicitEmailError, ProviderUserNotFound} from "../../../../lib/graphql/error";
+import {DuplicitAccountError, DuplicitEmailError, NotLinkedAccountError, ProviderUserNotFound} from "../../../../lib/graphql/error";
 
 const _id = to__id;
 export const getMutationResolvers = (db: AuthDB) => ({
@@ -25,26 +25,29 @@ export const getMutationResolvers = (db: AuthDB) => ({
             ]
         );
     },
-    registerUser: async (args: any, {provider, code, state}) => {
-        let externalUser;
-        try {
-            externalUser = await auth_resolvers[provider](code);
-        } catch (e) {
-            console.log(e)
-        }
+    authenticateUser: async (args: any, {provider, code, state}) => {
+        let externalUser: UserInfo;
+
+        externalUser = await auth_resolvers[provider](code);
+
         if (!externalUser) {
             throw new ProviderUserNotFound(provider)
         }
 
         let user: User = await db.Users.findOne({email: externalUser.email});
+        let account: Account = await db.Accounts.findOne({providerAccountId: externalUser.id, provider: provider});
 
-        if (user) throw new DuplicitEmailError(externalUser.email)
+        if (user) {
+            if (user.email !== externalUser.email) throw new DuplicitEmailError(provider)
 
-        let account: Account = await db.Accounts.findOne({providerAccountId: externalUser.id});
+            if (!account) throw new NotLinkedAccountError(provider)
 
-        if (account) throw new DuplicitAccountError()
+            if (account.providerAccountId !== externalUser.id) throw new DuplicitAccountError(provider)
 
-        console.log({externalUser})
+            let jwt = generateJWT(account.user);
+
+            return {token: jwt, user: user}
+        }
 
         user = {
             email: externalUser.email,
@@ -52,6 +55,7 @@ export const getMutationResolvers = (db: AuthDB) => ({
             lastname: externalUser.lastname,
             role: Role.User
         }
+
         if (externalUser.image) {
             user.image = externalUser.image;
         }

@@ -1,13 +1,14 @@
 import {Role, User} from "../__generated__/resolvers-types";
 import jsonwebtoken from "jsonwebtoken";
+import {ObjectId} from "mongodb";
 
 const jwt = jsonwebtoken;
 
 
-const DEFAULT_TOKEN_LIFESPAN = 1000 * 60 * 60 * 24 * 30; // 30 days
+export const DEFAULT_TOKEN_LIFESPAN = 60 * 60 * 24 * 30; // 30 days in seconds
 
 const checkPayload = (payload: any): boolean => {
-    if (payload.role && payload.role == 'User' && payload.id) {
+    if (payload.role && payload.id) {
         return true;
     }
     return false;
@@ -23,18 +24,22 @@ interface JWTPayload {
 // returns payload if valid
 const verifyJWT = async (raw: string): Promise<JWTPayload | null> => {
     let token = raw.replace("Token ", "");
-
+    let payload: JWTPayload;
     // verifies secret, checks exp and returns user info if valid
-    let payload = await jwt.verify(token, process.env.JWT_SECRET as string) as any;
+    try {
+        payload = await jwt.verify(token, process.env.JWT_SECRET as string) as any;
+    } catch (e) {
+        return null;
+    }
 
     if (checkPayload(payload)) return payload;
-
-
     return null;
 }
 
 
 const generateJWT = (user: User, exp = DEFAULT_TOKEN_LIFESPAN): string => {
+    if (user.id === undefined) throw new Error("User ID is undefined");
+
     let payload: JWTPayload = {
         role: user.role,
         id: user.id

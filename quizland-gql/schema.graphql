@@ -8,23 +8,24 @@ directive @internal on FIELD_DEFINITION | OBJECT # only for internal usage eg. d
 
 type Query {
     # users
-    getUsers: [User] @server
-    getUserByID(id: ID!): User @server
-    getUserByEmail(email: String!): User @server
+    # getUsers: [User] @server
+    getUserByID(id: ID!): User
+    getUserByEmail(email: String!): User
     getUserByAccount(providerAccountId: ID!, provider: ProviderType!): User @server
     getUser: User @private
 
-
+    # auth
+    checkToken(token: Token!): CheckTokenPayload @private
 
 
     # cardSets
-    getCardSet(id: ID!): CardSet
+    getCardSet(id: ID!): CardSet @permitted(required: R)
 
 }
 
 type Mutation {
     # users
-    createUser(input: CreateUserInput!): User
+    # createUser(input: CreateUserInput!): User @server
     updateUser(input: UpdateUserInput!): User @private
     deleteUser(id: ID!): Void @private
 
@@ -45,6 +46,12 @@ type Mutation {
 type AuthenticateUserPayload {
     user: User
     token: Token
+    expiresAt: DateTime
+}
+
+type CheckTokenPayload {
+    token: Token
+    expiresAt: DateTime
 }
 
 input UpdateUserInput {

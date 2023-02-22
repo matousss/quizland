@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
+const token_cookie = [
+    {
+        type: 'cookie',
+        key: 'token',
+    }
+]
+
+
 const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
@@ -22,7 +30,32 @@ const nextConfig = {
         })
         return config;
     },
-    transpilePackages: ['quizland-gql']
+    transpilePackages: ['quizland-gql'],
+    redirects: async () => {
+        return [
+            {
+                source: '/signout',
+                destination: '/auth/signout',
+                permanent: false,
+            },
+            {
+                source: '/',
+                has: token_cookie,
+                destination: '/home',
+                permanent: false,
+            }, {
+                source: '/',
+                destination: '/about',
+                permanent: false,
+            },
+            {
+                source: '/auth',
+                has: token_cookie,
+                destination: '/home',
+                permanent: false,
+            }
+        ]
+    },
 }
 
 module.exports = nextConfig

@@ -1,18 +1,18 @@
-import type {Account, CreateUserInput, User} from "../../../__generated__/resolvers-types";
+import type {Account, User} from "../../../__generated__/resolvers-types";
 import {Role} from "../../../__generated__/resolvers-types";
 import type {AuthDB} from "../../../../lib/mongodb";
-import {to__id} from "../../../../lib/mongodb";
+import {fromMongo, to__id} from "../../../../lib/mongodb";
 import {resolvers as auth_resolvers, UserInfo} from "../../../auth";
-import {generateJWT} from "../../../auth/util";
-import {DuplicitAccountError, DuplicitEmailError, NotLinkedAccountError, ProviderUserNotFound} from "../../../../lib/graphql/error";
+import {DEFAULT_TOKEN_LIFESPAN, generateJWT} from "../../../auth/util";
+import {
+    DuplicitAccountError,
+    DuplicitEmailError, ERROR_CODES, GQLError,
+    NotLinkedAccountError,
+    ProviderUserNotFound
+} from "../../../../lib/graphql/error";
 
 const _id = to__id;
 export const getMutationResolvers = (db: AuthDB) => ({
-    createUser: async (args: any, {input}: { input: CreateUserInput }) => {
-        if (await db.Users.findOne({email: input.email})) throw new Error("Email already used");
-        await db.Users.insertOne(input);
-        return await db.Users.findOne({email: input.email});
-    },
     updateUser: async (user: User) => {
         return await db.Users.updateOne({_id: _id(user.id)}, {$set: user});
     },
@@ -44,9 +44,12 @@ export const getMutationResolvers = (db: AuthDB) => ({
 
             if (account.providerAccountId !== externalUser.id) throw new DuplicitAccountError(provider)
 
-            let jwt = generateJWT(account.user);
+            let plainUser = fromMongo(user);
 
-            return {token: jwt, user: user}
+            let exp = Date.now() + DEFAULT_TOKEN_LIFESPAN * 1000;
+            let jwt = generateJWT(plainUser as User);
+
+            return {token: jwt, user: plainUser, expiresAt: exp}
         }
 
         user = {
@@ -80,16 +83,20 @@ export const getMutationResolvers = (db: AuthDB) => ({
             session.endSession()
         }
 
-        // if (session.acknowledged === false) {
-        //     throw new GraphQLError("Could not create account", {code: ERROR_CODES.WRITE_ERROR})
-        // }
+        if (!response.ok) throw new GQLError("Could not create account", {code: ERROR_CODES.WRITE_ERROR})
 
-        if (response.ok) {
-            return {
-                token: generateJWT(user_id),
-                user: user
-            }
+
+        let exp = Date.now() + DEFAULT_TOKEN_LIFESPAN * 1000;
+
+        user.id = user_id;
+        let plainUser = fromMongo(user);
+
+        return {
+            token: generateJWT(plainUser as User),
+            expiresAt: exp,
+            user: plainUser
         }
+
 
     }
 })

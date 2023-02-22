@@ -3,7 +3,8 @@ import {GraphQLError} from "graphql/error";
 export const ERROR_CODES = {
     DUPLICIT_EMAIL: "DUPLICIT_EMAIL",
     DUPLICIT_ACCOUNT: "DUPLICIT_ACCOUNT",
-    USER_NOT_FOUND: "USER_NOT_FOUND"
+    USER_NOT_FOUND: "USER_NOT_FOUND",
+    WRITE_ERROR: "WRITE_ERROR",
 }
 
 export class GQLError extends GraphQLError {

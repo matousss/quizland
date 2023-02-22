@@ -50,6 +50,24 @@ const to__id = (id: string | null | void) => {
     return new ObjectId(id);
 }
 
+const fromMongo = (object: {}) => {
+    const newObject = {};
+    for (let key in object) {
+        // @ts-ignore
+        const value = object[key];
+        if (key === "_id") {
+            // @ts-ignore
+            newObject.id = (object._id as ObjectId).toHexString();
+        } else {
+            // @ts-ignore
+            newObject[key] = value;
+        }
+    }
+    return newObject;
+}
+
+
+
 const toMongo = (object: {}) => {
 
     const newObject = {
@@ -87,5 +105,5 @@ const mongoClient = new MongoClient(DB_URL || 'mongodb://localhost:27017',
     // @ts-ignore
     {useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1});
 export default mongoClient;
-export {getAuthDB, to__id, AUTH_DB, AUTH_COLLECTIONS}
+export {getAuthDB, to__id, fromMongo, toMongo, AUTH_DB, AUTH_COLLECTIONS}
 export type {AuthDB}

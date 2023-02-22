@@ -19,6 +19,7 @@ const Home: NextPage<Props, any> = (props) => {
             <div>
 
                 {user.lastname}
+                {user.id}
             </div>
         </>
     )

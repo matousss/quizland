@@ -1,8 +1,7 @@
-import { createYoga, createSchema } from 'graphql-yoga'
+import {createYoga, createSchema} from 'graphql-yoga'
 import mongoClient from "../../lib/mongodb";
 import {getResolvers, typeDefs} from "../graphql";
 import {Context, resolveContext} from "../graphql/context";
-
 export const config = {
     api: {
         bodyParser: false
@@ -10,11 +9,7 @@ export const config = {
 }
 
 
-
-
-
-
-async function getServer<TServerContext>(endpoint="/graphql") {
+async function getServer<TServerContext>(endpoint = "/graphql") {
     console.log('Connecting to mongo...');
     let connection;
     try {
@@ -25,9 +20,9 @@ async function getServer<TServerContext>(endpoint="/graphql") {
     }
     console.log('Client connected to mongo')
 
-    const schema = createSchema({
+    const schema = createSchema<Context & TServerContext>({
         typeDefs: typeDefs,
-        resolvers: getResolvers(connection)
+        resolvers: getResolvers(mongoClient)
     })
 
     return createYoga<TServerContext, Context>({

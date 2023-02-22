@@ -4,7 +4,7 @@ scalar Void
 directive @permitted (required: Permission) on FIELD_DEFINITION | QUERY | MUTATION # available only for user with permission
 directive @private on FIELD_DEFINITION | QUERY # visible only to user who owns the item
 directive @server on FIELD_DEFINITION | QUERY | MUTATION | OBJECT | INPUT_FIELD_DEFINITION # only for server side
-directive @internal on FIELD_DEFINITION | OBJECT # only for internal usage eg. data structure, only relevant for database
+directive @internal on FIELD_DEFINITION | OBJECT | ENUM # only for internal usage eg. data structure, only relevant for database
 
 type Query {
     # users
@@ -15,7 +15,7 @@ type Query {
     getUser: User @private
 
     # auth
-    checkToken(token: Token!): CheckTokenPayload @private
+    checkToken: CheckTokenPayload @private
 
 
     # cardSets
@@ -26,53 +26,63 @@ type Query {
 type Mutation {
     # users
     # createUser(input: CreateUserInput!): User @server
-    updateUser(input: UpdateUserInput!): User @private
+    # updateUser(input: UpdateUserInput!): User @private
     deleteUser(id: ID!): Void @private
 
     authenticateUser(provider: ProviderType!, code: String!): AuthenticateUserPayload
+
     # accounts
     connectAccount(provider: ProviderType!, code: String!): Void @private
 
     # auth
 
+    # items
+    # items cannot be created directly, only through its child, eg. CardSet, Folder
+    deleteItem(id: ID!): Boolean @permitted(required: M) # delete item and all its children, shared folders, card sets, etc.
+    updateItemName(id: ID!, name: String!): Boolean @permitted(required: M)
+    updateItemDescription(id: ID!, description: String!): Boolean @permitted(required: W)
+    addPermission(id: ID!, user: ID!, permission: Permission!): Boolean @permitted(required: M)
+    updatePermission(id: ID!, user: ID!): Boolean @permitted(required: M) # update/delete
+    getItem(id: ID!): Item @permitted(required: R)
+
+    # folders
+    createFolder(parent: ID, name: String!, description: String): Folder @permitted(required: M)
+    moveItem(id: ID!, from: ID!, to: ID!): Boolean @permitted(required: M)
 
     # cardSets
-    createCardSet(input: CreateCardSetInput): Boolean @permitted(required: M)
-    removeCardSet(input: RemoveCardSetInput): Boolean @permitted(required: M)
-    addCard(input: AddCardInput): Boolean @permitted(required: RW)
-    removeCard(input: RemoveCardInput): Boolean @permitted(required: RW)
+    createCardSet(
+        cards: [CardInput!]!
+        folder: ID
+        name: String!
+        description: String
+    ): CardSet @permitted(required: M)
+    removeCardSet(input: RemoveCardSetInput): Void @permitted(required: M)
+    updateCardSet(id: ID!, name: String, description: String, cards: [CardInput!]): CardSet @permitted(required: M)
 }
 
 type AuthenticateUserPayload {
-    user: User
-    token: Token
-    expiresAt: DateTime
+    user: User!
+    token: String!
+    expiresAt: DateTime!
 }
 
 type CheckTokenPayload {
-    token: Token
-    expiresAt: DateTime
+    token: String
+    expiresAt: DateTime!
 }
 
-input UpdateUserInput {
-    id: ID!
-    name: String
-    email: String
-    image: String
-    emailVerified: DateTime @server
-}
+#input UpdateUserInput {
+#    id: ID!
+#    name: String
+#    email: String
+#    image: String
+#    emailVerified: Boolean @server
+#}
 
 input CreateUserInput {
     email: String!
     name: String!
     image: String
-}
-
-input CreateCardSetInput {
-    cards: [CardInput]
-    folder: ID
-    name: String!
-    description: String
 }
 
 input RemoveCardSetInput {
@@ -97,7 +107,7 @@ input RemoveCardInput {
 
 enum Permission {
     R   # read
-    RW  # read and write
+    W   # read and write
     M   # manage (read, write, delete, change permissions, etc.)
 }
 
@@ -119,7 +129,7 @@ enum Role {
 }
 
 interface Permit {
-    user(id: ID!): User
+    user: User
     permission: Permission
 }
 
@@ -127,7 +137,7 @@ interface Item {
     id: ID
     name: String!
     description: String
-    owner(id: ID!): User
+    owner: User
     permissions: [Permit!] @permitted(required: M)
 }
 
@@ -140,7 +150,7 @@ type CardSet implements Item {
     id: ID
     name: String!
     description: String
-    owner(id: ID!): User
+    owner: User
     permissions: [Permit!] @permitted(required: M)
     cards: [Card!]!
 }
@@ -149,13 +159,13 @@ type Folder implements Item {
     id: ID
     name: String!
     description: String
-    owner(id: ID!): User
+    owner: User
     permissions: [Permit!] @permitted(required: M)
     children: [Item] @permitted(required: R)
 }
 
 type Account @server {
-    user(id: ID!): User
+    user: User
     provider: ProviderType
     providerAccountId: String # for google is sub
 
@@ -173,9 +183,29 @@ type User {
     lastname: String @private
     email: String!
     image: String
-    accounts: [Account] @private
     role: Role @server
 }
 
-scalar Token
 
+fragment ItemFragment on Item {
+    id
+    name
+    description
+    owner {
+        id
+        username
+    }
+    permissions {
+        user {
+            id
+            username
+        }
+        permission
+    }
+}
+
+# on client can be resolved by __typename
+enum ItemType @internal {
+    FOLDER
+    CARD_SET
+}

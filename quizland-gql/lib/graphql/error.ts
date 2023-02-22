@@ -1,10 +1,12 @@
 import {GraphQLError} from "graphql/error";
+import exp from "constants";
 
 export const ERROR_CODES = {
     DUPLICIT_EMAIL: "DUPLICIT_EMAIL",
     DUPLICIT_ACCOUNT: "DUPLICIT_ACCOUNT",
     USER_NOT_FOUND: "USER_NOT_FOUND",
     WRITE_ERROR: "WRITE_ERROR",
+    INVALID_USER_INPUT: "INVALID_USER_INPUT",
 }
 
 export class GQLError extends GraphQLError {
@@ -57,5 +59,18 @@ export class ProviderUserNotFound extends ProviderError implements ResourceNotFo
 export class NotLinkedAccountError extends ProviderError {
     constructor(provider, options=undefined) {
         super("Account is not linked to any user", provider, ERROR_CODES.USER_NOT_FOUND, options);
+    }
+}
+
+
+export class WriteError extends GQLError {
+    constructor(message, options=undefined) {
+        super(message, ERROR_CODES.WRITE_ERROR, options);
+    }
+}
+
+export class InvalidUserInput extends InputError {
+    constructor(message, options=undefined) {
+        super(message, ERROR_CODES.INVALID_USER_INPUT, options);
     }
 }

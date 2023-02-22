@@ -1,7 +1,8 @@
 import {Collection, MongoClient, ObjectId, Db, ServerApiVersion} from "mongodb";
 import {DB_URL} from "./config";
 
-import type {User, Account} from "../src/__generated__/resolvers-types";
+import type {User, Account, Card} from "../src/__generated__/resolvers-types";
+import {DItem} from "./types";
 
 
 const AUTH_COLLECTIONS = {
@@ -11,6 +12,7 @@ const AUTH_COLLECTIONS = {
     //tokens: "tokens",
 };
 const AUTH_DB: string = 'auth';
+const QUIZ_DB: string = 'quiz';
 
 
 const setupDB = (connection: MongoClient) => (async () => {
@@ -22,26 +24,6 @@ const setupDB = (connection: MongoClient) => (async () => {
     }
     return connection;
 })
-
-
-const toJS = (object: {}) => {
-    const newObject = {};
-    for (let key in object) {
-        // @ts-ignore
-        const value = object[key];
-        if (key === "_id") {
-            // @ts-ignore
-            newObject.id = value.toHexString();
-        } else if (key === "userId") {
-            // @ts-ignore
-            newObject[key] = value.toHexString();
-        } else {
-            // @ts-ignore
-            newObject[key] = value;
-        }
-    }
-    return newObject;
-}
 
 const to__id = (id: string | null | void) => {
     if ((id === null || id === void 0 ? void 0 : (id as string).length) !== 24)
@@ -67,7 +49,6 @@ const fromMongo = (object: {}) => {
 }
 
 
-
 const toMongo = (object: {}) => {
 
     const newObject = {
@@ -84,12 +65,22 @@ const toMongo = (object: {}) => {
     return newObject;
 }
 
+type WDbClient = {
+    client: MongoClient;
+    db: Db
+}
+
 declare type AuthDB = {
     Users: Collection<User>;
     Accounts: Collection<Account>;
-    client: MongoClient;
-    db: Db
-};
+
+} & WDbClient
+
+declare type QuizDB = {
+    Items: Collection<DItem>;
+    Cards: Collection<{ _id: ObjectId, cards: Array<Card> }>;
+} & WDbClient
+
 const getAuthDB = (client: MongoClient): AuthDB => {
     const _db = client.db(AUTH_DB);
     const c = AUTH_COLLECTIONS;
@@ -101,9 +92,19 @@ const getAuthDB = (client: MongoClient): AuthDB => {
     };
 }
 
+const getQuizDB = (client: MongoClient): QuizDB => {
+    const _db = client.db(QUIZ_DB);
+    return {
+        Items: _db.collection<DItem>("items"),
+        Cards: _db.collection<{ _id: ObjectId, cards: Array<Card> }>("cards"),
+        client: client,
+        db: _db
+    }
+}
+
 const mongoClient = new MongoClient(DB_URL || 'mongodb://localhost:27017',
     // @ts-ignore
     {useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1});
 export default mongoClient;
-export {getAuthDB, to__id, fromMongo, toMongo, AUTH_DB, AUTH_COLLECTIONS}
-export type {AuthDB}
+export {getAuthDB, getQuizDB, to__id, fromMongo, toMongo, AUTH_DB, AUTH_COLLECTIONS}
+export type {AuthDB, QuizDB}

@@ -13,9 +13,6 @@ import {
 
 const _id = to__id;
 export const getMutationResolvers = (db: AuthDB) => ({
-    updateUser: async (user: User) => {
-        return await db.Users.updateOne({_id: _id(user.id)}, {$set: user});
-    },
     deleteUser: async ({id}: { id: string }) => {
         let objId = _id(id);
         await Promise.all([

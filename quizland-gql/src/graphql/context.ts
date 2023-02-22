@@ -1,10 +1,11 @@
 import {BaseContext} from "@apollo/server";
 import {MongoClient} from "mongodb";
-import {IncomingMessage, ServerResponse} from "http";
 import {Role, User} from "../__generated__/resolvers-types";
 import {verifyJWT} from "../auth/util";
 import {AUTH_COLLECTIONS, AUTH_DB, to__id} from "../../lib/mongodb";
+import {NodeRequest, NodeResponse} from "@whatwg-node/server";
 
+// @ts-ignore
 const nextClient: User = {
     id: '@next',
     role: Role.Server,
@@ -19,19 +20,22 @@ interface Context extends BaseContext {
     user: {} | null;
 }
 
-const resolveContext = async (mongo: MongoClient, req: IncomingMessage | Request, res?: ServerResponse): Promise<Context> => {
+const resolveContext = async (mongo: MongoClient, req: NodeRequest, res?: NodeResponse): Promise<Context> => {
     const getUserFromRequest = async (): Promise<User | null> => {
         // extract token
-        let headers = req.headers;
-        if (!headers.hasOwnProperty('authorization') || !headers['authorization']) return null;
-        let token = headers['authorization'] as string;
 
+
+        let headerMap = req.headers['map'];
+        let cookie = headerMap.get('cookie') as string;
+        let token = cookie.split(';').map(v => v.trim().split('=')).find(v => v[0] === 'token')?.[1];
+
+        if (!token) return null;
         // verify token
         let info = await verifyJWT(token);
         if (!info) return null;
 
         if (info.id.startsWith('@')) {
-            return specialUsers[info.id.substr(1)];
+            return specialUsers[info.id.substring(1)];
         }
 
         // get user

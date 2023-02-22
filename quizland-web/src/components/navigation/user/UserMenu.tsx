@@ -6,23 +6,23 @@ import UserImage from "./UserImage"
 const items = [
     {label: 'Your Profile', href: '/profile'},
     {label: 'Settings', href: '/settings'},
-    {label: 'Sign out', href: '/signout}'}
+    {label: 'Sign out', href: '/signout'},
 ]
-const Item = (props: {label: string, href: string}) => (
-    <Menu.Item>
+const Item = ({label, href}:{label: string, href: string}) => (
+    <Menu.Item key={label}>
         {({active}) => (
-            <Link href={props.href}
-                  className={active ? 'bg-gray-100' : '' + 'block px-4 py-2 text-sm text-gray-700'}>
-                {props.label}
+            <Link href={href}
+                  className={(active ? 'bg-gray-100 ' : '' )+ 'block px-4 py-2 text-sm text-gray-700'}>
+                {label}
             </Link>
         )}
     </Menu.Item>
 )
 const UserMenu = () => (
-    <Menu as="div" className="relative ml-3">
+    <Menu as="div" className="relative">
         <div>
             <Menu.Button
-                className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                className="flex rounded-full bg-gray-800 text-sm focus:outline-none border-2 border-gray-700">
                 <span className="sr-only">Open user menu</span>
                 <UserImage/>
             </Menu.Button>

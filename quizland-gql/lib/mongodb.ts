@@ -11,19 +11,15 @@ const AUTH_COLLECTIONS = {
     //sessions: "sessions",
     //tokens: "tokens",
 };
+
+const QUIZ_COLLECTIONS = {
+    ITEMS: "items",
+    CARDS: "cards",
+}
 const AUTH_DB: string = 'auth';
 const QUIZ_DB: string = 'quiz';
 
 
-const setupDB = (connection: MongoClient) => (async () => {
-
-    const auth_db = connection.db(AUTH_DB);
-    for (let i in AUTH_COLLECTIONS) {
-        console.log(i)
-        //await auth_db.createCollection<AdapterUser>(i)
-    }
-    return connection;
-})
 
 const to__id = (id: string | null | void) => {
     if ((id === null || id === void 0 ? void 0 : (id as string).length) !== 24)
@@ -94,9 +90,10 @@ const getAuthDB = (client: MongoClient): AuthDB => {
 
 const getQuizDB = (client: MongoClient): QuizDB => {
     const _db = client.db(QUIZ_DB);
+    const c = QUIZ_COLLECTIONS;
     return {
-        Items: _db.collection<DItem>("items"),
-        Cards: _db.collection<{ _id: ObjectId, cards: Array<Card> }>("cards"),
+        Items: _db.collection<DItem>(c.ITEMS),
+        Cards: _db.collection<{ _id: ObjectId, cards: Array<Card> }>(c.CARDS),
         client: client,
         db: _db
     }

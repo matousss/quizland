@@ -11,6 +11,24 @@ module.exports = {
         tercial: "rgb(0, 184, 107)",
         text_a: "rgb(255,255,255)",
       },
+      keyframes: {
+        card: {
+          '0%': {opacity: '100%'},
+          '30%': {
+            opacity: '80%'
+          },
+          '40%': {
+            transform: 'rotate(8deg) size(1.1)',
+          },
+          '100%': {
+            opacity: '0%',
+            transform: 'translate(12%, -15%) rotate(8deg)'
+          }
+        }
+      },
+      animation: {
+        card: 'card 750ms ease-in-out infinite'
+      }
     },
   },
   plugins: [

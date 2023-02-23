@@ -1,7 +1,7 @@
 import auth from "./auth";
 import Link from "next/link";
 
-export default function () {
+export default function About() {
 
     return (
         <div className={'w-full h-full bg-gray-800 text-gray-300 divide-y-8 divide-gray-600'}>

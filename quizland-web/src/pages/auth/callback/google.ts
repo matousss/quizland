@@ -63,7 +63,6 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
         return error_redirect(500)
     }
 
-    console.log(response.data.authenticateUser)
     let exp = new Date(response.data.authenticateUser.expires);
 
 
@@ -79,7 +78,7 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
     return {
         redirect: {
             permanent: false,
-            destination: "/account",
+            destination: "/home",
             response: res
         }
     }

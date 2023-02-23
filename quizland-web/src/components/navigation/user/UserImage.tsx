@@ -6,7 +6,7 @@ import Image from "next/image";
 const UserImage = () => {
     const user = useUser()
     const src = user.image || '/assets/user.svg'
-    console.log({user})
+
     return <Image
         className="h-8 w-8 rounded-full m-auto"
         src={src}

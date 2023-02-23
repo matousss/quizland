@@ -1,4 +1,4 @@
-import {ApolloClient, createHttpLink, InMemoryCache, MutationOptions, QueryOptions} from "@apollo/client";
+import {ApolloClient, InMemoryCache, MutationOptions, QueryOptions} from "@apollo/client";
 import {split, HttpLink} from '@apollo/client';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {GraphQLWsLink} from '@apollo/client/link/subscriptions';
@@ -15,7 +15,7 @@ const httpLink = new HttpLink(
     {
         uri: process.env.GRAPHQL_ENDPOINT_HTTP,
         headers: {
-            Authorization: `Bearer ${process.env.GRAPHQL_TOKEN}`
+            Authorization: `Bearer ${process.env.GRAPHQL_SECRET}`
         }
     }
 )

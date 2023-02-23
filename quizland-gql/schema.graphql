@@ -139,6 +139,7 @@ interface Item {
     description: String
     owner: User
     permissions: [Permit!] @permitted(required: M)
+    modifiedAt: DateTime
 }
 
 type Card @internal {
@@ -153,6 +154,7 @@ type CardSet implements Item {
     owner: User
     permissions: [Permit!] @permitted(required: M)
     cards: [Card!]!
+    modifiedAt: DateTime
 }
 
 type Folder implements Item {
@@ -162,6 +164,7 @@ type Folder implements Item {
     owner: User
     permissions: [Permit!] @permitted(required: M)
     children: [Item] @permitted(required: R)
+    modifiedAt: DateTime
 }
 
 type Account @server {
@@ -202,6 +205,7 @@ fragment ItemFragment on Item {
         }
         permission
     }
+    modifiedAt
 }
 
 # on client can be resolved by __typename

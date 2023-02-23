@@ -73,7 +73,7 @@ export const getMutationResolvers = (db: AuthDB) => ({
                 user_id = user_result.insertedId;
                 // @ts-ignore
                 account.user = user_id;
-                console.log("inserting account")
+
                 await db.Accounts.insertOne(account, {session});
             })
         } finally {

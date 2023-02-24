@@ -1,3 +1,19 @@
+const cardAnimation = (rotation, x, y) => ({
+  '0%': {opacity: '100%'},
+  '30%': {
+    opacity: '80%'
+  },
+  '10%': {
+    transform: `rotate(${rotation}deg) size(1.05)`,
+  },
+  '50%':{transform: `translate(0,0) rotate(${rotation}deg) `},
+  '80%':{transform: `translate(${x/2}%,${y/2}%) rotate(${rotation}deg) `},
+  '100%': {
+    opacity: '0%',
+    transform: `translate(${x}%, ${y}%) rotate(8deg)`
+  }
+})
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -12,7 +28,7 @@ module.exports = {
         text_a: "rgb(255,255,255)",
       },
       keyframes: {
-        card: {
+        card_old: {
           '0%': {opacity: '100%'},
           '30%': {
             opacity: '80%'
@@ -22,13 +38,15 @@ module.exports = {
           },
           '100%': {
             opacity: '0%',
-            transform: 'translate(12%, -15%) rotate(8deg)'
-          }
-        }
+            transform: 'translate(12%, -15%) rotate(8deg)',
+          },
+          card_r: cardAnimation(8, 20, 0),
+          card_l: cardAnimation(-8, -20, 0)
+        },
       },
       animation: {
-        card: 'card 750ms ease-in-out infinite'
-      }
+        card: 'cardd 1000ms ease-in-out infinite'
+      },
     },
   },
   plugins: [

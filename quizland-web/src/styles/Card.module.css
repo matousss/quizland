@@ -1,0 +1,14 @@
+.flip {
+    transform: rotateX(180deg);
+
+}
+
+.strokeGreen {
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: green;
+}
+
+.strokeRed {
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: red;
+}

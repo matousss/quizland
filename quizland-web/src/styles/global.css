@@ -21,3 +21,7 @@ div#__next > div {
 .button {
     @apply bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md;
 }
+
+.backface-hidden {
+    backface-visibility: hidden;
+}

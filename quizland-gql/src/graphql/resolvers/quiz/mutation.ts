@@ -1,6 +1,6 @@
-import {QuizDB, to__id} from "../../../../lib/mongodb";
-import {Card, CardSet, Item, ItemType, MutationCreateCardSetArgs} from "../../../__generated__/resolvers-types";
-import {GQLError, InvalidUserInput, WriteError} from "../../../../lib/graphql/error";
+import {QuizDB} from "../../../../lib/mongodb";
+import {CardSet, ItemType, MutationCreateCardSetArgs} from "../../../__generated__/resolvers-types";
+import {InvalidUserInput, WriteError} from "../../../../lib/graphql/error";
 import {DItem} from "../../../../lib/types";
 
 
@@ -8,27 +8,32 @@ export const getMutationResolvers = (db: QuizDB) => {
 
 
     return {
-        createCardSet: async (_, args: MutationCreateCardSetArgs, {user}) => {
+        createCardSet: async (_, args: MutationCreateCardSetArgs, {user}): Promise<CardSet> => {
             if (args.cards.length < 2) throw new InvalidUserInput("Minimal cardset size is 2");
 
+
+            let cards = args.cards
+
+
+            let folder
+            if (args.folder !== undefined) {
+                folder = await db.Items.findOne({_id: parseInt(args.folder)});
+                if (!folder) throw new InvalidUserInput(`Folder with id ${args.folder} doesn't exist`);
+            }
+
             let item: DItem = {
+                _id: await db.getID(),
                 name: args.name,
                 owner: user._id,
                 type: ItemType.CardSet,
                 permissions: []
             };
-
-            let cards = args.cards.map(value => [value.term, value.definition]);
-
             if (args.description !== undefined) item.description = args.description;
-            let folder
-            if (args.folder !== undefined) {
-                folder = await db.Items.findOne({_id: to__id(args.folder)});
-                if (!folder) throw new InvalidUserInput(`Folder with id ${args.folder} doesn't exist`);
-            }
+
             let session = await db.client.startSession();
             let response;
             let insertedId
+
             try {
                 response = await session.withTransaction(async () => {
                     let insertOneResult = await db.Items.insertOne(item, {session});
@@ -48,10 +53,10 @@ export const getMutationResolvers = (db: QuizDB) => {
 
             return {
                 id: insertedId,
-                cards: args.cards,
+                cards: cards,
                 owner: user,
                 ...item
-            } as CardSet
+            }
 
         }
     }

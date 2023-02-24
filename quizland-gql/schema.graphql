@@ -39,10 +39,10 @@ type Mutation {
     # items
     # items cannot be created directly, only through its child, eg. CardSet, Folder
     deleteItem(id: ID!): Boolean @permitted(required: M) # delete item and all its children, shared folders, card sets, etc.
-    updateItemName(id: ID!, name: String!): Boolean @permitted(required: M)
-    updateItemDescription(id: ID!, description: String!): Boolean @permitted(required: W)
-    addPermission(id: ID!, user: ID!, permission: Permission!): Boolean @permitted(required: M)
+    updateItem(id: ID!, name: String, description: String): CardSet @permitted(required: M)
+
     updatePermission(id: ID!, user: ID!): Boolean @permitted(required: M) # update/delete
+
     getItem(id: ID!): Item @permitted(required: R)
 
     # folders
@@ -56,8 +56,13 @@ type Mutation {
         name: String!
         description: String
     ): CardSet @permitted(required: M)
-    removeCardSet(input: RemoveCardSetInput): Void @permitted(required: M)
-    updateCardSet(id: ID!, name: String, description: String, cards: [CardInput!]): CardSet @permitted(required: M)
+    removeCardSet(id: ID!): Void @permitted(required: M)
+
+    # if index not specified, add to the end
+    # addCard(cardSet: ID!, index: Int, card: CardInput!): CardSet @permitted(required: W)
+    # updateCard(cardSet: ID!, index: Int!, card: CardInput!): CardSet @permitted(required: W)
+    # removeCard(cardSet: ID!, index: Int!): CardSet @permitted(required: W)
+    updateCards(cars: [CardInput!]!): CardSet @permitted(required: W)
 }
 
 type AuthenticateUserPayload {
@@ -83,10 +88,6 @@ input CreateUserInput {
     email: String!
     name: String!
     image: String
-}
-
-input RemoveCardSetInput {
-    id: ID!
 }
 
 input CardInput {

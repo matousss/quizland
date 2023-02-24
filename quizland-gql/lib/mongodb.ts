@@ -2,7 +2,7 @@ import {Collection, MongoClient, ObjectId, Db, ServerApiVersion} from "mongodb";
 import {DB_URL} from "./config";
 
 import type {User, Account, Card} from "../src/__generated__/resolvers-types";
-import {DItem} from "./types";
+import {DCard, DCardSet, DItem} from "./types";
 
 
 const AUTH_COLLECTIONS = {
@@ -18,7 +18,6 @@ const QUIZ_COLLECTIONS = {
 }
 const AUTH_DB: string = 'auth';
 const QUIZ_DB: string = 'quiz';
-
 
 
 const to__id = (id: string | null | void) => {
@@ -61,7 +60,24 @@ const toMongo = (object: {}) => {
     return newObject;
 }
 
+type SequenceDoc = { _id: string, value: number }
+
+const getSequence = (collection: Collection<SequenceDoc>, id: any) => async () => {
+    let response = await collection.findOneAndUpdate(
+        {_id: id}, {$inc: {value: 1}}
+    );
+
+    if (!response.value) {
+        let insetResponse = await collection.insertOne({_id: id, value: 0});
+
+        return 0;
+    }
+
+    return response.value.value
+}
+
 type WDbClient = {
+    getID: () => Promise<number>;
     client: MongoClient;
     db: Db
 }
@@ -74,15 +90,17 @@ declare type AuthDB = {
 
 declare type QuizDB = {
     Items: Collection<DItem>;
-    Cards: Collection<{ _id: ObjectId, cards: Array<Card> }>;
+    Cards: Collection<DCardSet>;
 } & WDbClient
 
 const getAuthDB = (client: MongoClient): AuthDB => {
     const _db = client.db(AUTH_DB);
     const c = AUTH_COLLECTIONS;
+    const sequence = _db.collection<SequenceDoc>("sequence");
     return {
         Users: _db.collection<User>(c.USERS),
         Accounts: _db.collection<Account>(c.ACCOUNTS),
+        getID: getSequence(sequence, c.USERS),
         client: client,
         db: _db
     };
@@ -91,9 +109,11 @@ const getAuthDB = (client: MongoClient): AuthDB => {
 const getQuizDB = (client: MongoClient): QuizDB => {
     const _db = client.db(QUIZ_DB);
     const c = QUIZ_COLLECTIONS;
+    const sequence = _db.collection<SequenceDoc>("sequence");
     return {
         Items: _db.collection<DItem>(c.ITEMS),
-        Cards: _db.collection<{ _id: ObjectId, cards: Array<Card> }>(c.CARDS),
+        Cards: _db.collection<DCardSet>(c.CARDS),
+        getID: getSequence(sequence, c.ITEMS),
         client: client,
         db: _db
     }

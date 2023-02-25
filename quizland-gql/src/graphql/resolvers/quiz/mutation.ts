@@ -1,11 +1,12 @@
-import {QuizDB} from "../../../../lib/mongodb";
+import {DBClient} from "../../../../lib/mongodb";
 import {CardSet, ItemType, MutationCreateCardSetArgs} from "../../../__generated__/resolvers-types";
 import {InvalidUserInput, WriteError} from "../../../../lib/graphql/error";
 import {DItem} from "../../../../lib/types";
 
 
-export const getMutationResolvers = (db: QuizDB) => {
-
+export const getMutationResolvers = (dbClient: DBClient) => {
+    const mongo = dbClient.mongoClient;
+    const db = dbClient.quiz;
 
     return {
         createCardSet: async (_, args: MutationCreateCardSetArgs, {user}): Promise<CardSet> => {
@@ -13,7 +14,6 @@ export const getMutationResolvers = (db: QuizDB) => {
 
 
             let cards = args.cards
-
 
             let folder
             if (args.folder !== undefined) {
@@ -26,11 +26,12 @@ export const getMutationResolvers = (db: QuizDB) => {
                 name: args.name,
                 owner: user._id,
                 type: ItemType.CardSet,
-                permissions: []
+                permissions: [],
+                modified: new Date(),
             };
             if (args.description !== undefined) item.description = args.description;
 
-            let session = await db.client.startSession();
+            let session = await mongo.startSession();
             let response;
             let insertedId
 

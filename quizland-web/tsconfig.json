@@ -20,8 +20,8 @@
     "incremental": true,
     "baseUrl": "./",
     "paths": {
-      "@lib/*": [
-        "./lib/*"
+      "#types": [
+        "../quizland-gql/src/__generated__/resolvers-types"
       ]
     }
   },

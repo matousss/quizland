@@ -62,8 +62,8 @@ module.exports = {
             animation: {
                 card_result_r: 'card_r 800ms ease-in-out',
                 card_result_l: 'card_l 800ms ease-in-out',
-                card_from_left: 'from_left 250ms ease-in-out',
-                card_from_right: 'from_right 250ms ease-in-out',
+                card_from_right: 'from_left 250ms ease-in-out',
+                card_from_left: 'from_right 250ms ease-in-out',
             },
         },
     },

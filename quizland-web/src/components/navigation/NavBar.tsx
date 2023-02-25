@@ -1,8 +1,8 @@
-import {Disclosure, Menu, Popover, Transition} from '@headlessui/react'
-import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
+import {Disclosure, Popover, Transition} from '@headlessui/react'
+import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
 import Link from "next/link";
 import {usePathname} from "next/navigation";
-import React, {Component, FC, PropsWithChildren} from "react";
+import React, {FC, PropsWithChildren} from "react";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import UserMenu from "./user";
 
@@ -54,7 +54,7 @@ const SmallNavBarItem: FC<{ active: boolean } & Item> = ({active, ...item}) => (
     as={Link}
     href={item.href}
     className={
-        active ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' + 'block px-3 py-2 rounded-md text-base font-medium'
+        active ? 'bg-gray-900 text-white' : '> hover:bg-gray-700 hover:text-white' + 'block px-3 py-2 rounded-md text-base font-medium'
     }
     aria-current={active ? 'page' : undefined}
 >
@@ -95,7 +95,7 @@ const BodyBtn: FC<BodyBtnProps & PropsWithChildren> = ({active, ...props}) => (
     <div
         key={props.label}
         className={
-            active ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' +
+            active ? 'bg-gray-900 text-white' : '> hover:bg-gray-700 hover:text-white' +
                 ' px-3 py-2 rounded-md text-sm font-medium flex transition duration-150 ease-in-out'
         }
         aria-current={active ? 'page' : undefined}
@@ -137,7 +137,7 @@ const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Ar
                     <Popover.Panel>
                         <div
                             className={
-                                'absolute z-50 rounded-md text-sm font-medium mt-.5 shadow-md bg-gray-800 border-2 border-gray-700 divide-y divide-gray-100 flex flex-col text-gray-300'}
+                                'absolute z-50 rounded-md text-sm font-medium mt-.5 shadow-md bg-gray-800 border border-gray-700 divide-y divide-gray-700 flex flex-col >'}
                         >
 
 
@@ -212,7 +212,7 @@ const NavBar = () => {
     const pathName = usePathname()
 
     return (
-        <Disclosure as="nav" className={"bg-gray-800"}>
+        <Disclosure as="nav" className={"backdrop-blur-lg sticky top-0 z-50 border-b-[2px] border-gray-500"}>
             {({open}) => (
                 <>
                     <NavBarBody pathName={pathName} open={open}/>

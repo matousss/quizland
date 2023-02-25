@@ -1,11 +1,15 @@
-import {TCard} from "../cardset/FlipCard";
-import {Section} from "./Section";
+import {ExpandableSection} from "./Section";
 import React, {FC, useState} from "react";
 import {FlashCard} from "../cardset/FlashCard";
 
+import type {Card} from "#types";
 
 
-const FlashCardSection: FC<{next: Function, previous: Function, currentCard: TCard}> = ({next, previous, currentCard}) => {
+const FlashCardSection: FC<{ next: Function, previous: Function, currentCard: Card }> = ({
+                                                                                             next,
+                                                                                             previous,
+                                                                                             currentCard
+                                                                                         }) => {
 
     const [flipped, setFlipped] = useState(false)
     const [animation, setAnimation] = useState<string>()
@@ -28,11 +32,12 @@ const FlashCardSection: FC<{next: Function, previous: Function, currentCard: TCa
     }
 
     return (
-        <Section>
-            <div className={'sm:m-5 mt-12 flex grow'}>
-                <FlashCard onNext={goNext} onBack={goBack} currentCard={currentCard} className={animation} flipState={[flipped, setFlipped]}/>
+        <ExpandableSection>
+            <div className={'sm:m-5 py-6 flex grow'}>
+                <FlashCard onNext={goNext} onBack={goBack} currentCard={currentCard} className={animation}
+                           flipState={[flipped, setFlipped]}/>
             </div>
-        </Section>
+        </ExpandableSection>
     )
 }
 

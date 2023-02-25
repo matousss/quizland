@@ -1,6 +1,6 @@
-import {AuthError} from "@lib/page_errors/auth";
+import {AuthError} from "lib/page_errors/auth";
 import {Tab} from "@headlessui/react";
-import React, {FC, Fragment} from "react";
+import React, {FC} from "react";
 import {GoogleButton, SocialButton} from "../../components/auth/socialbuttons";
 import {useRouter} from "next/router";
 
@@ -47,9 +47,9 @@ const Auth = ({error_codes}: Props) => {
 
 
     return (
-        <div className={'bg-gray-800 md:flex'}>
+        <div className={'bg-gray-800 md:flex h-full'}>
             <Tab.Group as={"div"}
-                       className={'md:rounded-md h-full md:h-1/2 md:w-1/2 text-gray-300 bg-gray-700 m-auto divide-y flex flex-col drop-shadow-xl'}>
+                       className={'md:rounded-md h-full md:h-1/2 md:w-1/2 bg-gray-700 m-auto divide-y flex flex-col drop-shadow-xl'}>
                 <Tab.List className={'w-full grow-0 bg-gray-700 md:rounded-t-md'}>
                     <div className={'flex'}>
                         <TabBtn label={'3rd party account'}/>

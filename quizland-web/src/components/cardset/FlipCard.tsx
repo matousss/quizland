@@ -1,13 +1,15 @@
-import {ElementType, useRef, useState} from "react";
+import {ComponentProps, ElementType, useRef, useState} from "react";
 import styles from "../../styles/Card.module.css";
 import {Transition} from "@headlessui/react";
 
 import type {Dispatch, FC, PropsWithChildren, SetStateAction} from "react";
+import type {Card} from "#types";
 
-type TCard = [Array<string>, Array<string>]
 
-
-const AnimationCard: FC<{ success: boolean, onAnimationEnd: () => void }> = ({success, ...props}) => (
+/**
+ * Face of a flip card used for Known/Unknown card mode
+ * */
+const AnimationCard: FC<{ success: boolean } & ComponentProps<any>> = ({success, ...props}) => (
     <div
         className={'opacity-0 font-sans uppercase bg-gray-600 absolute z-10 w-full h-full text-[4rem] rounded-lg text-gray-500 flex drop-shadow-lg border-[3.5px] '
             + (success ? 'border-green-800 text-green-700 animate-card_result_r ' + styles.strokeGreen : 'border-red-800 text-red-700 animate-card_result_l ' + styles.strokeRed)}
@@ -19,6 +21,11 @@ const AnimationCard: FC<{ success: boolean, onAnimationEnd: () => void }> = ({su
     </div>
 )
 
+/**
+ * Represents one side of a flip card
+ * @param show Whether is shown or not, animation is played when this changes
+ * @param children The content of the card
+ * */
 const CardFace: FC<{ show: boolean } & PropsWithChildren> = ({children, show}) => (
     <Transition
         show={show}
@@ -39,8 +46,16 @@ const CardFace: FC<{ show: boolean } & PropsWithChildren> = ({children, show}) =
 
 const arrayToTerms = (array: Array<String>) => array.map((d, i) => (
     <div key={i} className={'text-center p-1 sm:p-6'}>{d}</div>))
+
+/**
+ * Creates a flip card with a term and a definition, both can be a list of strings
+ * @param {Card} card Card to be displayed in format {term: string, definition: string[]}
+ * @param className Additional classes for the card
+ * @param flipState State of the card, if not provided, the card will be flipped on click
+ * @param AdditionalFace Additional face of the card, will be shown over card face, can be used for animations
+ * */
 const FlipCard: FC<{
-    card: TCard,
+    card: Card,
     className?: string,
     flipState?: [boolean, Dispatch<SetStateAction<boolean>>],
     AdditionalFace?: ElementType
@@ -53,24 +68,26 @@ const FlipCard: FC<{
 
     const [flipped, setFlipped] = flipState || useState(false)
 
-    let definition = arrayToTerms(card[1])
-    let term = arrayToTerms(card[0])
+    let {term, definition} = card
+
+    let definitionComponents = arrayToTerms(definition as Array<string>)
+    let termComponents = arrayToTerms([term as string])
     let cardRef = useRef<HTMLDivElement>(null)
     let additionalFace = AdditionalFace ? <AdditionalFace onClick={() => setFlipped(!flipped)}/> : null
 
     return (
         <div className={'w-[18rem] sm:w-[33rem] md:w-[39rem] z-0 select-none'}>
-            <div ref={cardRef} key={card[0][0]}
+            <div ref={cardRef} key={term}
                  className={className + ' relative rounded-lg h-[12rem] sm:h-[22rem] md:h-[26rem] cursor-pointer backdrop-shadow-lg'}
             >
                 <div onClick={() => setFlipped(!flipped)}
                      className={'text-[1.3rem] sm:text-[2.2rem] md:text-[2.4rem] text-gray-200'}>
 
                     <CardFace show={!flipped}>
-                        {term}
+                        {termComponents}
                     </CardFace>
                     <CardFace show={flipped}>
-                        {definition}
+                        {definitionComponents}
                     </CardFace>
                 </div>
                 {additionalFace}
@@ -82,4 +99,3 @@ const FlipCard: FC<{
 }
 
 export {FlipCard, AnimationCard}
-export type {TCard}

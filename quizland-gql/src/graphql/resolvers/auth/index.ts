@@ -1,12 +1,9 @@
-import {MongoClient} from "mongodb";
-import {getAuthDB} from "../../../../lib/mongodb";
 import {getQueryResolvers} from "./query";
 import {getMutationResolvers} from "./mutation";
-export const getAuthResolvers = (client: MongoClient) => {
-    const db = getAuthDB(client);
-
+import {DBClient} from "../../../../lib/mongodb";
+export const getAuthResolvers = (client: DBClient) => {
     return {
-        Query: getQueryResolvers(db),
-        Mutation: getMutationResolvers(db)
+        Query: getQueryResolvers(client.auth),
+        Mutation: getMutationResolvers(client.auth, client.mongoClient)
     }
 }

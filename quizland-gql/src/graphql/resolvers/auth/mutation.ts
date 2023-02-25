@@ -10,9 +10,10 @@ import {
     NotLinkedAccountError,
     ProviderUserNotFound
 } from "../../../../lib/graphql/error";
+import {MongoClient} from "mongodb";
 
 const _id = to__id;
-export const getMutationResolvers = (db: AuthDB) => ({
+export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient) => ({
     deleteUser: async ({id}: { id: string }) => {
         let objId = _id(id);
         await Promise.all([
@@ -65,7 +66,7 @@ export const getMutationResolvers = (db: AuthDB) => ({
             providerAccountId: externalUser.id
         }
         let user_id
-        let session = await db.client.startSession();
+        let session = await mongoClient.startSession();
         let response;
         try {
             response = await session.withTransaction(async () => {

@@ -1,7 +1,10 @@
 import {useEffect, useState} from "react";
 import {getCookie} from "cookies-next";
-import { User } from "quizland-gql/src/__generated__/resolvers-types";
+import type {User} from "#types";
 
+/**
+ * Return the user object from the cookie
+ * */
 export function useUser() {
     const [user, setUser] = useState({})
 
@@ -14,6 +17,10 @@ export function useUser() {
     return user as User
 }
 
+/**
+ * Return the token from the cookie
+ * \*surprisingly\*
+ * */
 export function useToken() {
     const [token, setToken] = useState("")
 

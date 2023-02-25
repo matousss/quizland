@@ -1,5 +1,5 @@
 import {createYoga, createSchema} from 'graphql-yoga'
-import mongoClient from "../../lib/mongodb";
+import mongoClient, {getDBClient} from "../../lib/mongodb";
 import {getResolvers, typeDefs} from "../graphql";
 import {Context, resolveContext} from "../graphql/context";
 export const config = {
@@ -22,7 +22,7 @@ async function getServer<TServerContext>(endpoint = "/graphql") {
 
     const schema = createSchema<Context & TServerContext>({
         typeDefs: typeDefs,
-        resolvers: getResolvers(mongoClient)
+        resolvers: getResolvers(await getDBClient(connection))
     })
 
     return createYoga<TServerContext, Context>({

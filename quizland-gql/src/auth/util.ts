@@ -1,18 +1,13 @@
 import {Role, User} from "../__generated__/resolvers-types";
 import jsonwebtoken from "jsonwebtoken";
-import {ObjectId} from "mongodb";
 
 const jwt = jsonwebtoken;
 
 
 export const DEFAULT_TOKEN_LIFESPAN = 60 * 60 * 24 * 30; // 30 days in seconds
 
-const checkPayload = (payload: any): boolean => {
-    if (payload.role && payload.id) {
-        return true;
-    }
-    return false;
-}
+const checkPayload = (payload: any): boolean => !!(payload.role && payload.id);
+
 
 interface JWTPayload {
     role?: Role;

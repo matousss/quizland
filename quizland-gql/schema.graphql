@@ -21,6 +21,7 @@ type Query {
     # cardSets
     getCardSet(id: ID!): CardSet @permitted(required: R)
 
+    discoverCardSets: [ID!] @server
 }
 
 type Mutation {
@@ -130,8 +131,8 @@ enum Role {
 }
 
 interface Permit {
-    user: User
-    permission: Permission
+    user: ID!
+    permission: Permission!
 }
 
 interface Item {
@@ -140,7 +141,7 @@ interface Item {
     description: String
     owner: User
     permissions: [Permit!] @permitted(required: M)
-    modifiedAt: DateTime
+    modified: DateTime
 }
 
 type Card @internal {
@@ -155,7 +156,27 @@ type CardSet implements Item {
     owner: User
     permissions: [Permit!] @permitted(required: M)
     cards: [Card!]!
-    modifiedAt: DateTime
+    modified: DateTime
+}
+
+fragment CardSetFragment on CardSet {
+    id
+    name
+    description
+    owner {
+        id
+        username
+        image
+    }
+    permissions {
+        user
+        permission
+    }
+    cards {
+        term
+        definition
+    }
+    modified
 }
 
 type Folder implements Item {
@@ -165,7 +186,7 @@ type Folder implements Item {
     owner: User
     permissions: [Permit!] @permitted(required: M)
     children: [Item] @permitted(required: R)
-    modifiedAt: DateTime
+    modified: DateTime
 }
 
 type Account @server {
@@ -200,13 +221,10 @@ fragment ItemFragment on Item {
         username
     }
     permissions {
-        user {
-            id
-            username
-        }
+        user
         permission
     }
-    modifiedAt
+    modified
 }
 
 # on client can be resolved by __typename

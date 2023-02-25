@@ -1,8 +1,8 @@
 import {Collection, MongoClient, ObjectId, Db, ServerApiVersion} from "mongodb";
 import {DB_URL} from "./config";
 
-import type {User, Account, Card} from "../src/__generated__/resolvers-types";
-import {DCard, DCardSet, DItem} from "./types";
+import type {User, Account} from "../src/__generated__/resolvers-types";
+import {DCardSet, DItem} from "./types";
 
 
 const AUTH_COLLECTIONS = {
@@ -68,7 +68,7 @@ const getSequence = (collection: Collection<SequenceDoc>, id: any) => async () =
     );
 
     if (!response.value) {
-        let insetResponse = await collection.insertOne({_id: id, value: 0});
+        await collection.insertOne({_id: id, value: 0});
 
         return 0;
     }
@@ -78,7 +78,6 @@ const getSequence = (collection: Collection<SequenceDoc>, id: any) => async () =
 
 type WDbClient = {
     getID: () => Promise<number>;
-    client: MongoClient;
     db: Db
 }
 
@@ -93,6 +92,11 @@ declare type QuizDB = {
     Cards: Collection<DCardSet>;
 } & WDbClient
 
+type DBClient = {
+    auth: AuthDB;
+    quiz: QuizDB;
+    mongoClient: MongoClient;
+}
 const getAuthDB = (client: MongoClient): AuthDB => {
     const _db = client.db(AUTH_DB);
     const c = AUTH_COLLECTIONS;
@@ -101,7 +105,6 @@ const getAuthDB = (client: MongoClient): AuthDB => {
         Users: _db.collection<User>(c.USERS),
         Accounts: _db.collection<Account>(c.ACCOUNTS),
         getID: getSequence(sequence, c.USERS),
-        client: client,
         db: _db
     };
 }
@@ -114,7 +117,6 @@ const getQuizDB = (client: MongoClient): QuizDB => {
         Items: _db.collection<DItem>(c.ITEMS),
         Cards: _db.collection<DCardSet>(c.CARDS),
         getID: getSequence(sequence, c.ITEMS),
-        client: client,
         db: _db
     }
 }
@@ -122,6 +124,15 @@ const getQuizDB = (client: MongoClient): QuizDB => {
 const mongoClient = new MongoClient(DB_URL || 'mongodb://localhost:27017',
     // @ts-ignore
     {useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1});
+
+
+const getDBClient = async (mongoClient: MongoClient): Promise<DBClient> => {
+    return {
+        auth: getAuthDB(mongoClient),
+        quiz:  getQuizDB(mongoClient),
+        mongoClient: mongoClient
+    }
+}
 export default mongoClient;
-export {getAuthDB, getQuizDB, to__id, fromMongo, toMongo, AUTH_DB, AUTH_COLLECTIONS}
-export type {AuthDB, QuizDB}
+export {getDBClient, getAuthDB, getQuizDB, to__id, fromMongo, toMongo, AUTH_DB, AUTH_COLLECTIONS}
+export type {AuthDB, QuizDB, DBClient}

@@ -1,9 +1,7 @@
 import type {NextPage} from 'next'
-import styles from 'src/styles/Home.module.css'
-import React, {useEffect, useState} from "react";
-import {getCookie, getCookies} from "cookies-next";
+import React from "react";
 import {NavBar} from "src/components/navigation/NavBar";
-import {useUser} from "@lib/hooks/user";
+import {useUser} from "lib/hooks/user";
 interface Props {
     clientId: string
 }

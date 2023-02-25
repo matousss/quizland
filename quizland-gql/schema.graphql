@@ -46,6 +46,8 @@ type Mutation {
 
     getItem(id: ID!): Item @permitted(required: R)
 
+    checkPermission(id: ID!, user: ID!): Permission
+
     # folders
     createFolder(parent: ID, name: String!, description: String): Folder @permitted(required: M)
     moveItem(id: ID!, from: ID!, to: ID!): Boolean @permitted(required: M)
@@ -131,7 +133,8 @@ enum Role {
 }
 
 interface Permit {
-    user: ID!
+    user: ID
+    group: ID
     permission: Permission!
 }
 
@@ -211,6 +214,13 @@ type User {
     role: Role @server
 }
 
+type Group {
+    id: ID
+    name: String!
+    owner: User
+    members: [User] @permitted(required: R)
+    modified: DateTime
+}
 
 fragment ItemFragment on Item {
     id

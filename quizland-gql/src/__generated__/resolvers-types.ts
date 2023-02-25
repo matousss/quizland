@@ -81,6 +81,15 @@ export type Folder = Item & {
   permissions?: Maybe<Array<Permit>>;
 };
 
+export type Group = {
+  __typename?: 'Group';
+  id?: Maybe<Scalars['ID']>;
+  members?: Maybe<Array<Maybe<User>>>;
+  modified?: Maybe<Scalars['DateTime']>;
+  name: Scalars['String'];
+  owner?: Maybe<User>;
+};
+
 export type Item = {
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
@@ -98,6 +107,7 @@ export enum ItemType {
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateUser?: Maybe<AuthenticateUserPayload>;
+  checkPermission?: Maybe<Permission>;
   connectAccount?: Maybe<Scalars['Void']>;
   createCardSet?: Maybe<CardSet>;
   createFolder?: Maybe<Folder>;
@@ -115,6 +125,12 @@ export type Mutation = {
 export type MutationAuthenticateUserArgs = {
   code: Scalars['String'];
   provider: ProviderType;
+};
+
+
+export type MutationCheckPermissionArgs = {
+  id: Scalars['ID'];
+  user: Scalars['ID'];
 };
 
 
@@ -190,8 +206,9 @@ export enum Permission {
 }
 
 export type Permit = {
-  permission?: Maybe<Permission>;
-  user?: Maybe<User>;
+  group?: Maybe<Scalars['ID']>;
+  permission: Permission;
+  user?: Maybe<Scalars['ID']>;
 };
 
 export enum ProviderType {
@@ -340,6 +357,7 @@ export type ResolversTypes = ResolversObject<{
   CreateUserInput: CreateUserInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   Folder: ResolverTypeWrapper<Folder>;
+  Group: ResolverTypeWrapper<Group>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Item: ResolversTypes['CardSet'] | ResolversTypes['Folder'];
@@ -369,6 +387,7 @@ export type ResolversParentTypes = ResolversObject<{
   CreateUserInput: CreateUserInput;
   DateTime: Scalars['DateTime'];
   Folder: Folder;
+  Group: Group;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Item: ResolversParentTypes['CardSet'] | ResolversParentTypes['Folder'];
@@ -451,6 +470,15 @@ export type FolderResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type GroupResolvers<ContextType = any, ParentType extends ResolversParentTypes['Group'] = ResolversParentTypes['Group']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  members?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+  modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  owner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type ItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['Item'] = ResolversParentTypes['Item']> = ResolversObject<{
   __resolveType: TypeResolveFn<'CardSet' | 'Folder', ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -463,6 +491,7 @@ export type ItemResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   authenticateUser?: Resolver<Maybe<ResolversTypes['AuthenticateUserPayload']>, ParentType, ContextType, RequireFields<MutationAuthenticateUserArgs, 'code' | 'provider'>>;
+  checkPermission?: Resolver<Maybe<ResolversTypes['Permission']>, ParentType, ContextType, RequireFields<MutationCheckPermissionArgs, 'id' | 'user'>>;
   connectAccount?: Resolver<Maybe<ResolversTypes['Void']>, ParentType, ContextType, RequireFields<MutationConnectAccountArgs, 'code' | 'provider'>>;
   createCardSet?: Resolver<Maybe<ResolversTypes['CardSet']>, ParentType, ContextType, RequireFields<MutationCreateCardSetArgs, 'cards' | 'name'>>;
   createFolder?: Resolver<Maybe<ResolversTypes['Folder']>, ParentType, ContextType, RequireFields<MutationCreateFolderArgs, 'name'>>;
@@ -478,8 +507,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type PermitResolvers<ContextType = any, ParentType extends ResolversParentTypes['Permit'] = ResolversParentTypes['Permit']> = ResolversObject<{
   __resolveType: TypeResolveFn<null, ParentType, ContextType>;
-  permission?: Resolver<Maybe<ResolversTypes['Permission']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  group?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  permission?: Resolver<ResolversTypes['Permission'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -515,6 +545,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   CheckTokenPayload?: CheckTokenPayloadResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Folder?: FolderResolvers<ContextType>;
+  Group?: GroupResolvers<ContextType>;
   Item?: ItemResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Permit?: PermitResolvers<ContextType>;

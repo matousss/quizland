@@ -1,21 +1,18 @@
-import getServer, {Context} from "./src/apollo";
-import {startStandaloneServer} from "@apollo/server/standalone";
+import getServer from "./src/yoga";
+import {createServer} from "http";
 
 
+const endpoint = '/graphql';
+const port = 4000
 
 async function start() {
-    const {server, options} = await getServer();
-    return await startStandaloneServer<Context>(server, {
-        // @ts-ignore
-        port: 4000,
-        host: "localhost",
-        ...options})
+    const yoga = await getServer(endpoint);
+    createServer(yoga).listen({port: port});
 }
 
 start().then(
-    ({url}) => {
-        console.log(`🚀 Server ready at ${url}`);
-    })
+    () => console.log(`🚀 Server ready at http://localhost:${port}${endpoint}`)
+)
 
 
 

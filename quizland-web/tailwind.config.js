@@ -42,17 +42,17 @@ module.exports = {
                 },
                 card_r: cardAnimation(-4, 20, 0),
                 card_l: cardAnimation(4, -20, 0),
-                from_left: {
+                from_right: {
                     '0%': {
-                        transform: 'translate(-20%, 0)',
+                        transform: 'scale(.9) translate(-20%, 0) rotateY(45deg)',
                     },
                     '100%': {
                         transform: 'translate(0, 0)',
                     }
                 },
-                from_right: {
+                from_left: {
                     '0%': {
-                        transform: 'translate(20%, 0)',
+                        transform: 'scale(.9) translate(20%, 0) rotateY(-45deg)',
                     },
                     '100%': {
                         transform: 'translate(0, 0)',
@@ -60,10 +60,10 @@ module.exports = {
                 },
             },
             animation: {
-                card_r: 'card_r 800ms ease-in-out',
-                card_l: 'card_l 800ms ease-in-out',
-                from_left: 'from_left 300ms ease-in-out',
-                from_right: 'from_right 300ms ease-in-out',
+                card_result_r: 'card_r 800ms ease-in-out',
+                card_result_l: 'card_l 800ms ease-in-out',
+                card_from_left: 'from_left 250ms ease-in-out',
+                card_from_right: 'from_right 250ms ease-in-out',
             },
         },
     },

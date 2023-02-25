@@ -25,3 +25,7 @@ div#__next > div {
 .backface-hidden {
     backface-visibility: hidden;
 }
+
+.scrollbar-rounded > ::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb {
+    @apply rounded-full
+}

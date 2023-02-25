@@ -34,10 +34,10 @@ const CardFace: FC<{ show: boolean } & PropsWithChildren> = ({children, show}) =
 
         leaveTo={styles.flip}
 
-        className={'flex py-6 bg-gray-600 absolute z-10 w-full h-full rounded-lg transition-transform duration-500 backface-hidden font-sans text-lg md: text-[2rem] text-gray-200'}
+        className={'flex py-6 bg-gray-600 absolute z-10 w-full h-full rounded-lg transition-transform duration-500 backface-hidden font-sans text-lg md:text-[1.3rem] text-gray-200'}
     >
         <div
-            className={'px-8 m-auto divide-y divide-gray-500 overflow-y-auto max-h-full w-full scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-w-[5px] scrollbar-rounded'}>
+            className={'px-4 sm:px-6 md:px-8 m-auto divide-y divide-gray-500 overflow-y-auto max-h-full w-full scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-w-[5px] scrollbar-rounded'}>
             {children}
         </div>
 
@@ -45,7 +45,7 @@ const CardFace: FC<{ show: boolean } & PropsWithChildren> = ({children, show}) =
 )
 
 const arrayToTerms = (array: Array<String>) => array.map((d, i) => (
-    <div key={i} className={'text-center p-6'}>{d}</div>))
+    <div key={i} className={'text-center p-1 sm:p-6'}>{d}</div>))
 const FlipCard: FC<{
     card: TCard,
     className?: string,
@@ -61,19 +61,13 @@ const FlipCard: FC<{
     let definition = arrayToTerms(card[1])
     let term = arrayToTerms(card[0])
     let cardRef = useRef<HTMLDivElement>(null)
-    const [animate, setAnimate] = useState(true)
-
-    useEffect(() => {
-        if (cardRef.current === null) return
-        setAnimate(true)
-    }, [card])
 
     return (
         <div className={'w-[15rem] sm:w-[21rem] md:w-[27rem] z-0 select-none'}>
-            <div ref={cardRef} key={card[0][0]} onAnimationEnd={() => setAnimate(false)}
+            <div ref={cardRef} key={card[0][0]}
                  className={className + ' relative rounded-lg h-[10rem] sm:h-[14rem] md:h-[18rem] cursor-pointer backdrop-shadow-lg'}
             >
-                <div onClick={() => !animate && setFlipped(!flipped)}>
+                <div onClick={() => setFlipped(!flipped)}>
 
                     <CardFace show={!flipped}>
                         {term}
@@ -82,10 +76,7 @@ const FlipCard: FC<{
                         {definition}
                     </CardFace></div>
 
-                {false && animate &&
-                    <AnimationCard onAnimationEnd={() => setAnimate(false)} success={!flipped}/>}
-
-
+                {/*AnimationCard placeholder*/}
             </div>
         </div>
     )

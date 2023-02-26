@@ -21,7 +21,7 @@
     "baseUrl": "./",
     "paths": {
       "#types": [
-        "../quizland-gql/src/__generated__/resolvers-types"
+        "./src/graphql/types"
       ]
     }
   },

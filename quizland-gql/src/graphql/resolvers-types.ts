@@ -50,12 +50,14 @@ export type CardInput = {
 export type CardSet = Item & {
   __typename?: 'CardSet';
   cards: Array<Card>;
+  definitionLng?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   modified?: Maybe<Scalars['DateTime']>;
   name: Scalars['String'];
-  owner?: Maybe<User>;
+  owner: User;
   permissions?: Maybe<Array<Permit>>;
+  termLng?: Maybe<Scalars['String']>;
 };
 
 export type CheckTokenPayload = {
@@ -77,7 +79,7 @@ export type Folder = Item & {
   id?: Maybe<Scalars['ID']>;
   modified?: Maybe<Scalars['DateTime']>;
   name: Scalars['String'];
-  owner?: Maybe<User>;
+  owner: User;
   permissions?: Maybe<Array<Permit>>;
 };
 
@@ -95,7 +97,7 @@ export type Item = {
   id?: Maybe<Scalars['ID']>;
   modified?: Maybe<Scalars['DateTime']>;
   name: Scalars['String'];
-  owner?: Maybe<User>;
+  owner: User;
   permissions?: Maybe<Array<Permit>>;
 };
 
@@ -440,12 +442,14 @@ export type CardResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type CardSetResolvers<ContextType = any, ParentType extends ResolversParentTypes['CardSet'] = ResolversParentTypes['CardSet']> = ResolversObject<{
   cards?: Resolver<Array<ResolversTypes['Card']>, ParentType, ContextType>;
+  definitionLng?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   permissions?: Resolver<Maybe<Array<ResolversTypes['Permit']>>, ParentType, ContextType>;
+  termLng?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -465,7 +469,7 @@ export type FolderResolvers<ContextType = any, ParentType extends ResolversParen
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   permissions?: Resolver<Maybe<Array<ResolversTypes['Permit']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -485,7 +489,7 @@ export type ItemResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   permissions?: Resolver<Maybe<Array<ResolversTypes['Permit']>>, ParentType, ContextType>;
 }>;
 

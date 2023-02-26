@@ -1,7 +1,7 @@
 import {DBClient} from "../../../../lib/mongodb";
-import {ItemType} from "../../../__generated__/resolvers-types";
+import {ItemType, QueryResolvers} from "../../resolvers-types";
 
-export const getQueryResolvers = (dbClient: DBClient) => {
+export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
     const db = dbClient.quiz;
     const Users = dbClient.auth.Users;
 
@@ -10,7 +10,7 @@ export const getQueryResolvers = (dbClient: DBClient) => {
         discoverCardSets: async () => {
             let items = await db.Items.find({type: ItemType.CardSet}, {limit: null}).toArray();
 
-            return items.map(item => item._id)
+            return items.map(item => item._id.toString())
         },
         getCardSet: async (_, {id}) => {
             let item = await db.Items.findOne({_id: parseInt(id)});

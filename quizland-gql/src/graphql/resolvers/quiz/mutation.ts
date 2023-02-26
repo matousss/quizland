@@ -1,10 +1,10 @@
 import {DBClient} from "../../../../lib/mongodb";
-import {CardSet, ItemType, MutationCreateCardSetArgs} from "../../../__generated__/resolvers-types";
+import {CardSet, ItemType, MutationCreateCardSetArgs, MutationResolvers} from "../../resolvers-types";
 import {InvalidUserInput, WriteError} from "../../../../lib/graphql/error";
 import {DItem} from "../../../../lib/types";
 
 
-export const getMutationResolvers = (dbClient: DBClient) => {
+export const getMutationResolvers = (dbClient: DBClient): MutationResolvers => {
     const mongo = dbClient.mongoClient;
     const db = dbClient.quiz;
 

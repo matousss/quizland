@@ -142,7 +142,7 @@ interface Item {
     id: ID
     name: String!
     description: String
-    owner: User
+    owner: User!
     permissions: [Permit!] @permitted(required: M)
     modified: DateTime
 }
@@ -156,10 +156,13 @@ type CardSet implements Item {
     id: ID
     name: String!
     description: String
-    owner: User
+    owner: User!
     permissions: [Permit!] @permitted(required: M)
     cards: [Card!]!
+    termLng: String
+    definitionLng: String
     modified: DateTime
+
 }
 
 fragment CardSetFragment on CardSet {
@@ -186,7 +189,7 @@ type Folder implements Item {
     id: ID
     name: String!
     description: String
-    owner: User
+    owner: User!
     permissions: [Permit!] @permitted(required: M)
     children: [Item] @permitted(required: R)
     modified: DateTime

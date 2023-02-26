@@ -1,4 +1,4 @@
-import {Card, Item, ItemType} from "../src/__generated__/resolvers-types";
+import {Card, Item, ItemType} from "../src/graphql/resolvers-types";
 import {ObjectId} from "mongodb";
 
 export type DItem = {type: ItemType} & Item & {_id: number}

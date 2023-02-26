@@ -1,4 +1,4 @@
-import { ProviderType } from "../__generated__/resolvers-types";
+import { ProviderType } from "../graphql/resolvers-types";
 import { resolve as google } from "./providers/Google";
 
 export declare type UserInfo = {

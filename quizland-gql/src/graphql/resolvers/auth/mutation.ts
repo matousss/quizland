@@ -1,5 +1,5 @@
-import type {Account, User} from "../../../__generated__/resolvers-types";
-import {Role} from "../../../__generated__/resolvers-types";
+import type {Account, MutationResolvers, User} from "../../resolvers-types";
+import {Role} from "../../resolvers-types";
 import type {AuthDB} from "../../../../lib/mongodb";
 import {fromMongo, to__id} from "../../../../lib/mongodb";
 import {resolvers as auth_resolvers, UserInfo} from "../../../auth";
@@ -13,7 +13,7 @@ import {
 import {MongoClient} from "mongodb";
 
 const _id = to__id;
-export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient) => ({
+export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient): MutationResolvers => ({
     deleteUser: async ({id}: { id: string }) => {
         let objId = _id(id);
         await Promise.all([
@@ -23,7 +23,7 @@ export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient) => ({
             ]
         );
     },
-    authenticateUser: async (args: any, {provider, code, state}) => {
+    authenticateUser: async (args, {provider, code}) => {
         let externalUser: UserInfo;
 
         externalUser = await auth_resolvers[provider](code);
@@ -32,7 +32,7 @@ export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient) => ({
             throw new ProviderUserNotFound(provider)
         }
 
-        let user: User = await db.Users.findOne({email: externalUser.email});
+        let user = await db.Users.findOne({email: externalUser.email});
         let account: Account = await db.Accounts.findOne({providerAccountId: externalUser.id, provider: provider});
 
         if (user) {
@@ -42,15 +42,15 @@ export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient) => ({
 
             if (account.providerAccountId !== externalUser.id) throw new DuplicitAccountError(provider)
 
-            let plainUser = fromMongo(user);
+            let plainUser = fromMongo<User>(user);
 
             let exp = Date.now() + DEFAULT_TOKEN_LIFESPAN * 1000;
             let jwt = generateJWT(plainUser as User);
 
-            return {token: jwt, user: plainUser, expiresAt: exp}
+            return {token: jwt, user: plainUser as User, expiresAt: exp}
         }
 
-        user = {
+        let newUser: User = {
             email: externalUser.email,
             surname: externalUser.surname,
             lastname: externalUser.lastname,
@@ -58,7 +58,7 @@ export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient) => ({
         }
 
         if (externalUser.image) {
-            user.image = externalUser.image;
+            newUser.image = externalUser.image;
         }
 
         account = {
@@ -78,7 +78,7 @@ export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient) => ({
                 await db.Accounts.insertOne(account, {session});
             })
         } finally {
-            session.endSession()
+            await session.endSession()
         }
 
         if (!response.ok) throw new GQLError("Could not create account", {code: ERROR_CODES.WRITE_ERROR})
@@ -86,13 +86,12 @@ export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient) => ({
 
         let exp = Date.now() + DEFAULT_TOKEN_LIFESPAN * 1000;
 
-        user.id = user_id;
-        let plainUser = fromMongo(user);
+        user.id = user_id.toString();
 
         return {
-            token: generateJWT(plainUser as User),
+            token: generateJWT(user),
             expiresAt: exp,
-            user: plainUser
+            user: user
         }
 
 

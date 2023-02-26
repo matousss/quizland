@@ -5,7 +5,7 @@ import {NavBar} from "../../components/navigation/NavBar";
 import {DescriptionSection, TitleSection} from "../../components/sections/CardSet";
 import FlashCardSection from "../../components/sections/FlashCardSection";
 
-import type {User, CardSet} from "#types";
+import type {CardSet} from "#types";
 import {NextPage} from "next";
 
 interface Params {
@@ -57,6 +57,8 @@ export const getStaticProps = async ({params}: { params: Params }): Promise<{ pr
                             term
                             definition
                         }
+                        termLng
+                        definitionLng
                         modified
                     }
                 }
@@ -77,7 +79,8 @@ export const getStaticProps = async ({params}: { params: Params }): Promise<{ pr
 
 const CardSet: NextPage<Props> = (props) => {
     const cardSet = props.cardSet
-    const {name, description, cards, modified, owner} = cardSet
+    const {name, cards, owner, modified, ...rest} = cardSet
+    // rest: {description, termLng, definitionLng}
 
     const [index, setIndex] = useState(0)
     const [currentCard, setCard] = useState(cards[0])
@@ -102,7 +105,7 @@ const CardSet: NextPage<Props> = (props) => {
                     </div>
                 </div>
 
-                <DescriptionSection author={owner as User} description={description as string | undefined} modified={modified ? Date.parse(modified) : undefined}/>
+                <DescriptionSection author={owner} modified={modified ? Date.parse(modified) : undefined} {...rest}/>
             </div>
         </>
     )

@@ -1,7 +1,7 @@
 import {Collection, MongoClient, ObjectId, Db, ServerApiVersion} from "mongodb";
 import {DB_URL} from "./config";
 
-import type {User, Account} from "../src/__generated__/resolvers-types";
+import type {User, Account} from "../src/graphql/resolvers-types";
 import {DCardSet, DItem} from "./types";
 
 
@@ -27,20 +27,20 @@ const to__id = (id: string | null | void) => {
     return new ObjectId(id);
 }
 
-const fromMongo = (object: {}) => {
+const fromMongo = <T>(object: T & {_id: ObjectId}): T & {id: string} => {
     const newObject = {};
     for (let key in object) {
         // @ts-ignore
         const value = object[key];
         if (key === "_id") {
             // @ts-ignore
-            newObject.id = (object._id as ObjectId).toHexString();
+            newObject.id = (object._id as ObjectId).toString();
         } else {
             // @ts-ignore
             newObject[key] = value;
         }
     }
-    return newObject;
+    return newObject as T & {id: string};
 }
 
 

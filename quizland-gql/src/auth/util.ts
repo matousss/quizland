@@ -1,4 +1,4 @@
-import {Role, User} from "../__generated__/resolvers-types";
+import {Role, User} from "../graphql/resolvers-types";
 import jsonwebtoken from "jsonwebtoken";
 
 const jwt = jsonwebtoken;

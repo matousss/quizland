@@ -1,11 +1,17 @@
 schema: './schema.graphql'
 
 generates:
-  ./src/__generated__/resolvers-types.ts:
+  ./src/graphql/resolvers-types.ts:
     plugins:
       - "typescript"
       - "typescript-resolvers"
 
     config:
       useIndexSignature: true
-#      contextType: "../index#MyContext"
+  #      contextType: "../index#MyContext"
+  '../quizland-web/src/graphql/types.ts':
+    plugins:
+      - 'typescript'
+    config:
+      maybeValue: 'T | null | undefined'
+

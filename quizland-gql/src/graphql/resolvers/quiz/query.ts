@@ -31,7 +31,7 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
             let ownerID
             let ownerRaw
             if (owner.toString().startsWith('@')) {
-                ownerRaw = specialUsers[owner.replace('@', '')]
+                ownerRaw = specialUsers[owner.toString().replace('@', '')]
             }
 
             else {

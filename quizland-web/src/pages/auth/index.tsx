@@ -1,7 +1,7 @@
 import {AuthError} from "lib/page_errors/auth";
 import {Tab} from "@headlessui/react";
 import React, {FC} from "react";
-import {GoogleButton, SocialButton} from "../../components/auth/socialbuttons";
+import {GoogleButton, SocialButton} from "@components/auth/socialbuttons";
 import {useRouter} from "next/router";
 
 interface Props {

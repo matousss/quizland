@@ -1,12 +1,13 @@
 import apollo_client from "../../graphql";
 import {gql} from "@apollo/client";
 import React, {useEffect, useState} from "react";
-import {NavBar} from "../../components/navigation/NavBar";
-import {DescriptionSection, TitleSection} from "../../components/sections/CardSet";
-import FlashCardSection from "../../components/sections/FlashCardSection";
+import NavBar from "@components/navigation/NavBar";
+import {DescriptionSection, TitleSection} from "@components/sections/CardSet";
+import FlashCardSection from "@components/sections/FlashCardSection";
 
 import type {CardSet} from "#types";
 import {NextPage} from "next";
+import {SectionContainer} from "@components/sections";
 
 interface Params {
     id: number
@@ -94,7 +95,7 @@ const CardSet: NextPage<Props> = (props) => {
     return (
         <>
             <NavBar/>
-            <div className={'divide-y divide-gray-600 divide-dashed w-full md:mx-8 px-4 md:w-2/3'}>
+            <SectionContainer>
                 <TitleSection title={name}/>
 
                 <div>
@@ -106,7 +107,7 @@ const CardSet: NextPage<Props> = (props) => {
                 </div>
 
                 <DescriptionSection author={owner} modified={modified ? Date.parse(modified) : undefined} {...rest}/>
-            </div>
+            </SectionContainer>
         </>
     )
 

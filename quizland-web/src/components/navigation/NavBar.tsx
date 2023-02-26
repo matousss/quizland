@@ -21,8 +21,8 @@ const navigation: Array<Item & Submenu> = [
     {label: 'Browse', href: '/browse'},
     {
         label: 'Create', href: '/create', subMenu: [
-            {label: 'Card set', href: '/create/cardset'},
-            {label: 'Quiz', href: '/create/quiz'}
+            {label: 'Card set', href: '/cardset/create'},
+            // {label: 'Quiz', href: '/create/quiz'}
         ]
     },
     {label: 'About', href: '/about'},
@@ -203,11 +203,6 @@ const NavBarBody = ({
 
 }
 
-
-export {
-    NavBar
-}
-
 const NavBar = () => {
     const pathName = usePathname()
 
@@ -224,3 +219,4 @@ const NavBar = () => {
     )
 }
 
+export default NavBar

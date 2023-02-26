@@ -22,6 +22,9 @@
     "paths": {
       "#types": [
         "./src/graphql/types"
+      ],
+      "@components/*": [
+        "./src/components/*"
       ]
     }
   },

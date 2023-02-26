@@ -1,6 +1,6 @@
 import type {NextPage} from 'next'
 import React from "react";
-import {NavBar} from "src/components/navigation/NavBar";
+import NavBar from "@components/navigation/NavBar";
 import {useUser} from "lib/hooks/user";
 interface Props {
     clientId: string

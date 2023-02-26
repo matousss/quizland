@@ -8,7 +8,7 @@ const UserImage: FC<{src?: string}> = ({src}) => {
     const source = src || '/assets/user.svg'
 
     return <Image
-        className="h-8 w-8 rounded-full m-auto"
+        className="h-8 w-8 rounded-full m-auto bg-contrast"
         src={source}
         alt=""
         width={64}

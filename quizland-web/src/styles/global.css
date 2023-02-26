@@ -17,10 +17,6 @@ div#__next {
     height: 100%;
 }
 
-body {
-    @apply bg-primary text-contrast;
-}
-
 @layer components {
     .button {
         @apply bg-primary text-contrast hover:bg-middle hover:text-white rounded-md;
@@ -29,20 +25,52 @@ body {
     .backface-hidden {
         backface-visibility: hidden;
     }
+}
 
-    .scrollbar-rounded > ::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb {
-        @apply rounded-full
+body {
+    @apply bg-primary text-contrast;
+}
+
+::-webkit-scrollbar {
+    @apply w-2.5 h-2.5;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-primary;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-secondary rounded-full hover:bg-middle;
+}
+
+::-webkit-scrollbar-corner{
+    @apply bg-middle;
+    border: none;
+    outline: none;
+    --tw-ring-color: transparent;
+}
+
+@layer base {
+    .scrollbar-rounded > ::-webkit-scrollbar-thumb {
+        @apply rounded-full;
+    }
+    .scrollbar-m1 > ::-webkit-scrollbar {
+        @apply w-1.5;
+    }
+    .scrollbar-m1 > ::-webkit-scrollbar-track {
+        @apply bg-primary;
+        @apply scrollbar-thin scrollbar;
     }
 
-    .scrollbar-primary {
-        @apply scrollbar-thin scrollbar
+    .scrollbar-m1 > ::-webkit-scrollbar-thumb {
+        @apply bg-secondary;
     }
 
-    .scrollbar-primary > ::-webkit-scrollbar-track {
-        @apply bg-white
+    .scrollbar-m1 > ::-webkit-scrollbar-corner{
+        @apply bg-middle;
     }
 
     .scrollbar > ::-webkit-scrollbar-thumb {
-        @apply bg-middle
+        @apply bg-middle;
     }
 }

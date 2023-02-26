@@ -5,10 +5,3 @@ export const Section: FC<PropsWithChildren> = ({children}) => (
         {children}
     </div>
 )
-
-export const ExpandableSection: FC<PropsWithChildren>
-    = ({children}) => (
-    <div className={'w-full px-8'}>
-        {children}
-    </div>
-)

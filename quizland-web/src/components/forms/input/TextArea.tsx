@@ -17,7 +17,7 @@ const TextArea: FC<ComponentProps<'textarea'> & { value?: string }> = ({
     return (<>
         <textarea
             className={'bg-middle_dark border-2 rounded-md focus:ring-0 focus:border-contrast transition duration-250 ' +
-                'scrollbar-primary scrollbar-rounded '
+                'scrollbar-m1 scrollbar-rounded '
                 + className}
             onChange={(e) => {
                 if (maxLength && e.target.value.length > maxLength)

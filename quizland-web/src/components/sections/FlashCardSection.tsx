@@ -1,8 +1,8 @@
-import {ExpandableSection} from "./Section";
 import React, {FC, useState} from "react";
 import {FlashCard} from "../cardset/FlashCard";
 
 import type {Card} from "#types";
+import { Section } from "./Section";
 
 
 const FlashCardSection: FC<{ next: Function, previous: Function, currentCard: Card }> = ({
@@ -32,12 +32,12 @@ const FlashCardSection: FC<{ next: Function, previous: Function, currentCard: Ca
     }
 
     return (
-        <ExpandableSection>
+        <Section>
             <div className={'sm:m-5 py-6 flex grow'}>
                 <FlashCard onNext={goNext} onBack={goBack} currentCard={currentCard} className={animation}
                            flipState={[flipped, setFlipped]}/>
             </div>
-        </ExpandableSection>
+        </Section>
     )
 }
 

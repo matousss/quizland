@@ -38,8 +38,8 @@ export type AuthenticateUserPayload = {
 
 export type Card = {
   __typename?: 'Card';
-  definition?: Maybe<Array<Maybe<Scalars['String']>>>;
-  term?: Maybe<Scalars['String']>;
+  definition: Array<Scalars['String']>;
+  term: Scalars['String'];
 };
 
 export type CardInput = {
@@ -52,7 +52,7 @@ export type CardSet = Item & {
   cards: Array<Card>;
   definitionLng?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   modified?: Maybe<Scalars['DateTime']>;
   name: Scalars['String'];
   owner: User;
@@ -76,7 +76,7 @@ export type Folder = Item & {
   __typename?: 'Folder';
   children?: Maybe<Array<Maybe<Item>>>;
   description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   modified?: Maybe<Scalars['DateTime']>;
   name: Scalars['String'];
   owner: User;
@@ -94,7 +94,7 @@ export type Group = {
 
 export type Item = {
   description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   modified?: Maybe<Scalars['DateTime']>;
   name: Scalars['String'];
   owner: User;
@@ -435,8 +435,8 @@ export type AuthenticateUserPayloadResolvers<ContextType = any, ParentType exten
 }>;
 
 export type CardResolvers<ContextType = any, ParentType extends ResolversParentTypes['Card'] = ResolversParentTypes['Card']> = ResolversObject<{
-  definition?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
-  term?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  definition?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  term?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -444,7 +444,7 @@ export type CardSetResolvers<ContextType = any, ParentType extends ResolversPare
   cards?: Resolver<Array<ResolversTypes['Card']>, ParentType, ContextType>;
   definitionLng?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
@@ -466,7 +466,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export type FolderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Folder'] = ResolversParentTypes['Folder']> = ResolversObject<{
   children?: Resolver<Maybe<Array<Maybe<ResolversTypes['Item']>>>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
@@ -486,7 +486,7 @@ export type GroupResolvers<ContextType = any, ParentType extends ResolversParent
 export type ItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['Item'] = ResolversParentTypes['Item']> = ResolversObject<{
   __resolveType: TypeResolveFn<'CardSet' | 'Folder', ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;

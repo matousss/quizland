@@ -36,8 +36,8 @@ export type AuthenticateUserPayload = {
 
 export type Card = {
   __typename?: 'Card';
-  definition?: Maybe<Array<Maybe<Scalars['String']>>>;
-  term?: Maybe<Scalars['String']>;
+  definition: Array<Scalars['String']>;
+  term: Scalars['String'];
 };
 
 export type CardInput = {
@@ -50,7 +50,7 @@ export type CardSet = Item & {
   cards: Array<Card>;
   definitionLng?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   modified?: Maybe<Scalars['DateTime']>;
   name: Scalars['String'];
   owner: User;
@@ -74,7 +74,7 @@ export type Folder = Item & {
   __typename?: 'Folder';
   children?: Maybe<Array<Maybe<Item>>>;
   description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   modified?: Maybe<Scalars['DateTime']>;
   name: Scalars['String'];
   owner: User;
@@ -92,7 +92,7 @@ export type Group = {
 
 export type Item = {
   description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   modified?: Maybe<Scalars['DateTime']>;
   name: Scalars['String'];
   owner: User;

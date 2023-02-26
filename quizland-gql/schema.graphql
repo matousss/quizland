@@ -139,7 +139,7 @@ interface Permit {
 }
 
 interface Item {
-    id: ID
+    id: ID!
     name: String!
     description: String
     owner: User!
@@ -148,12 +148,12 @@ interface Item {
 }
 
 type Card @internal {
-    term: String
-    definition: [String]
+    term: String!
+    definition: [String!]!
 }
 
 type CardSet implements Item {
-    id: ID
+    id: ID!
     name: String!
     description: String
     owner: User!
@@ -186,7 +186,7 @@ fragment CardSetFragment on CardSet {
 }
 
 type Folder implements Item {
-    id: ID
+    id: ID!
     name: String!
     description: String
     owner: User!

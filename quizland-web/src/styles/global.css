@@ -18,17 +18,31 @@ div#__next {
 }
 
 body {
-    @apply bg-gray-800 text-gray-300;
+    @apply bg-primary text-contrast;
 }
 
-.button {
-    @apply bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md;
-}
+@layer components {
+    .button {
+        @apply bg-primary text-contrast hover:bg-middle hover:text-white rounded-md;
+    }
 
-.backface-hidden {
-    backface-visibility: hidden;
-}
+    .backface-hidden {
+        backface-visibility: hidden;
+    }
 
-.scrollbar-rounded > ::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb {
-    @apply rounded-full
+    .scrollbar-rounded > ::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb {
+        @apply rounded-full
+    }
+
+    .scrollbar-primary {
+        @apply scrollbar-thin scrollbar
+    }
+
+    .scrollbar-primary > ::-webkit-scrollbar-track {
+        @apply bg-white
+    }
+
+    .scrollbar > ::-webkit-scrollbar-thumb {
+        @apply bg-middle
+    }
 }

@@ -11,7 +11,7 @@ import type {Card} from "#types";
  * */
 const AnimationCard: FC<{ success: boolean } & ComponentProps<any>> = ({success, ...props}) => (
     <div
-        className={'opacity-0 font-sans uppercase bg-gray-600 absolute z-10 w-full h-full text-[4rem] rounded-lg text-gray-500 flex drop-shadow-lg border-[3.5px] '
+        className={'opacity-0 font-sans uppercase bg-secondary absolute z-10 w-full h-full text-[4rem] rounded-lg text-gray-500 flex drop-shadow-lg border-[3.5px] '
             + (success ? 'border-green-800 text-green-700 animate-card_result_r ' + styles.strokeGreen : 'border-red-800 text-red-700 animate-card_result_l ' + styles.strokeRed)}
         {...props}
     >
@@ -34,7 +34,7 @@ const CardFace: FC<{ show: boolean } & PropsWithChildren> = ({children, show}) =
 
         leaveTo={styles.flip}
 
-        className={'flex py-6 bg-gray-600 absolute z-10 w-full h-full rounded-lg transition-transform duration-500 backface-hidden font-sans'}
+        className={'flex py-6 bg-secondary absolute z-10 w-full h-full rounded-lg transition-transform duration-500 backface-hidden font-sans'}
     >
         <div
             className={'px-4 sm:px-6 md:px-8 m-auto divide-y divide-gray-500 overflow-y-auto max-h-full w-full scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-w-[5px] scrollbar-rounded'}>

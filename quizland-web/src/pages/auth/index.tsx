@@ -47,16 +47,16 @@ const Auth = ({error_codes}: Props) => {
 
 
     return (
-        <div className={'bg-gray-800 md:flex h-full'}>
+        <div className={'bg-primary md:flex h-full'}>
             <Tab.Group as={"div"}
-                       className={'md:rounded-md h-full md:h-1/2 md:w-1/2 bg-gray-700 m-auto divide-y flex flex-col drop-shadow-xl'}>
-                <Tab.List className={'w-full grow-0 bg-gray-700 md:rounded-t-md'}>
+                       className={'md:rounded-md h-full md:h-1/2 md:w-1/2 bg-middle m-auto divide-y flex flex-col drop-shadow-xl'}>
+                <Tab.List className={'w-full grow-0 bg-middle md:rounded-t-md'}>
                     <div className={'flex'}>
                         <TabBtn label={'3rd party account'}/>
                         <TabBtn label={'Credentials'}/>
                     </div>
                 </Tab.List>
-                <Tab.Panels className={'flex flex-col grow bg-gray-700 md:rounded-b-md'}>
+                <Tab.Panels className={'flex flex-col grow bg-middle md:rounded-b-md'}>
                     <Tab.Panel className={'flex flex-col grow'}>
                         <h1 className={'text-xl ml-6 mt-6'}>
                             Use 3rd party auth:
@@ -74,7 +74,7 @@ const Auth = ({error_codes}: Props) => {
                                 <GoogleButton className={'rounded-md border bg-white text-black mx-auto w-full mb-3'}/>
 
                                 <SocialButton provider={'More coming soon...'}
-                                              className={'rounded-md border-none bg-gray-600 mx-auto w-full'}/>
+                                              className={'rounded-md border-none bg-secondary mx-auto w-full'}/>
                             </div>
                         </div>
 

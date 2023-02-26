@@ -15,6 +15,8 @@ const cardAnimation = (rotation, x, y) => ({
     }
 })
 
+const colors = require('tailwindcss/colors')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
@@ -23,10 +25,14 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                primary: "rgb(9, 107, 82)",
-                secondary: "rgb(0,0,0)",
-                tercial: "rgb(0, 184, 107)",
-                text_a: "rgb(255,255,255)",
+                primary: colors.gray["800"],
+                secondary: colors.gray["600"],
+                middle: colors.gray["700"],
+                middle_dark: "#2f3949",
+                gray: {
+                    "750": "#2f3949",
+                ...colors.gray},
+                contrast: colors.gray["300"],
             },
             keyframes: {
                 card_old: {
@@ -69,6 +75,7 @@ module.exports = {
     },
     plugins: [
         require('@headlessui/tailwindcss'),
+        require('@tailwindcss/forms'),
         require('tailwind-scrollbar')({ nocompatible: true }),
     ],
 };

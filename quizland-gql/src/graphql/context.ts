@@ -9,10 +9,11 @@ import {NodeRequest, NodeResponse} from "@whatwg-node/server";
 const nextClient: User = {
     id: '@next',
     role: Role.Server,
-    username: 'QuitLand',
+    username: 'QuizLand',
+    image: '/assets/logo_small.svg'
 }
 
-const specialUsers = {
+export const specialUsers = {
     next: nextClient
 }
 
@@ -20,6 +21,7 @@ interface Context extends BaseContext {
     user: {} | null;
 }
 
+// noinspection JSUnusedLocalSymbols
 const resolveContext = async (mongo: MongoClient, req: NodeRequest, res?: NodeResponse): Promise<Context> => {
     const getUserFromRequest = async (): Promise<User | null> => {
         // extract token

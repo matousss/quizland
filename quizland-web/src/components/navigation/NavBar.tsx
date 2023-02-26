@@ -5,6 +5,7 @@ import {usePathname} from "next/navigation";
 import React, {FC, PropsWithChildren} from "react";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import UserMenu from "./user";
+import {useUser} from "../../../lib/hooks/user";
 
 interface Item {
     label: string
@@ -40,7 +41,7 @@ const Logo = () => (
 
 const ToggleButton = ({open}: { open: boolean }) => (
     <Disclosure.Button
-        className={"inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white"}>
+        className={"inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-middle hover:text-white"}>
         {open ? (
             <XMarkIcon className={"block h-6 w-6"} aria-hidden/>
         ) : (
@@ -54,7 +55,7 @@ const SmallNavBarItem: FC<{ active: boolean } & Item> = ({active, ...item}) => (
     as={Link}
     href={item.href}
     className={
-        active ? 'bg-gray-900 text-white' : '> hover:bg-gray-700 hover:text-white' + 'block px-3 py-2 rounded-md text-base font-medium'
+        active ? 'bg-gray-900 text-white' : '> hover:bg-middle hover:text-white' + 'block px-3 py-2 rounded-md text-base font-medium'
     }
     aria-current={active ? 'page' : undefined}
 >
@@ -87,16 +88,19 @@ const SmallNavBar = ({pathName}: { pathName: string | null }) => (
     </Transition>
 )
 
-interface BodyBtnProps {
-    active: boolean, label: string
-    onMouseEnter?: () => void, onMouseLeave?: () => void
-}
-const BodyBtn: FC<BodyBtnProps & PropsWithChildren> = ({active, ...props}) => (
+type BodyBtnProps = {
+    active: boolean,
+    label: string
+    onMouseEnter?: () => void,
+    onMouseLeave?: () => void
+} & PropsWithChildren
+
+const BodyBtn: FC<BodyBtnProps> = ({active, ...props}) => (
     <div
         key={props.label}
         className={
-            active ? 'bg-gray-900 text-white' : '> hover:bg-gray-700 hover:text-white' +
-                ' px-3 py-2 rounded-md text-sm font-medium flex transition duration-150 ease-in-out'
+            active ? 'bg-gray-900 text-white' : '> hover:bg-middle hover:text-white' +
+                ' px-3 py-2 rounded-md text-sm font-medium flex transition duration-150 ease-in-out outline-none'
         }
         aria-current={active ? 'page' : undefined}
         {...props}
@@ -137,14 +141,14 @@ const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Ar
                     <Popover.Panel>
                         <div
                             className={
-                                'absolute z-50 rounded-md text-sm font-medium mt-.5 shadow-md bg-gray-800 border border-gray-700 divide-y divide-gray-700 flex flex-col >'}
+                                'absolute z-50 rounded-md text-sm font-medium mt-.5 shadow-md bg-primary border border-middle divide-y divide-middle flex flex-col >'}
                         >
 
 
                             {items.map((item) => {
                                 return (
                                     <Link href={item.href} key={`${props.label}-${item.label}`}
-                                          className={'px-3 py-2 w-full hover:bg-gray-700 hover:text-white'}
+                                          className={'px-3 py-2 w-full hover:bg-middle hover:text-white'}
                                     >
                                         {item.label}
                                     </Link>
@@ -160,6 +164,10 @@ const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Ar
     )
 }
 
+const LoginButton = () => (
+    <BodyBtnLink href={'/login'} active={false} label={'Sign In'}/>
+)
+
 
 const NavBarBody = ({
                         pathName, open
@@ -168,6 +176,9 @@ const NavBarBody = ({
         :
         boolean
 }) => {
+    let user = useUser();
+
+
     return (
         <div className={"m w-full px-2 sm:px-6 lg:px-8"}>
             <div className={"relative flex h-16 items-center justify-between"}>
@@ -194,7 +205,7 @@ const NavBarBody = ({
                     </div>
 
                     <div className={'absolute right-0'}>
-                        <UserMenu/>
+                        {user ? <UserMenu user={user}/> : <LoginButton/>}
                     </div>
                 </div>
 

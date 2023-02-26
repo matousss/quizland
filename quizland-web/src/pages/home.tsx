@@ -7,6 +7,7 @@ interface Props {
 }
 
 
+// noinspection JSUnusedLocalSymbols
 const Home: NextPage<Props, any> = (props) => {
     const user = useUser()
     return (
@@ -16,8 +17,8 @@ const Home: NextPage<Props, any> = (props) => {
             {/*<SocialButton provider={'Google'} onClick={login} icon={'/assets/google-icon.svg'}/>*/}
             <div>
 
-                {user.lastname}
-                {user.id}
+                {user ? user.lastname : 'no user'}
+                {user ? user.id : null}
             </div>
         </>
     )

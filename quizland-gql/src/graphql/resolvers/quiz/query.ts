@@ -1,5 +1,6 @@
 import {DBClient} from "../../../../lib/mongodb";
 import {ItemType, QueryResolvers} from "../../resolvers-types";
+import {specialUsers} from "../../context";
 
 export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
     const db = dbClient.quiz;
@@ -13,7 +14,12 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
             return items.map(item => item._id.toString())
         },
         getCardSet: async (_, {id}) => {
-            let item = await db.Items.findOne({_id: parseInt(id)});
+            let idNum = parseInt(id)
+            let lookFor = !isNaN(idNum) ? idNum : id;
+
+            // @ts-ignore
+            let item = await db.Items.findOne({_id: lookFor});
+
             if (!item) return null;
             let {_id, owner, ...rest} = item;
 
@@ -21,14 +27,29 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
             if (!cards) return null;
 
             // @ts-ignore
-            let ownerUser = await Users.findOne({_id: owner});
+            let ownerUser
+            let ownerID
+            let ownerRaw
+            if (owner.toString().startsWith('@')) {
+                ownerRaw = specialUsers[owner.replace('@', '')]
+            }
+
+            else {
+                // @ts-ignore
+                ownerUser = await Users.findOne({_id: owner});
+                let {_id, ...rest} = ownerUser;
+                ownerRaw = rest;
+                ownerID = _id.toString();
+            }
+
+
 
             return {
                 id: id,
                 ...cards,
                 owner: {
-                    id: ownerUser._id.toString(),
-                    ...ownerUser
+                    id: ownerID,
+                    ...ownerRaw
                 },
                 ...rest
 

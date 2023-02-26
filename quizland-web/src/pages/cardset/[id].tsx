@@ -2,7 +2,7 @@ import apollo_client from "../../graphql";
 import {gql} from "@apollo/client";
 import React, {useEffect, useState} from "react";
 import NavBar from "@components/navigation/NavBar";
-import {DescriptionSection, TitleSection} from "@components/sections/CardSet";
+import {CardSetDescriptionSection as DescriptionSection, TitleSection} from "@components/sections";
 import FlashCardSection from "@components/sections/FlashCardSection";
 
 import type {CardSet} from "#types";
@@ -38,7 +38,6 @@ type Props = {
     cardSet: CardSet
 }
 export const getStaticProps = async ({params}: { params: Params }): Promise<{ props: Props } & any> => {
-
     const {data} = await apollo_client.query<{ cardSet: CardSet }>(
         {
             query: gql`
@@ -69,7 +68,7 @@ export const getStaticProps = async ({params}: { params: Params }): Promise<{ pr
             }
         }
     )
-
+    console.log(data)
     return {
         props: {
             cardSet: data.cardSet

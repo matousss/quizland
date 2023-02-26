@@ -1,23 +1,15 @@
 import React, {FC} from "react";
-import {ExpandableSection, Section} from "./Section";
+import {ExpandableSection} from "./Section";
 import UserImage from "../navigation/user/UserImage";
 import Moment from "moment";
 
 import type { User } from "#types";
 import type {Maybe} from "graphql/jsutils/Maybe";
 
-const TitleSection: FC<{ title: string }> = ({title}) => (
-    <Section>
-        <div className={'flex flex-col'}>
-            <h1 className={'text-3xl font-bold'}>{title}</h1>
-        </div>
-    </Section>
-)
-
-const DescriptionSection: FC<{ author: User, description?: Maybe<string>, modified?: Date | number, termLng?: Maybe<string>, definitionLng?: Maybe<string> }>
+const CardSetDescriptionSection: FC<{ author: User, description?: Maybe<string>, modified?: Date | number, termLng?: Maybe<string>, definitionLng?: Maybe<string> }>
     = ({description, modified, author, termLng, definitionLng}) => (
     <ExpandableSection>
-        <div className={'flex flex-col pt-3 divide-y divide-gray-600 pl-2 select-none'}>
+        <div className={'flex flex-col pt-3 divide-y divide-secondary pl-2 select-none'}>
             <div className={'flex pt-2 pb-4 pl-2 text-gray-400'}>
                 <div className={'group flex hover:text-white cursor-pointer'}>
                     <div className={'rounded-full border-gray-400 group-hover:border-white border'}>
@@ -32,7 +24,7 @@ const DescriptionSection: FC<{ author: User, description?: Maybe<string>, modifi
                     {modified && "Last change " + Moment(modified).fromNow()}
                 </div>
             </div>
-            <div className={'bg-gray-600 rounded-md p-4'}>
+            <div className={'bg-secondary rounded-md p-4'}>
                 {termLng && <div className={'text-gray-400'}>Language: {termLng}{definitionLng && definitionLng !== termLng ? ' ↔ ' + definitionLng : ''}</div>}
 
                 <p className={'text-md'}>{description}</p>
@@ -42,4 +34,4 @@ const DescriptionSection: FC<{ author: User, description?: Maybe<string>, modifi
     </ExpandableSection>
 )
 
-export {TitleSection, DescriptionSection}
+export default CardSetDescriptionSection

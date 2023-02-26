@@ -31,9 +31,9 @@ const navigation: Array<Item & Submenu> = [
 const Logo = () => (
     <Link href={'/'} className={"flex flex-shrink-0 items-center"}>
         <img
-            className={"block h-8 w-auto"}
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-            alt="Your Company"
+            className={"block h-9 w-auto"}
+            src="/logo_big.svg"
+            alt="QuizLand"
         />
     </Link>
 )

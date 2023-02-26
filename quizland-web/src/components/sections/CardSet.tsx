@@ -33,7 +33,7 @@ const DescriptionSection: FC<{ author: User, description?: Maybe<string>, modifi
                 </div>
             </div>
             <div className={'bg-gray-600 rounded-md p-4'}>
-                <p>Language: {termLng} - {definitionLng}</p>
+                {termLng && <div className={'text-gray-400'}>Language: {termLng}{definitionLng && definitionLng !== termLng ? ' ↔ ' + definitionLng : ''}</div>}
 
                 <p className={'text-md'}>{description}</p>
 

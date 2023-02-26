@@ -25,7 +25,7 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
 
             return {
                 id: id,
-                cards: cards.cards,
+                ...cards,
                 owner: {
                     id: ownerUser._id.toString(),
                     ...ownerUser

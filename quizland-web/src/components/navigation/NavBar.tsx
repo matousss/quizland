@@ -99,8 +99,8 @@ const BodyBtn: FC<BodyBtnProps> = ({active, ...props}) => (
     <div
         key={props.label}
         className={
-            active ? 'bg-gray-900 text-white' : '> hover:bg-middle hover:text-white' +
-                ' px-3 py-2 rounded-md text-sm font-medium flex transition duration-150 ease-in-out outline-none'
+            active ? 'bg-gray-900 text-white' : 'hover:bg-middle hover:text-white' +
+                ' px-3 py-2 rounded-md font-medium flex transition duration-150 ease-in-out outline-none'
         }
         aria-current={active ? 'page' : undefined}
         {...props}
@@ -121,7 +121,7 @@ const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Ar
         <Popover className={"realtive m-auto"}>
 
             <>
-                <Popover.Button>
+                <Popover.Button className={'ring-0 focus:border-0 focus:outline-0'}>
                     <BodyBtn active={active} {...props}>
                         <ChevronDownIcon
                             className={'h-5 w-5 ui-open:rotate-180 ui-open:transform transition duration-150 ease-in-out'}
@@ -141,7 +141,7 @@ const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Ar
                     <Popover.Panel>
                         <div
                             className={
-                                'absolute z-50 rounded-md text-sm font-medium mt-.5 shadow-md bg-primary border border-middle divide-y divide-middle flex flex-col >'}
+                                'absolute z-50 rounded-md font-medium mt-.5 shadow-md bg-primary border border-middle divide-y divide-middle flex flex-col >'}
                         >
 
 

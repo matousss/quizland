@@ -48,7 +48,7 @@ const TermInput: FC<{
         <Text key={index} placeholder={'Definition'} className={'w-full'} value={value}
               onChange={e => setter(e.target.value)}/>
         {index !== 0 && <div className={'absolute flex right-1 top-0 z-10 h-full'}>
-            <button className={'my-auto text-gray-400 hover:text-white duration-200 '} onClick={remove}>
+            <button tabIndex={-1} className={'my-auto text-gray-400 hover:text-white duration-200'} onClick={remove}>
                 <XMarkIcon className={'w-[1.1rem]'}/>
             </button>
         </div>}
@@ -86,7 +86,7 @@ const Term: FC<{
 
     return (
         <div className={'flex relative border-2 border-middle my-3 p-6 rounded-sm bg-middle'}>
-            <button className={'absolute top-[-.75rem] right-[-.75rem] text-gray-400 hover:text-white'}
+            <button tabIndex={-1} className={'absolute top-[-.75rem] right-[-.75rem] text-gray-400 hover:text-white'}
                     onClick={remove}>
                 <XMarkIcon className={'w-6'}/>
             </button>
@@ -110,7 +110,7 @@ const Term: FC<{
                     />
                 )}
                 <div className={'absolute flex w-full duration-200'}>
-                    <button className={'w-[1.1rem] mt-1 mx-auto text-gray-400 hover:text-white'} onClick={addDef}>
+                    <button tabIndex={-1} className={'w-[1.1rem] mt-1 mx-auto text-gray-400 hover:text-white'} onClick={addDef}>
                         <PlusIcon/>
                     </button>
                 </div>
@@ -157,7 +157,7 @@ const TermsSection = () => {
 
         </div>
         <div className={'flex'}>
-            <button className={'w-[3rem] mx-auto hover:text-contrast text-secondary duration-200'}
+            <button tabIndex={-1} className={'w-[3rem] mx-auto hover:text-contrast text-secondary duration-200'}
                     onClick={addTerm}>
                 <PlusCircleIcon/>
             </button>

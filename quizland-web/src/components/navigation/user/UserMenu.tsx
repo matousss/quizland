@@ -23,8 +23,8 @@ const UserMenu: FC<{user: User}> = ({user}) => (
     <Menu as={"div"} className={"relative"}>
         <div>
             <Menu.Button
-                className="flex rounded-full bg-white focus:outline-none border-2 border-middle">
-                <UserImage src={user.image as string | undefined}/>
+                className="flex rounded-full bg-white focus:outline-none border-2 border-middle hover:border-contrast duration-200">
+                <UserImage src={user.image as string | undefined} className={'w-10 h-10'}/>
             </Menu.Button>
         </div>
         <Transition

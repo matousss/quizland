@@ -1,5 +1,10 @@
 import {DBClient} from "../../../../lib/mongodb";
-import {CardSet, ItemType, MutationCreateCardSetArgs, MutationResolvers} from "../../resolvers-types";
+import {
+    CardSet,
+    ItemType,
+    MutationCreateCardSetArgs,
+    MutationResolvers
+} from "../../resolvers-types";
 import {InvalidUserInput, WriteError} from "../../../../lib/graphql/error";
 import {DItem} from "../../../../lib/types";
 
@@ -58,6 +63,47 @@ export const getMutationResolvers = (dbClient: DBClient): MutationResolvers => {
                 owner: user,
                 ...item
             }
+
+        },
+
+        updateCards: async (_, {id, cards}) => {
+            console.log('dklansjkdnjk')
+            let dbId = isNaN(parseInt(id)) ? id : parseInt(id)
+
+            const session = await mongo.startSession();
+            console.log('krypl')
+            if (await db.Cards.findOne({_id: dbId}) === null) throw new InvalidUserInput("CardSet doesn't exist")
+
+            try {
+                await session.withTransaction(async () => {
+                    // @ts-ignore
+                    await db.Cards.updateOne({_id: dbId}, {$set:{cards: cards}}, {session})
+                    await db.Items.updateOne({_id: dbId}, {$set:{modified: new Date()}}, {session});
+
+
+                })
+            } finally {
+                await session.endSession()
+            }
+            // @ts-ignore
+            let {_id, ...rest} = await db.Items.findOne({_id: dbId})
+
+            return {
+                id: id,
+                cards: cards,
+                ...rest
+            }
+        },
+        updateItem: async (_, {id, name, description}) => {
+            console.log('sandjknn')
+            let dbId = isNaN(parseInt(id)) ? id : parseInt(id)
+
+            await db.Items.updateOne({_id: dbId}, {$set: {name: name, description: description, modified: new Date()}})
+
+            let response =  await db.Items.findOne({_id: dbId})
+            if (!response) throw new WriteError("Cannot update item, because it doesn't exist")
+
+            return
 
         }
     }

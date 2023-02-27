@@ -115,11 +115,10 @@ export type Mutation = {
   createFolder?: Maybe<Folder>;
   deleteItem?: Maybe<Scalars['Boolean']>;
   deleteUser?: Maybe<Scalars['Void']>;
-  getItem?: Maybe<Item>;
   moveItem?: Maybe<Scalars['Boolean']>;
   removeCardSet?: Maybe<Scalars['Void']>;
   updateCards?: Maybe<CardSet>;
-  updateItem?: Maybe<CardSet>;
+  updateItem?: Maybe<Scalars['Void']>;
   updatePermission?: Maybe<Scalars['Boolean']>;
 };
 
@@ -167,11 +166,6 @@ export type MutationDeleteUserArgs = {
 };
 
 
-export type MutationGetItemArgs = {
-  id: Scalars['ID'];
-};
-
-
 export type MutationMoveItemArgs = {
   from: Scalars['ID'];
   id: Scalars['ID'];
@@ -185,7 +179,8 @@ export type MutationRemoveCardSetArgs = {
 
 
 export type MutationUpdateCardsArgs = {
-  cars: Array<CardInput>;
+  cards: Array<CardInput>;
+  id: Scalars['ID'];
 };
 
 
@@ -229,6 +224,7 @@ export type Query = {
   checkToken?: Maybe<CheckTokenPayload>;
   discoverCardSets?: Maybe<Array<Scalars['ID']>>;
   getCardSet?: Maybe<CardSet>;
+  getItem?: Maybe<Item>;
   getUser?: Maybe<User>;
   getUserByAccount?: Maybe<User>;
   getUserByEmail?: Maybe<User>;
@@ -237,6 +233,11 @@ export type Query = {
 
 
 export type QueryGetCardSetArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetItemArgs = {
   id: Scalars['ID'];
 };
 
@@ -501,11 +502,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createFolder?: Resolver<Maybe<ResolversTypes['Folder']>, ParentType, ContextType, RequireFields<MutationCreateFolderArgs, 'name'>>;
   deleteItem?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteItemArgs, 'id'>>;
   deleteUser?: Resolver<Maybe<ResolversTypes['Void']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
-  getItem?: Resolver<Maybe<ResolversTypes['Item']>, ParentType, ContextType, RequireFields<MutationGetItemArgs, 'id'>>;
   moveItem?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMoveItemArgs, 'from' | 'id' | 'to'>>;
   removeCardSet?: Resolver<Maybe<ResolversTypes['Void']>, ParentType, ContextType, RequireFields<MutationRemoveCardSetArgs, 'id'>>;
-  updateCards?: Resolver<Maybe<ResolversTypes['CardSet']>, ParentType, ContextType, RequireFields<MutationUpdateCardsArgs, 'cars'>>;
-  updateItem?: Resolver<Maybe<ResolversTypes['CardSet']>, ParentType, ContextType, RequireFields<MutationUpdateItemArgs, 'id'>>;
+  updateCards?: Resolver<Maybe<ResolversTypes['CardSet']>, ParentType, ContextType, RequireFields<MutationUpdateCardsArgs, 'cards' | 'id'>>;
+  updateItem?: Resolver<Maybe<ResolversTypes['Void']>, ParentType, ContextType, RequireFields<MutationUpdateItemArgs, 'id'>>;
   updatePermission?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdatePermissionArgs, 'id' | 'user'>>;
 }>;
 
@@ -520,6 +520,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   checkToken?: Resolver<Maybe<ResolversTypes['CheckTokenPayload']>, ParentType, ContextType>;
   discoverCardSets?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType>;
   getCardSet?: Resolver<Maybe<ResolversTypes['CardSet']>, ParentType, ContextType, RequireFields<QueryGetCardSetArgs, 'id'>>;
+  getItem?: Resolver<Maybe<ResolversTypes['Item']>, ParentType, ContextType, RequireFields<QueryGetItemArgs, 'id'>>;
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   getUserByAccount?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByAccountArgs, 'provider' | 'providerAccountId'>>;
   getUserByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByEmailArgs, 'email'>>;

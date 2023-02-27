@@ -19,6 +19,8 @@ type Query {
 
 
     # cardSets
+    getItem(id: ID!): Item @permitted(required: R)
+
     getCardSet(id: ID!): CardSet @permitted(required: R)
 
     discoverCardSets: [ID!] @server
@@ -40,11 +42,9 @@ type Mutation {
     # items
     # items cannot be created directly, only through its child, eg. CardSet, Folder
     deleteItem(id: ID!): Boolean @permitted(required: M) # delete item and all its children, shared folders, card sets, etc.
-    updateItem(id: ID!, name: String, description: String): CardSet @permitted(required: M)
+    updateItem(id: ID!, name: String, description: String): Void @permitted(required: M)
 
     updatePermission(id: ID!, user: ID!): Boolean @permitted(required: M) # update/delete
-
-    getItem(id: ID!): Item @permitted(required: R)
 
     checkPermission(id: ID!, user: ID!): Permission
 
@@ -65,7 +65,7 @@ type Mutation {
     # addCard(cardSet: ID!, index: Int, card: CardInput!): CardSet @permitted(required: W)
     # updateCard(cardSet: ID!, index: Int!, card: CardInput!): CardSet @permitted(required: W)
     # removeCard(cardSet: ID!, index: Int!): CardSet @permitted(required: W)
-    updateCards(cars: [CardInput!]!): CardSet @permitted(required: W)
+    updateCards(id: ID!, cards: [CardInput!]!): CardSet @permitted(required: W)
 }
 
 type AuthenticateUserPayload {

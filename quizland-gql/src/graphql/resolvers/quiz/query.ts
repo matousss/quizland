@@ -23,6 +23,7 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
             if (!item) return null;
             let {_id, owner, ...rest} = item;
 
+            // @ts-ignore
             let cards = await db.Cards.findOne({_id: item._id});
             if (!cards) return null;
 
@@ -54,6 +55,18 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
                 ...rest
 
             }
+        },
+        getItem: async (_, {id}) => {
+            let dbId = isNaN(parseInt(id)) ? id : parseInt(id)
+            let item = await db.Items.findOne({_id: dbId})
+            if (!item) return null;
+
+            let {_id, ...rest} = item;
+            return {
+                id: id,
+                ...rest,
+            }
+
         }
     }
 }

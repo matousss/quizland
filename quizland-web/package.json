@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.5",
-    "@as-integrations/next": "^1.2.0",
+    "@graphql-yoga/apollo-link": "^1.6.0",
     "@headlessui/react": "^1.7.11",
     "@headlessui/tailwindcss": "^0.1.2",
     "@heroicons/react": "^2.0.15",
@@ -20,12 +20,14 @@
     "graphql": "^16.6.0",
     "graphql-ws": "^5.11.3",
     "moment": "^2.29.4",
+    "net": "^1.0.2",
     "next": "13.1.6",
     "process": "^0.11.10",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "reflect-metadata": "^0.1.13",
-    "swr": "^2.0.3"
+    "swr": "^2.0.3",
+    "ws": "^8.12.1"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.1.6",

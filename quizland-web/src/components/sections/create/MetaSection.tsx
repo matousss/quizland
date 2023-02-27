@@ -2,8 +2,8 @@ import {Section} from "@components/sections";
 import {Switch, Text, TextArea} from "@components/forms/input";
 import {FC, useEffect, useState} from "react";
 
-
-const MetaSection: FC<{ meta: { isPrivate: boolean, description: string, name: string }, setMeta: Function,  }>
+export type MetaType =  { isPrivate: boolean, description: string, name: string }
+const MetaSection: FC<{ meta: MetaType, setMeta: Function,  }>
     = (
     {setMeta, meta = {isPrivate: false, description: '', name: ''}}
 ) => {
@@ -13,6 +13,11 @@ const MetaSection: FC<{ meta: { isPrivate: boolean, description: string, name: s
     useEffect(() => setMeta('isPrivate')(isPrivate), [isPrivate])
     useEffect(() => setMeta('description')(description), [description])
     useEffect(() => setMeta('name')(name), [name])
+    useEffect(() => {
+        setIsPrivate(meta.isPrivate)
+        setDescription(meta.description)
+        setName(meta.name)
+    }, [meta])
 
     return (<Section>
         <div className={'flex flex-col gap-4'}>

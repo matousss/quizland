@@ -113,11 +113,10 @@ export type Mutation = {
   createFolder?: Maybe<Folder>;
   deleteItem?: Maybe<Scalars['Boolean']>;
   deleteUser?: Maybe<Scalars['Void']>;
-  getItem?: Maybe<Item>;
   moveItem?: Maybe<Scalars['Boolean']>;
   removeCardSet?: Maybe<Scalars['Void']>;
   updateCards?: Maybe<CardSet>;
-  updateItem?: Maybe<CardSet>;
+  updateItem?: Maybe<Scalars['Void']>;
   updatePermission?: Maybe<Scalars['Boolean']>;
 };
 
@@ -165,11 +164,6 @@ export type MutationDeleteUserArgs = {
 };
 
 
-export type MutationGetItemArgs = {
-  id: Scalars['ID'];
-};
-
-
 export type MutationMoveItemArgs = {
   from: Scalars['ID'];
   id: Scalars['ID'];
@@ -183,7 +177,8 @@ export type MutationRemoveCardSetArgs = {
 
 
 export type MutationUpdateCardsArgs = {
-  cars: Array<CardInput>;
+  cards: Array<CardInput>;
+  id: Scalars['ID'];
 };
 
 
@@ -227,6 +222,7 @@ export type Query = {
   checkToken?: Maybe<CheckTokenPayload>;
   discoverCardSets?: Maybe<Array<Scalars['ID']>>;
   getCardSet?: Maybe<CardSet>;
+  getItem?: Maybe<Item>;
   getUser?: Maybe<User>;
   getUserByAccount?: Maybe<User>;
   getUserByEmail?: Maybe<User>;
@@ -235,6 +231,11 @@ export type Query = {
 
 
 export type QueryGetCardSetArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetItemArgs = {
   id: Scalars['ID'];
 };
 

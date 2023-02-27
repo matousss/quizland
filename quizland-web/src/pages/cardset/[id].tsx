@@ -4,10 +4,15 @@ import React, {useEffect, useState} from "react";
 import NavBar from "@components/navigation/NavBar";
 import {CardSetDescriptionSection as DescriptionSection, TitleSection} from "@components/sections";
 import FlashCardSection from "@components/sections/FlashCardSection";
+import {SectionContainer} from "@components/sections";
+import {useRouter} from "next/router";
+import {cardsSetToQuery} from "../../../lib/encode";
+import {ArrowDownTrayIcon, DocumentDuplicateIcon, ShareIcon} from "@heroicons/react/24/outline";
+import {BoppyButton} from "@components/buttons/BoppyButton";
 
 import type {CardSet} from "#types";
-import {NextPage} from "next";
-import {SectionContainer} from "@components/sections";
+import type {NextPage} from "next";
+
 
 interface Params {
     id: number
@@ -91,6 +96,14 @@ const CardSet: NextPage<Props> = (props) => {
         setCard(cards[index])
     }, [index])
 
+    const router = useRouter()
+    const duplicate = async () => {
+        let {id, name, ...rest} = cardSet
+        let params = cardsSetToQuery({id: "", name: 'Copy of ' + name,...rest})
+
+        await router.push(`create?${params}`)
+    }
+
     return (
         <>
             <NavBar/>
@@ -100,8 +113,16 @@ const CardSet: NextPage<Props> = (props) => {
                 <div>
                     <FlashCardSection next={() => setIndex(index + 1)} previous={() => setIndex(index - 1)}
                                       currentCard={currentCard}/>
-                    <div>
-                        {/*todo buttons*/}
+                    <div className={'flex justify-end pr-8 pb-2 gap-2'}>
+                        <BoppyButton onClick={duplicate}>
+                            <DocumentDuplicateIcon className={'h-8 w-8'}/>
+                        </BoppyButton>
+                        <BoppyButton className={'cursor-no-drop hover:text-secondary'}>
+                            <ArrowDownTrayIcon className={'h-8 w-8'}/>
+                        </BoppyButton>
+                        <BoppyButton onClick={() => navigator.clipboard.writeText(`${window.location}`)}>
+                            <ShareIcon className={'h-8 w-8'}/>
+                        </BoppyButton>
                     </div>
                 </div>
 

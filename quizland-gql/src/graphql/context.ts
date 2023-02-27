@@ -36,7 +36,7 @@ const resolveContext = async (mongo: MongoClient, req: NodeRequest, res?: NodeRe
         }
         else {
             let authHeader =headerMap['authorization'] || headerMap.get('authorization')
-            token = authHeader.replace('Bearer ')
+            token = authHeader ? authHeader.replace('Bearer ') : null;
         }
         if (!token) return null;
         // verify token

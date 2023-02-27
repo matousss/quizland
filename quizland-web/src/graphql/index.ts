@@ -1,13 +1,16 @@
-import {ApolloClient, InMemoryCache, MutationOptions, QueryOptions} from "@apollo/client";
+import {ApolloClient, InMemoryCache} from "@apollo/client";
+
+
+import { YogaLink } from '@graphql-yoga/apollo-link'
+
+/*
 import {split, HttpLink} from '@apollo/client';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {GraphQLWsLink} from '@apollo/client/link/subscriptions';
 import {createClient} from 'graphql-ws';
-import WebSocket from 'ws'
 
 const wsLink = new GraphQLWsLink(createClient({
-        url: process.env.GRAPHQL_ENDPOINT_WS as string,
-    webSocketImpl: WebSocket
+        url: process.env.GRAPHQL_ENDPOINT_WS as string
     })
 )
 
@@ -31,12 +34,14 @@ const splitLink = split(
     },
     wsLink,
     httpLink,
-);
+);*/
 
 const apolloClient = new ApolloClient({
     ssrMode: true,
     cache: new InMemoryCache(),
-    link: splitLink
+    link: new YogaLink({
+        endpoint: process.env.GRAPHQL_ENDPOINT_HTTP
+    })
 })
 
 export default apolloClient

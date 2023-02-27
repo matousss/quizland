@@ -98,7 +98,7 @@ const getEmptyTerm = () => ({
 })
 
 export type TermArray = Array<Card | undefined>
-const TermsSection: FC<{terms: TermArray, setTerms: Dispatch<SetStateAction<TermArray>>}> = ({terms, setTerms}) => {
+const TermsSection: FC<{terms: TermArray, setTerms: Dispatch<SetStateAction<TermArray>> | Function}> = ({terms, setTerms}) => {
     const addTerm = () => {
         // @ts-ignore
         setTerms([...terms, getEmptyTerm()])

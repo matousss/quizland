@@ -1,103 +1,67 @@
-import {NextPage} from "next";
-import NavBar from "@components/navigation/NavBar";
-import {Section, SectionContainer} from "@components/sections";
-import {TitleSection} from "@components/sections";
-import {EventHandler, MouseEvent, useEffect, useState} from "react";
-import MetaSection from "@components/sections/create/MetaSection";
-import TermsSection, {TermArray} from "@components/sections/create/TermsSection";
-import {useGQL} from "../../../lib/hooks/graphql";
-import {gql} from "@apollo/client";
-import {useRouter} from "next/router";
+import {GetServerSideProps, NextPage} from "next";
+import React, {useEffect} from "react";
+import {MetaType} from "@components/sections/create/MetaSection";
+import {TermArray} from "@components/sections/create/TermsSection";
+import {isString} from "postcss-selector-parser";
+import {decodeDefs} from "../../../lib/encode";
+import Editor from "@components/cardset/Editor";
 
-const Create: NextPage = () => {
-    const [meta, setMeta] = useState({
-        isPrivate: false,
-        description: '',
-        name: ''
-    })
-    const setMetaValue = (key: keyof typeof meta) => (value: string | boolean) => {
-        // @ts-ignore
-        meta[key] = value;
-        setMeta(meta)
-    }
 
-    const [terms, setTerms] = useState<TermArray>([])
-    const client = useGQL()
-    const router = useRouter()
-    const [errors, setErrors] = useState<Array<string>>([])
-    const [btnDisabled, setBtnDisabled] = useState(false)
-    const submit: EventHandler<MouseEvent<HTMLButtonElement>> = async () => {
-        setBtnDisabled(true)
-        setErrors([]);
-        let response
+export const getServerSideProps: GetServerSideProps = async ({ query}) => {
+    let initialTerms
+    let {name, description, term, definition} = query;
+
+    deserializeCards : {
+        if (!(term && definition)) break deserializeCards;
+
         try {
-            let errors = [];
-            let newTerms = terms.filter((val) => val?.term && val.definition[0]);
-            if (meta.name === '') errors.push("Name is required!");
-            if (newTerms.length < 2) errors.push("You have to include at least 2 cards!");
-            if (errors.length !== 0) return setErrors(errors);
+            if (Array.isArray(term) && Array.isArray(definition) && (term.length === definition.length)) {
+                initialTerms = term.map((term, index) => (
+                    {
+                        term: term as string,
+                        definition: definition ? decodeDefs(definition[index] as string) : ['']
 
-
-
-            try {
-                response = await client.mutate({
-                        mutation: gql`
-                            mutation ($cards: [CardInput!]!, $name: String!, $description: String) {
-                                newSet: createCardSet(cards: $cards, name: $name, description: $description)
-                                {
-                                    id
-                                }
-                            }
-                        `
-                        ,
-                        variables: {
-                            cards: newTerms,
-                            ...meta
-                        }
-                    },
-                );
-            } catch (e) {
-                console.log(e)
-                return
+                    }))
+                break deserializeCards;
             }
 
-        } finally {
-            setBtnDisabled(false);
+            if (isString(term) && isString(definition)) {
+                initialTerms = [({
+                    term: atob(term as string),
+                    definition: decodeDefs(definition as string)
+                })]
+                break deserializeCards;
+            }
+        } catch (e) {
+            console.log(e)
+            // ignore atob errors
+            return {
+                props: {
+                    error: ['Invalid query parameters']
+                }
+            }
         }
-        router.push('/cardset/' + response.data.newSet.id);
     }
 
-    return (
-        <>
-            <NavBar/>
-            <SectionContainer>
-                <TitleSection title={"Create CardSet"}/>
-                <MetaSection meta={meta} setMeta={setMetaValue}/>
-                <TermsSection terms={terms} setTerms={setTerms}/>
-                <Section className={'flex flex-col justify-center pb-12'}>
+    let meta: MetaType = {
+        name: name ? name as string : '',
+        description: description ? description as string : '',
+        isPrivate: false
+    }
+    return {
+        props: {
+            meta: meta,
+            terms: initialTerms
+        }
 
-
-                    <div className={'flex flex-col mx-auto'}>
-                        <div className={'text-red-500 pt-1 h-16 text-center'}>
-                            {errors.map((e, i) => <div key={i}>{e}</div>)}
-                        </div>
-                        <div className={'flex justify-end'}>
-                            <button onClick={submit}
-                                    disabled={btnDisabled}
-                                    className={'button mr-8 px-5 py-3 ' +
-                                        'bg-middle disabled:bg-red-800 disabled:hover:bg-red-800 disabled:text-gray-600 disabled:cursor-disabled hover:bg-green-900 border border-secondary text-xl duration-200'}>
-                                Save
-                            </button>
-                        </div>
-                    </div>
-
-
-                </Section>
-            </SectionContainer>
-
-        </>
-    )
+    }
 }
+const Create: NextPage<{meta: MetaType, terms: TermArray, error?: Array<string>}> = ({meta, terms, error= []}) => {
+    useEffect(() => window.history.replaceState(null, document.title, "/cardset/create"), [
+        window
+    ])
 
+    return <Editor initialMeta={meta} initialTerms={terms} initialErrors={error}/>
+}
 
 export default Create;

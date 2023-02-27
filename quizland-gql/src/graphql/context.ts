@@ -36,14 +36,14 @@ const resolveContext = async (mongo: MongoClient, req: NodeRequest, res?: NodeRe
         }
         else {
             let authHeader =headerMap['authorization'] || headerMap.get('authorization')
-            token = authHeader ? authHeader.replace('Bearer ') : null;
+            token = authHeader ? authHeader.replace('Bearer ', '') : null;
+            console.log({token})
         }
         if (!token) return null;
         // verify token
         let info = await verifyJWT(token);
 
         if (info === null) return null;
-
         if (info.id.startsWith('@')) {
             return specialUsers[info.id.substring(1)];
         }

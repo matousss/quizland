@@ -2,6 +2,8 @@ import {createYoga, createSchema} from 'graphql-yoga'
 import mongoClient, {getDBClient} from "../../lib/mongodb";
 import {getResolvers, typeDefs} from "../graphql";
 import {Context, resolveContext} from "../graphql/context";
+import {applyMiddleware} from "graphql-middleware";
+import {permissions} from "../shield/permissions";
 export const config = {
     api: {
         bodyParser: false
@@ -25,8 +27,10 @@ async function getServer<TServerContext>(endpoint = "/graphql") {
         resolvers: getResolvers(await getDBClient(connection))
     })
 
+    const protectedSchema = applyMiddleware<Context & TServerContext>(schema, permissions);
+
     return createYoga<TServerContext, Context>({
-        schema, graphqlEndpoint: endpoint, context: async ({request}) => resolveContext(connection, request)
+        schema: protectedSchema, graphqlEndpoint: endpoint, context: async ({request}) => resolveContext(connection, request)
     })
 
 }

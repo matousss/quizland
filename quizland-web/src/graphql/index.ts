@@ -40,7 +40,10 @@ const apolloClient = new ApolloClient({
     ssrMode: true,
     cache: new InMemoryCache(),
     link: new YogaLink({
-        endpoint: process.env.GRAPHQL_ENDPOINT_HTTP
+        endpoint: process.env.GRAPHQL_ENDPOINT_HTTP,
+        headers: {
+            Authorization: `Bearer ${process.env.GRAPHQL_SECRET}`
+        }
     })
 })
 

@@ -1,7 +1,7 @@
 import {Card, Item, ItemType} from "../src/graphql/resolvers-types";
 import {ObjectId} from "mongodb";
 
-export type DItem = {type: ItemType} & Item & {_id: number, owner: ObjectId}
+export type DItem = {type: ItemType} & Omit<Item, 'id'> & {_id: number, owner: ObjectId}
 
 export type DFolder = DItem & {children: Array<ObjectId>}
 

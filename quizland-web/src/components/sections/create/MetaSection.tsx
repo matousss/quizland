@@ -3,13 +3,13 @@ import {Switch, Text, TextArea} from "@components/forms/input";
 import {FC, useEffect, useState} from "react";
 
 
-const MetaSection: FC<{ setMeta: Function, defaultValues?: { isPrivate: boolean, description: string, name: string } }>
+const MetaSection: FC<{ meta: { isPrivate: boolean, description: string, name: string }, setMeta: Function,  }>
     = (
-    {setMeta, defaultValues = {isPrivate: false, description: '', name: ''}}
+    {setMeta, meta = {isPrivate: false, description: '', name: ''}}
 ) => {
-    const [isPrivate, setIsPrivate] = useState<boolean>(defaultValues.isPrivate);
-    const [description, setDescription] = useState<string>(defaultValues.description);
-    const [name, setName] = useState<string>(defaultValues.name);
+    const [isPrivate, setIsPrivate] = useState<boolean>(meta.isPrivate);
+    const [description, setDescription] = useState<string>(meta.description);
+    const [name, setName] = useState<string>(meta.name);
     useEffect(() => setMeta('isPrivate')(isPrivate), [isPrivate])
     useEffect(() => setMeta('description')(description), [description])
     useEffect(() => setMeta('name')(name), [name])

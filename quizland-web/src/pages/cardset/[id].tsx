@@ -68,7 +68,7 @@ export const getStaticProps = async ({params}: { params: Params }): Promise<{ pr
             }
         }
     )
-    console.log(data)
+
     return {
         props: {
             cardSet: data.cardSet

@@ -23,14 +23,14 @@ const TextArea: FC<ComponentProps<'textarea'> & { value?: string }> = ({
                 if (maxLength && e.target.value.length > maxLength)
                     e.target.classList.add('border-red-800', 'focus:border-red-600')
                 else e.target.classList.remove('border-red-800', 'focus:border-red-600')
-                console.log(e.target.value.length)
+
                 setContent(e.target.value);
                 onChange && onChange(e);
             }
             }
             {...props}
         />
-        <span className={'ml-auto bg-middle_dark relative bottom-11 right-4 opacity-75 rounded-md px-2'}>
+        <span className={'ml-auto bg-middle_dark relative bottom-11 right-4 opacity-75 rounded-md px-2 select-none'}>
             {length}{maxLength && `/${maxLength}`}
         </span>
     </>)

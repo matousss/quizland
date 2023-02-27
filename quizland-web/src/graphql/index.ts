@@ -3,15 +3,15 @@ import {split, HttpLink} from '@apollo/client';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {GraphQLWsLink} from '@apollo/client/link/subscriptions';
 import {createClient} from 'graphql-ws';
-import WebSocket from 'ws';
+import WebSocket from 'ws'
 
 const wsLink = new GraphQLWsLink(createClient({
         url: process.env.GRAPHQL_ENDPOINT_WS as string,
-        webSocketImpl: WebSocket
+    webSocketImpl: WebSocket
     })
 )
 
-const httpLink = new HttpLink(
+export const httpLink = new HttpLink(
     {
         uri: process.env.GRAPHQL_ENDPOINT_HTTP,
         headers: {
@@ -38,8 +38,5 @@ const apolloClient = new ApolloClient({
     cache: new InMemoryCache(),
     link: splitLink
 })
-
-const queryFetcher = (options: QueryOptions) => apolloClient.query(options)
-const mutationFetcher = (options: MutationOptions) => apolloClient.mutate(options)
 
 export default apolloClient

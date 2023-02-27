@@ -50,7 +50,7 @@ export const getMutationResolvers = (dbClient: DBClient): MutationResolvers => {
                 await session.endSession()
             }
 
-            if (!response.ok) throw new WriteError("Cannot create cardset")
+            if (!response.ok) throw new WriteError("Cannot create CardSet")
 
             return {
                 id: insertedId,

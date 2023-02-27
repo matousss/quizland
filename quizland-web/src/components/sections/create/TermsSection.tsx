@@ -6,8 +6,9 @@ import {PlusCircleIcon, PlusIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import type {Card} from "#types";
 const TermInput: FC<{
     setter: (value: string) => void,
-    remove: () => void, index: number,
-    value: string
+    remove: () => void,
+    index: number,
+    value: string,
 }> = ({
           setter,
           remove,
@@ -16,6 +17,7 @@ const TermInput: FC<{
       }) => (
     <div className={'relative'}>
         <Text key={index} placeholder={'Definition'} className={'w-full'} value={value}
+              autoFocus={index !== 0}
               onChange={e => setter(e.target.value)}/>
         {index !== 0 && <div className={'absolute flex right-1 top-0 z-10 h-full'}>
             <button tabIndex={-1} className={'my-auto text-gray-400 hover:text-white duration-200'} onClick={remove}>
@@ -64,7 +66,7 @@ const Term: FC<{
                 <Text placeholder={'Term'} className={'w-full'}
                       onChange={e => setter('term', e.target.value)}
                       value={term}
-
+                      autoFocus={true}
                 />
             </span>
             <span className={'grow'}>

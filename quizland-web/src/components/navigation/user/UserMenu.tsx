@@ -24,7 +24,6 @@ const UserMenu: FC<{user: User}> = ({user}) => (
         <div>
             <Menu.Button
                 className="flex rounded-full bg-white focus:outline-none border-2 border-middle">
-                <span className="sr-only">Open user menu</span>
                 <UserImage src={user.image as string | undefined}/>
             </Menu.Button>
         </div>

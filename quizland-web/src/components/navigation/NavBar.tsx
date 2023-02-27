@@ -124,7 +124,7 @@ const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Ar
                 <Popover.Button className={'ring-0 focus:border-0 focus:outline-0'}>
                     <BodyBtn active={active} {...props}>
                         <ChevronDownIcon
-                            className={'h-5 w-5 ui-open:rotate-180 ui-open:transform transition duration-150 ease-in-out'}
+                            className={'h-6 w-6 mt-0.5 ui-open:rotate-180 ui-open:transform transition duration-150 ease-in-out'}
                             aria-hidden
                         />
                     </BodyBtn>

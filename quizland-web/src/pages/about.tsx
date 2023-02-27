@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export default function About() {
 
     return (
@@ -14,10 +12,10 @@ export default function About() {
                         You cannot escape us.
                     </p>
                     <div className={'flex pt-10'}>
-                        <Link href={'/auth'} className={'text-xxl text-white bg-green-900 rounded-md p-5 m-auto'}>
-                                Join us!
+                        <a href={'/auth'} className={'text-xxl text-white bg-green-900 rounded-md p-5 m-auto'}>
+                            Join us!
 
-                        </Link>
+                        </a>
                     </div>
                 </div>
                 <div className={'w-4/5 sm:w-3/5 md:w-2/5 m-auto md:m-5'}>

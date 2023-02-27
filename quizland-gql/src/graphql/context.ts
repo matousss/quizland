@@ -26,20 +26,23 @@ const resolveContext = async (mongo: MongoClient, req: NodeRequest, res?: NodeRe
     const getUserFromRequest = async (): Promise<User | null> => {
         // extract token
 
+        let headerMap = req.headers?.headersInit || req.headers['map'];
 
-        let headerMap = req.headers['map'];
-        let cookie = headerMap.get('cookie') as string;
+        let cookie = headerMap.get ? headerMap.get('cookie') : headerMap['cookie'] as string;
 
         let token;
         if (cookie !== undefined){
             token = cookie.split(';').map(v => v.trim().split('=')).find(v => v[0] === 'token')?.[1];
         }
-        else token = headerMap.get('authorization').replace('Bearer ')
-
+        else {
+            let authHeader =headerMap['authorization'] || headerMap.get('authorization')
+            token = authHeader.replace('Bearer ')
+        }
         if (!token) return null;
         // verify token
         let info = await verifyJWT(token);
-        if (!info) return null;
+
+        if (info === null) return null;
 
         if (info.id.startsWith('@')) {
             return specialUsers[info.id.substring(1)];

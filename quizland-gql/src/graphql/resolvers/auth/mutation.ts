@@ -70,11 +70,10 @@ export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient): Muta
         let response;
         try {
             response = await session.withTransaction(async () => {
-                let user_result = await db.Users.insertOne(user, {session});
+                let user_result = await db.Users.insertOne(newUser, {session});
                 user_id = user_result.insertedId;
                 // @ts-ignore
                 account.user = user_id;
-
                 await db.Accounts.insertOne(account, {session});
             })
         } finally {

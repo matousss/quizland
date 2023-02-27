@@ -67,11 +67,9 @@ export const getMutationResolvers = (dbClient: DBClient): MutationResolvers => {
         },
 
         updateCards: async (_, {id, cards}) => {
-            console.log('dklansjkdnjk')
             let dbId = isNaN(parseInt(id)) ? id : parseInt(id)
 
             const session = await mongo.startSession();
-            console.log('krypl')
             if (await db.Cards.findOne({_id: dbId}) === null) throw new InvalidUserInput("CardSet doesn't exist")
 
             try {
@@ -95,7 +93,6 @@ export const getMutationResolvers = (dbClient: DBClient): MutationResolvers => {
             }
         },
         updateItem: async (_, {id, name, description}) => {
-            console.log('sandjknn')
             let dbId = isNaN(parseInt(id)) ? id : parseInt(id)
 
             await db.Items.updateOne({_id: dbId}, {$set: {name: name, description: description, modified: new Date()}})

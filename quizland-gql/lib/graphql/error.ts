@@ -74,3 +74,15 @@ export class InvalidUserInput extends InputError {
         super(message, ERROR_CODES.INVALID_USER_INPUT, options);
     }
 }
+
+export class PermissionError extends GQLError {
+    constructor(message, options=undefined) {
+        super(message, "PERMISSION_ERROR", options);
+    }
+}
+
+export class AccessDeniedError extends PermissionError {
+    constructor(message = "Access denied") {
+        super(message);
+    }
+}

@@ -16,5 +16,12 @@ export const isOwner = rule()(async (parent, args, ctx, info) => {
 
 export const canRead = rule()(async (parent, args, ctx, info) => {
     console.log("canRead", ctx.user);
+    console.log({parent, args, info});
+    console.log(info.fieldNodes);
+    if (ctx.user.role === Role.Server) return true;
+    if (ctx.user.role === Role.Admin) return true;
+
+
+
     return true;
 })

@@ -75,8 +75,8 @@ export const getMutationResolvers = (dbClient: DBClient): MutationResolvers => {
             try {
                 await session.withTransaction(async () => {
                     // @ts-ignore
-                    await db.Cards.updateOne({_id: dbId}, {$set:{cards: cards}}, {session})
-                    await db.Items.updateOne({_id: dbId}, {$set:{modified: new Date()}}, {session});
+                    await db.Cards.updateOne({_id: dbId}, {$set: {cards: cards}}, {session})
+                    await db.Items.updateOne({_id: dbId}, {$set: {modified: new Date()}}, {session});
 
 
                 })
@@ -97,10 +97,24 @@ export const getMutationResolvers = (dbClient: DBClient): MutationResolvers => {
 
             await db.Items.updateOne({_id: dbId}, {$set: {name: name, description: description, modified: new Date()}})
 
-            let response =  await db.Items.findOne({_id: dbId})
+            let response = await db.Items.findOne({_id: dbId})
             if (!response) throw new WriteError("Cannot update item, because it doesn't exist")
 
             return
+
+        },
+
+        deleteItem: async (_, {id}) => {
+            const session = await mongo.startSession();
+            let dbId = parseIfNumber(id)
+
+            let result = await session.withTransaction(
+                async () => {
+                    await db.Items.deleteOne({_id: dbId}, {session})
+                    await db.Cards.deleteOne({_id: dbId}, {session})
+                }
+            )
+            if (!result.ok) throw new WriteError("Cannot delete item")
 
         }
     }

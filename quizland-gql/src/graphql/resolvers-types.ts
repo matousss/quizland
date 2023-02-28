@@ -122,7 +122,7 @@ export type Mutation = {
   checkPermission?: Maybe<Permission>;
   createCardSet?: Maybe<CardSet>;
   createFolder?: Maybe<Folder>;
-  deleteItem?: Maybe<Scalars['Boolean']>;
+  deleteItem?: Maybe<Scalars['Void']>;
   deleteUser?: Maybe<Scalars['Void']>;
   updateCards?: Maybe<CardSet>;
   updateItem?: Maybe<Scalars['Void']>;
@@ -516,7 +516,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   checkPermission?: Resolver<Maybe<ResolversTypes['Permission']>, ParentType, ContextType, RequireFields<MutationCheckPermissionArgs, 'id' | 'user'>>;
   createCardSet?: Resolver<Maybe<ResolversTypes['CardSet']>, ParentType, ContextType, RequireFields<MutationCreateCardSetArgs, 'cards' | 'name'>>;
   createFolder?: Resolver<Maybe<ResolversTypes['Folder']>, ParentType, ContextType, RequireFields<MutationCreateFolderArgs, 'name'>>;
-  deleteItem?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteItemArgs, 'id'>>;
+  deleteItem?: Resolver<Maybe<ResolversTypes['Void']>, ParentType, ContextType, RequireFields<MutationDeleteItemArgs, 'id'>>;
   deleteUser?: Resolver<Maybe<ResolversTypes['Void']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
   updateCards?: Resolver<Maybe<ResolversTypes['CardSet']>, ParentType, ContextType, RequireFields<MutationUpdateCardsArgs, 'cards' | 'id'>>;
   updateItem?: Resolver<Maybe<ResolversTypes['Void']>, ParentType, ContextType, RequireFields<MutationUpdateItemArgs, 'id'>>;

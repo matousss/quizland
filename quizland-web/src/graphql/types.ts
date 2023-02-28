@@ -120,7 +120,7 @@ export type Mutation = {
   checkPermission?: Maybe<Permission>;
   createCardSet?: Maybe<CardSet>;
   createFolder?: Maybe<Folder>;
-  deleteItem?: Maybe<Scalars['Boolean']>;
+  deleteItem?: Maybe<Scalars['Void']>;
   deleteUser?: Maybe<Scalars['Void']>;
   updateCards?: Maybe<CardSet>;
   updateItem?: Maybe<Scalars['Void']>;

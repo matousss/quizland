@@ -53,7 +53,7 @@ type Mutation {
 
     # items
     # items cannot be created directly, only through its implementation, eg. CardSet, Folder
-    deleteItem(id: ID!): Boolean @permitted(required: M) # delete item and all its children, shared folders, card sets, etc.
+    deleteItem(id: ID!): Void @permitted(required: M) # delete item and all its children, shared folders, card sets, etc.
     updateItem(id: ID!, name: String, description: String): Void @permitted(required: M)
 
     updatePermission(id: ID!, user: ID!): Boolean @permitted(required: M) # update/delete

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {FC} from "react";
-import Image from 'next/image';
 
 const classes = 'border-2 border-gray-100 round-sm flex p-2'
 

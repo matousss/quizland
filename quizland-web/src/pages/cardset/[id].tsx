@@ -12,6 +12,7 @@ import {BoppyButton} from "@components/buttons/BoppyButton";
 
 import type {CardSet} from "#types";
 import type {NextPage} from "next";
+import ShuffleIcon from "@components/utility/ShuffleIcon";
 
 
 interface Params {
@@ -89,19 +90,40 @@ const CardSet: NextPage<Props> = (props) => {
 
     const [index, setIndex] = useState(0)
     const [currentCard, setCard] = useState(cards[0])
+    const [shuffled, setShuffled] = useState<typeof cards | null>(null)
 
     useEffect(() => {
         if (index === cards.length) return setIndex(0)
         if (index < 0) return setIndex(cards.length - 1)
-        setCard(cards[index])
-    }, [index])
+
+        let useCards = shuffled ?? cards
+
+        setCard(useCards[index])
+    }, [index, shuffled])
 
     const router = useRouter()
     const duplicate = async () => {
         let {id, name, ...rest} = cardSet
-        let params = cardsSetToQuery({id: "", name: 'Copy of ' + name,...rest})
+        let params = cardsSetToQuery({id: "", name: 'Copy of ' + name, ...rest})
 
         await router.push(`create?${params}`)
+    }
+
+    const shuffle = () => {
+        console.log({cards, shuffled})
+        if (shuffled !== null) {
+            setShuffled(null)
+            return
+        }
+
+        let shuffledCards = cards.slice()
+
+        // https://en.wikipedia.org/wiki/Fisher–Yates_shuffle
+        for (let i = shuffledCards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledCards[i], shuffledCards[j]] = [shuffledCards[j], shuffledCards[i]];
+        }
+        setShuffled(shuffledCards)
     }
 
     return (
@@ -114,6 +136,9 @@ const CardSet: NextPage<Props> = (props) => {
                     <FlashCardSection next={() => setIndex(index + 1)} previous={() => setIndex(index - 1)}
                                       currentCard={currentCard}/>
                     <div className={'flex justify-end pr-8 pb-2 gap-2'}>
+                        <BoppyButton onClick={shuffle}>
+                            <ShuffleIcon className={'h-8 w-8' + (shuffled ? ' text-contrast' : '')}/>
+                        </BoppyButton>
                         <BoppyButton onClick={duplicate}>
                             <DocumentDuplicateIcon className={'h-8 w-8'}/>
                         </BoppyButton>

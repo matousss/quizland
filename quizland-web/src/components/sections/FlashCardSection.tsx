@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {FlashCard} from "../cardset/FlashCard";
 
 import type {Card} from "#types";
@@ -31,10 +31,14 @@ const FlashCardSection: FC<{ next: Function, previous: Function, currentCard: Ca
         setAnimation('animate-card_from_left')
     }
 
+    useEffect(() =>  {
+        if (!animation) setAnimation('animate-[pulse_750ms]')
+    }, [currentCard])
+
     return (
         <Section>
             <div className={'sm:m-5 py-6 flex grow'}>
-                <FlashCard onNext={goNext} onBack={goBack} currentCard={currentCard} className={animation}
+                <FlashCard onNext={goNext} onBack={goBack} currentCard={currentCard} animation={animation} onAnimationEnd={() => setAnimation(undefined)}
                            flipState={[flipped, setFlipped]}/>
             </div>
         </Section>

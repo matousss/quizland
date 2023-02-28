@@ -1,4 +1,4 @@
-import {ComponentProps, ElementType, useRef, useState} from "react";
+import {AnimationEventHandler, ComponentProps, ElementType, useRef, useState} from "react";
 import styles from "../../styles/Card.module.css";
 import {Transition} from "@headlessui/react";
 
@@ -56,12 +56,14 @@ const arrayToTerms = (array: Array<String>) => array.map((d, i) => (
  * */
 const FlipCard: FC<{
     card: Card,
-    className?: string,
+    animation?: string,
+    onAnimationEnd?: AnimationEventHandler,
     flipState?: [boolean, Dispatch<SetStateAction<boolean>>],
     AdditionalFace?: ElementType
 }> = ({
           card,
-          className = '',
+          animation = '',
+          onAnimationEnd,
           flipState,
           AdditionalFace
       }) => {
@@ -78,7 +80,8 @@ const FlipCard: FC<{
     return (
         <div className={'w-[18rem] sm:w-[33rem] md:w-[39rem] z-0 select-none'}>
             <div ref={cardRef} key={term}
-                 className={className + ' relative rounded-lg h-[12rem] sm:h-[22rem] md:h-[26rem] cursor-pointer backdrop-shadow-lg'}
+                 className={animation + ' relative rounded-lg h-[12rem] sm:h-[22rem] md:h-[26rem] cursor-pointer backdrop-shadow-lg'}
+                 onAnimationEnd={onAnimationEnd}
             >
                 <div onClick={() => setFlipped(!flipped)}
                      className={'text-[1.3rem] sm:text-[2.2rem] md:text-[2.4rem] text-gray-200'}>

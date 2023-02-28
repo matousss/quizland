@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, MouseEventHandler, SetStateAction} from "react";
+import React, {ComponentProps, Dispatch, FC, MouseEventHandler, SetStateAction} from "react";
 import {FlipCard} from "./FlipCard";
 import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/20/solid";
 
@@ -11,16 +11,17 @@ const CardBtn: FC<{ onClick: MouseEventHandler, flipped?: boolean }> = ({onClick
     </div>
 )
 
-export const FlashCard: FC<{ onNext: MouseEventHandler, onBack: MouseEventHandler, currentCard: Card, className?: string, flipState?: [boolean, Dispatch<SetStateAction<boolean>>] }> = ({
-                                                                                                                                                                                             onNext,
-                                                                                                                                                                                             onBack,
-                                                                                                                                                                                             currentCard,
-                                                                                                                                                                                             className,
-                                                                                                                                                                                             flipState
-                                                                                                                                                                                         }) => (
+export const FlashCard: FC<ComponentProps<'div'> & { onNext: MouseEventHandler, onBack: MouseEventHandler, currentCard: Card, animation?: string, flipState?: [boolean, Dispatch<SetStateAction<boolean>>] }>
+    = ({
+           onNext,
+           onBack,
+           currentCard,
+           animation,
+           flipState, ...props
+       }) => (
     <>
         <CardBtn onClick={onBack}/>
-        <FlipCard card={currentCard} className={className} flipState={flipState}/>
+        <FlipCard card={currentCard} animation={animation} flipState={flipState} {...props}/>
         <CardBtn onClick={onNext} flipped={true}/>
     </>
 )

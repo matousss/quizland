@@ -147,6 +147,7 @@ export type MutationCreateCardSetArgs = {
   description?: InputMaybe<Scalars['String']>;
   folder?: InputMaybe<Scalars['ID']>;
   name: Scalars['String'];
+  permissions?: InputMaybe<Array<PermitInput>>;
 };
 
 
@@ -197,6 +198,12 @@ export type Permit = {
   user?: Maybe<Scalars['ID']>;
 };
 
+export type PermitInput = {
+  group?: InputMaybe<Scalars['ID']>;
+  permission: Permission;
+  user?: InputMaybe<Scalars['ID']>;
+};
+
 export enum ProviderType {
   Discord = 'DISCORD',
   Email = 'EMAIL',
@@ -212,6 +219,7 @@ export type Query = {
   __typename?: 'Query';
   checkToken?: Maybe<CheckTokenPayload>;
   discoverCardSets?: Maybe<Array<Scalars['ID']>>;
+  fetchCardSets: Array<ItemPayload>;
   getCardSet?: Maybe<CardSet>;
   getItem?: Maybe<ItemPayload>;
   getUser?: Maybe<User>;
@@ -364,6 +372,7 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   Permission: Permission;
   Permit: never;
+  PermitInput: PermitInput;
   ProviderType: ProviderType;
   Query: ResolverTypeWrapper<{}>;
   RemoveCardInput: RemoveCardInput;
@@ -393,6 +402,7 @@ export type ResolversParentTypes = ResolversObject<{
   ItemPayload: ItemPayload;
   Mutation: {};
   Permit: never;
+  PermitInput: PermitInput;
   Query: {};
   RemoveCardInput: RemoveCardInput;
   String: Scalars['String'];
@@ -523,6 +533,7 @@ export type PermitResolvers<ContextType = any, ParentType extends ResolversParen
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   checkToken?: Resolver<Maybe<ResolversTypes['CheckTokenPayload']>, ParentType, ContextType>;
   discoverCardSets?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType>;
+  fetchCardSets?: Resolver<Array<ResolversTypes['ItemPayload']>, ParentType, ContextType>;
   getCardSet?: Resolver<Maybe<ResolversTypes['CardSet']>, ParentType, ContextType, RequireFields<QueryGetCardSetArgs, 'id'>>;
   getItem?: Resolver<Maybe<ResolversTypes['ItemPayload']>, ParentType, ContextType, RequireFields<QueryGetItemArgs, 'id'>>;
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;

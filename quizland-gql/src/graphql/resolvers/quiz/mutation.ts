@@ -31,7 +31,7 @@ export const getMutationResolvers = (dbClient: DBClient): MutationResolvers => {
                 name: args.name,
                 owner: user._id,
                 type: ItemType.CardSet,
-                permissions: [],
+                permissions: args.permissions,
                 modified: new Date(),
             };
             if (args.description !== undefined) item.description = args.description;

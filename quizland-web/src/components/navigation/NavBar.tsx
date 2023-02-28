@@ -18,7 +18,7 @@ interface Submenu {
 }
 
 const navigation: Array<Item & Submenu> = [
-    {label: 'Library', href: '/dashboard'},
+    {label: 'Library', href: '/library'},
     {label: 'Browse', href: '/browse'},
     {
         label: 'Create', href: '/create', subMenu: [
@@ -30,7 +30,7 @@ const navigation: Array<Item & Submenu> = [
 ]
 
 const Logo = () => (
-    <Link href={'/'} className={"flex flex-shrink-0 items-center"}>
+    <Link href={'/home'} className={"flex flex-shrink-0 items-center"}>
         <img
             className={"block h-9 w-auto"}
             src="/logo_big.svg"

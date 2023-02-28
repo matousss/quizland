@@ -145,6 +145,7 @@ export type MutationCreateCardSetArgs = {
   description?: InputMaybe<Scalars['String']>;
   folder?: InputMaybe<Scalars['ID']>;
   name: Scalars['String'];
+  permissions?: InputMaybe<Array<PermitInput>>;
 };
 
 
@@ -195,6 +196,12 @@ export type Permit = {
   user?: Maybe<Scalars['ID']>;
 };
 
+export type PermitInput = {
+  group?: InputMaybe<Scalars['ID']>;
+  permission: Permission;
+  user?: InputMaybe<Scalars['ID']>;
+};
+
 export enum ProviderType {
   Discord = 'DISCORD',
   Email = 'EMAIL',
@@ -210,6 +217,7 @@ export type Query = {
   __typename?: 'Query';
   checkToken?: Maybe<CheckTokenPayload>;
   discoverCardSets?: Maybe<Array<Scalars['ID']>>;
+  fetchCardSets: Array<ItemPayload>;
   getCardSet?: Maybe<CardSet>;
   getItem?: Maybe<ItemPayload>;
   getUser?: Maybe<User>;

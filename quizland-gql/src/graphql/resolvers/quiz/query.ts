@@ -1,5 +1,5 @@
 import {DBClient, parseIfNumber} from "../../../../lib/mongodb";
-import {ItemType, QueryResolvers} from "../../resolvers-types";
+import {CardSet, Item, ItemType, QueryResolvers, User} from "../../resolvers-types";
 import {specialUsers} from "../../context";
 
 export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
@@ -32,16 +32,13 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
             let ownerRaw
             if (owner.toString().startsWith('@')) {
                 ownerRaw = specialUsers[owner.toString().replace('@', '')]
-            }
-
-            else {
+            } else {
                 // @ts-ignore
                 ownerUser = await Users.findOne({_id: owner});
                 let {_id, ...rest} = ownerUser;
                 ownerRaw = rest;
                 ownerID = _id.toString();
             }
-
 
 
             return {
@@ -68,18 +65,42 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
 
         },
         searchCardSets: async (_, {query}) => {
-            let items = await db.Items.find({type: ItemType.CardSet, name: {$regex: '^(?i)' + query}}, {limit: null}).toArray();
-            return items.map(async (item) => {
+            let items = await db.Items.find({
+                type: ItemType.CardSet,
+                name: {$regex: '^(?i)' + query}
+            }, {limit: null}).toArray();
+            items = items.filter(item => item.permissions === null)
+            return await Promise.all(items.map(async (item) => {
                 let {_id, owner, ...rest} = item;
                 return {
                     id: _id.toString(),
                     ...rest,
                     owner: {
                         id: owner.toString(),
-                            ...(await dbClient.auth.Users.findOne({_id: owner}))
-                    }
-                }
+                        ...(await dbClient.auth.Users.findOne({_id: owner}))
+                    } as User,
+                    ...(await db.Cards.findOne({_id: item._id}))
+                } as CardSet
+            }))
+        },
+        fetchCardSets: async (_, __, ctx) => {
+            let user = ctx.user;
+            if (!user) return [];
+
+            let items = await db.Items.find({owner: user._id, type: ItemType.CardSet}).toArray();
+
+            return items.map(item => {
+                let {_id, owner, ...rest} = item;
+                return {
+                    id: _id.toString(),
+                    ...rest,
+                    owner: {
+                        id: owner.toString(),
+                        ...(user)
+                    } as User
+                } as Item
             })
+
         }
     }
 }

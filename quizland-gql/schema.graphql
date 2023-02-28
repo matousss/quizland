@@ -34,6 +34,7 @@ type Query {
     discoverCardSets: [ID!] @server
 
     searchCardSets(query: String!): [CardSet!]!
+    fetchCardSets: [ItemPayload!]!
 }
 
 type Mutation {
@@ -69,6 +70,7 @@ type Mutation {
         folder: ID
         name: String!
         description: String
+        permissions: [PermitInput!]
     ): CardSet @permitted(required: M)
 
     # if index not specified, add to the end
@@ -144,6 +146,12 @@ enum Role {
 }
 
 interface Permit {
+    user: ID
+    group: ID
+    permission: Permission!
+}
+
+input PermitInput {
     user: ID
     group: ID
     permission: Permission!

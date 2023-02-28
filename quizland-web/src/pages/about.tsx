@@ -1,27 +1,12 @@
 export default function About() {
 
     return (
-        <div className={'w-full h-full bg-primary divide-y-8 divide-secondary'}>
-            <div className={'w-full flex flex-col md:flex-row'}>
-                <div className={'grow m-5 flex flex-col'}>
-                    <h1 className={'text-lg pb-4'}>
-                        We are everywhere
-                    </h1>
-                    <p>
-                        There is no place where we are not.
-                        You cannot escape us.
-                    </p>
-                    <div className={'flex pt-10'}>
-                        <a href={'/auth'} className={'text-xxl text-white bg-green-900 rounded-md p-5 m-auto'}>
-                            Join us!
+        <div className={'w-full h-full bg-primary flex flex-col'}>
+            <img src={'/logo_big.svg'} className={'w-1/2 mx-auto'}/>
+            <a href={'/auth'} className={'text-[2rem] text-white hover:bg-[#009fe2] bg-[#0054bb] duration-200 rounded-lg p-5 mt-24 mx-auto'}>
+                Join now!
 
-                        </a>
-                    </div>
-                </div>
-                <div className={'w-4/5 sm:w-3/5 md:w-2/5 m-auto md:m-5'}>
-                    <img src={'/assets/stonks.png'} alt={'Stonks'} className={'rounded-xl'}/>
-                </div>
-            </div>
+            </a>
 
 
         </div>

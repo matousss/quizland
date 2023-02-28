@@ -3,8 +3,9 @@ import mongoClient, {getDBClient} from "../../lib/mongodb";
 import {getResolvers, typeDefs} from "../graphql";
 import {Context, resolveContext} from "../graphql/context";
 import {applyMiddleware} from "graphql-middleware";
-import {permissions} from "../shield/permissions";
+import {getPermissions} from "../shield/permissions";
 import {directiveTransformers} from "../directives/transformers";
+
 export const config = {
     api: {
         bodyParser: false
@@ -28,16 +29,18 @@ async function getServer<TServerContext>(endpoint = "/graphql") {
         resolvers: getResolvers(await getDBClient(connection))
     })
 
-    const protectedSchema = applyMiddleware<Context & TServerContext>(schema, permissions);
+    const protectedSchema = applyMiddleware<Context & TServerContext>(schema, getPermissions(await getDBClient(connection)));
     const directiveSchema = () => {
         return directiveTransformers.reduce((curSchema, transformer) => transformer(curSchema), protectedSchema)
     }
 
 
-
     return createYoga<TServerContext, Context>({
-        schema: directiveSchema, graphqlEndpoint: endpoint, context: async ({request}) => resolveContext(connection, request)
+        schema: directiveSchema,
+        graphqlEndpoint: endpoint,
+        context: async ({request}) => resolveContext(connection, request)
     })
 
 }
+
 export default getServer;

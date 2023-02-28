@@ -125,14 +125,25 @@ const mongoClient = new MongoClient(DB_URL || 'mongodb://localhost:27017',
     // @ts-ignore
     {useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1});
 
+let dbClient: DBClient | null = null;
 
 const getDBClient = async (mongoClient: MongoClient): Promise<DBClient> => {
-    return {
+    if (!dbClient) dbClient = {
         auth: getAuthDB(mongoClient),
         quiz:  getQuizDB(mongoClient),
         mongoClient: mongoClient
     }
+
+
+    return dbClient;
 }
+
+export const parseIfNumber = (value: string): string | number => {
+    if (typeof value === 'string' && !isNaN(parseInt(value)))
+        return parseInt(value);
+    return value.toString();
+}
+
 export default mongoClient;
 export {getDBClient, getAuthDB, getQuizDB, to__id, fromMongo, toMongo, AUTH_DB, AUTH_COLLECTIONS}
 export type {AuthDB, QuizDB, DBClient}

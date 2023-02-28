@@ -1,4 +1,4 @@
-import {DBClient} from "../../../../lib/mongodb";
+import {DBClient, parseIfNumber} from "../../../../lib/mongodb";
 import {
     CardSet,
     ItemType,
@@ -67,7 +67,7 @@ export const getMutationResolvers = (dbClient: DBClient): MutationResolvers => {
         },
 
         updateCards: async (_, {id, cards}) => {
-            let dbId = isNaN(parseInt(id)) ? id : parseInt(id)
+            let dbId = parseIfNumber(id)
 
             const session = await mongo.startSession();
             if (await db.Cards.findOne({_id: dbId}) === null) throw new InvalidUserInput("CardSet doesn't exist")
@@ -93,7 +93,7 @@ export const getMutationResolvers = (dbClient: DBClient): MutationResolvers => {
             }
         },
         updateItem: async (_, {id, name, description}) => {
-            let dbId = isNaN(parseInt(id)) ? id : parseInt(id)
+            let dbId = parseIfNumber(id)
 
             await db.Items.updateOne({_id: dbId}, {$set: {name: name, description: description, modified: new Date()}})
 

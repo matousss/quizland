@@ -1,4 +1,4 @@
-import {DBClient} from "../../../../lib/mongodb";
+import {DBClient, parseIfNumber} from "../../../../lib/mongodb";
 import {ItemType, QueryResolvers} from "../../resolvers-types";
 import {specialUsers} from "../../context";
 
@@ -14,8 +14,7 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
             return items.map(item => item._id.toString())
         },
         getCardSet: async (_, {id}) => {
-            let idNum = parseInt(id)
-            let lookFor = !isNaN(idNum) ? idNum : id;
+            let lookFor = parseIfNumber(id);
 
             // @ts-ignore
             let item = await db.Items.findOne({_id: lookFor});
@@ -57,7 +56,7 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
             }
         },
         getItem: async (_, {id}) => {
-            let dbId = isNaN(parseInt(id)) ? id : parseInt(id)
+            let dbId = parseIfNumber(id)
             let item = await db.Items.findOne({_id: dbId})
             if (!item) return null;
 

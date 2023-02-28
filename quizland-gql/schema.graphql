@@ -10,7 +10,7 @@ scalar Void
 
 # permitted can be used on Folder, CardSet, Group
 directive @permitted (required: Permission) on FIELD_DEFINITION | QUERY | MUTATION # available only for user with permission
-directive @private on FIELD_DEFINITION | QUERY # visible only to that user related user
+directive @private on FIELD_DEFINITION | QUERY # visible only to the related user and superusers
 directive @server on FIELD_DEFINITION | QUERY | MUTATION | OBJECT # only for server side
 directive @internal on FIELD_DEFINITION | OBJECT | ENUM # only for internal usage eg. data structure, only relevant for database and type generation
 
@@ -27,7 +27,7 @@ type Query {
 
 
     # cardSets
-    getItem(id: ID!): Item @permitted(required: R)
+    getItem(id: ID!): ItemPayload @permitted(required: R)
 
     getCardSet(id: ID!): CardSet @permitted(required: R)
 
@@ -38,7 +38,7 @@ type Mutation {
     # users
     # createUser(input: CreateUserInput!): User @server
     # updateUser(input: UpdateUserInput!): User @private
-    # deleteUser(id: ID!): Void @server
+    deleteUser(id: ID!): Void @server
     # closeAccount: Void @private
 
     authenticateUser(provider: ProviderType!, code: String!): AuthenticateUserPayload
@@ -59,7 +59,7 @@ type Mutation {
 
     # folders
     createFolder(parent: ID, name: String!, description: String): Folder @permitted(required: M)
-    moveItem(id: ID!, from: ID!, to: ID!): Boolean @permitted(required: M)
+    # moveItem(id: ID!, from: ID!, to: ID!): Boolean @permitted(required: M)
 
     # cardSets
     createCardSet(
@@ -68,7 +68,6 @@ type Mutation {
         name: String!
         description: String
     ): CardSet @permitted(required: M)
-    removeCardSet(id: ID!): Void @permitted(required: M)
 
     # if index not specified, add to the end
     # addCard(cardSet: ID!, index: Int, card: CardInput!): CardSet @permitted(required: W)
@@ -148,6 +147,15 @@ interface Permit {
 }
 
 interface Item {
+    id: ID!
+    name: String!
+    description: String
+    owner: User!
+    permissions: [Permit!] @permitted(required: M)
+    modified: DateTime
+}
+
+type ItemPayload {
     id: ID!
     name: String!
     description: String

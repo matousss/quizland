@@ -12,7 +12,7 @@ type Query {
     getUserByID(id: ID!): User
     getUserByEmail(email: String!): User
     getUserByAccount(providerAccountId: ID!, provider: ProviderType!): User @server
-    getUser: User @private
+    getUser: User
 
     # auth
     checkToken: CheckTokenPayload @private

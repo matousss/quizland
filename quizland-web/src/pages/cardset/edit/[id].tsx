@@ -60,8 +60,6 @@ const Edit: NextPage<{ cardSet: Omit<CardSet, 'termLng' | 'definitionLng' | 'mod
         isPrivate: !!permissions
     };
 
-    console.log({cardSet})
-
     return (
         <Editor initialTerms={cards.map(({definition, term}) =>({definition: definition, term: term}))} initialMeta={meta} id={id}/>
     )

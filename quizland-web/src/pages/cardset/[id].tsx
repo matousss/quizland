@@ -110,7 +110,6 @@ const CardSet: NextPage<Props> = (props) => {
     }
 
     const shuffle = () => {
-        console.log({cards, shuffled})
         if (shuffled !== null) {
             setShuffled(null)
             return

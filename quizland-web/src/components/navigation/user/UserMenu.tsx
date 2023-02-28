@@ -5,15 +5,17 @@ import UserImage from "./UserImage"
 import {User} from "#types";
 
 const items = [
-    {label: 'Your Profile', href: '/profile'},
-    {label: 'Settings', href: '/settings'},
+    {label: 'Your Profile', href: '/library'},
+    {label: 'Settings', href: '/settings', disabled: true},
     {label: 'Sign out', href: '/signout'},
 ]
-const Item = ({label, href}:{label: string, href: string}) => (
+const Item = ({label, href, disabled}:{label: string, href: string, disabled?: boolean}) => (
     <Menu.Item key={label} className={'group'} as={'div'}>
         {({active}) => (
-            <Link href={href}
-                  className={(active ? 'bg-gray-500 text-white' : 'text-contrast' )+ ' block px-4 py-2 group:hover:bg-primary'}>
+            <Link href={disabled ? '#' : href}
+                  className={(active ? 'bg-gray-500 text-white' : 'text-contrast' )
+                      + (disabled ? ' opacity-50 cursor-not-allowed' : '')
+                      + ' block px-4 py-2 group:hover:bg-primary'}>
                 {label}
             </Link>
         )}

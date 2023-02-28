@@ -72,7 +72,7 @@ const Editor: FC<{
                 let {isPrivate, ...rest} = passedMeta
 
                 response = await client.mutate({
-                        mutation: editing? UPDATE_CARDSET : CREATE_CARDSET,
+                        mutation: editing ? UPDATE_CARDSET : CREATE_CARDSET,
                         variables: {
                             cards: newTerms,
                             ...rest,
@@ -100,16 +100,16 @@ const Editor: FC<{
             <SectionContainer>
 
                 <div className={disabled ? 'cursor-wait disabled:cursor-wait' : ''}>
-                    <TitleSection title={editing ? "Edit CardSet" :"Create CardSet"}/>
+                    <TitleSection title={editing ? "Edit CardSet" : "Create CardSet"}/>
                     <fieldset disabled={disabled}>
                         <div className={'relative'}>
-                        <MetaSection meta={meta} setMeta={setMetaValue}/>
-                        <TermsSection terms={terms} setTerms={setTerms}/>
-                        {disabled && <div className={'absolute w-full h-full top-0 cursor-wait'}></div>}
+                            <MetaSection meta={meta} setMeta={setMetaValue}/>
+                            <TermsSection terms={terms} setTerms={setTerms}/>
+                            {disabled && <div className={'absolute w-full h-full top-0 cursor-wait'}></div>}
                         </div>
                     </fieldset>
                     <Section className={'flex flex-col justify-center pb-12'}>
-                        <div className={'flex flex-col mx-auto'}>
+                        <div className={'flex flex-col ml-auto'}>
                             <div className={'text-red-500 pt-1 h-16 text-center'}>
                                 {errors.map((e, i) => <div key={i}>{e}</div>)}
                             </div>

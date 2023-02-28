@@ -8,7 +8,7 @@ import Editor from "@components/cardset/Editor";
 
 
 export const getServerSideProps: GetServerSideProps = async ({ query}) => {
-    let initialTerms
+    let initialTerms = [] as TermArray;
     let {name, description, term, definition} = query;
 
     deserializeCards : {
@@ -33,7 +33,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query}) => {
                 break deserializeCards;
             }
         } catch (e) {
-            console.log(e)
             // ignore atob errors
             return {
                 props: {
@@ -57,9 +56,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query}) => {
     }
 }
 const Create: NextPage<{meta: MetaType, terms: TermArray, error?: Array<string>}> = ({meta, terms, error= []}) => {
-    useEffect(() => window.history.replaceState(null, document.title, "/cardset/create"), [
-        window
-    ])
+    useEffect(() => window.history.replaceState(null, document.title, "/cardset/create"), [])
 
     return <Editor initialMeta={meta} initialTerms={terms} initialErrors={error}/>
 }

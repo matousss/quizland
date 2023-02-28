@@ -9,7 +9,6 @@ const resolveFieldDirective = (schema, directive, resolver: (resolve) => GraphQL
         const privateDirective = getDirective(schema, fieldConfig, directive)?.[0];
 
         if (!!privateDirective) {
-            console.log({_fieldName})
             const {resolve} = fieldConfig
             fieldConfig.resolve = resolver(resolve)
             return fieldConfig

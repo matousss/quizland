@@ -66,6 +66,20 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
                 ...rest,
             }
 
+        },
+        searchCardSets: async (_, {query}) => {
+            let items = await db.Items.find({type: ItemType.CardSet, name: {$regex: '^(?i)' + query}}, {limit: null}).toArray();
+            return items.map(async (item) => {
+                let {_id, owner, ...rest} = item;
+                return {
+                    id: _id.toString(),
+                    ...rest,
+                    owner: {
+                        id: owner.toString(),
+                            ...(await dbClient.auth.Users.findOne({_id: owner}))
+                    }
+                }
+            })
         }
     }
 }

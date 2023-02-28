@@ -99,6 +99,16 @@ export type Item = {
   permissions?: Maybe<Array<Permit>>;
 };
 
+export type ItemPayload = {
+  __typename?: 'ItemPayload';
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  modified?: Maybe<Scalars['DateTime']>;
+  name: Scalars['String'];
+  owner: User;
+  permissions?: Maybe<Array<Permit>>;
+};
+
 export enum ItemType {
   CardSet = 'CARD_SET',
   Folder = 'FOLDER'
@@ -108,13 +118,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   authenticateUser?: Maybe<AuthenticateUserPayload>;
   checkPermission?: Maybe<Permission>;
-  connectAccount?: Maybe<Scalars['Void']>;
   createCardSet?: Maybe<CardSet>;
   createFolder?: Maybe<Folder>;
   deleteItem?: Maybe<Scalars['Boolean']>;
   deleteUser?: Maybe<Scalars['Void']>;
-  moveItem?: Maybe<Scalars['Boolean']>;
-  removeCardSet?: Maybe<Scalars['Void']>;
   updateCards?: Maybe<CardSet>;
   updateItem?: Maybe<Scalars['Void']>;
   updatePermission?: Maybe<Scalars['Boolean']>;
@@ -130,12 +137,6 @@ export type MutationAuthenticateUserArgs = {
 export type MutationCheckPermissionArgs = {
   id: Scalars['ID'];
   user: Scalars['ID'];
-};
-
-
-export type MutationConnectAccountArgs = {
-  code: Scalars['String'];
-  provider: ProviderType;
 };
 
 
@@ -160,18 +161,6 @@ export type MutationDeleteItemArgs = {
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationMoveItemArgs = {
-  from: Scalars['ID'];
-  id: Scalars['ID'];
-  to: Scalars['ID'];
-};
-
-
-export type MutationRemoveCardSetArgs = {
   id: Scalars['ID'];
 };
 
@@ -222,11 +211,12 @@ export type Query = {
   checkToken?: Maybe<CheckTokenPayload>;
   discoverCardSets?: Maybe<Array<Scalars['ID']>>;
   getCardSet?: Maybe<CardSet>;
-  getItem?: Maybe<Item>;
+  getItem?: Maybe<ItemPayload>;
   getUser?: Maybe<User>;
   getUserByAccount?: Maybe<User>;
   getUserByEmail?: Maybe<User>;
   getUserByID?: Maybe<User>;
+  searchCardSets: Array<CardSet>;
 };
 
 
@@ -253,6 +243,11 @@ export type QueryGetUserByEmailArgs = {
 
 export type QueryGetUserByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QuerySearchCardSetsArgs = {
+  query: Scalars['String'];
 };
 
 export type RemoveCardInput = {

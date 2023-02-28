@@ -27,6 +27,7 @@
     "react-dom": "18.2.0",
     "reflect-metadata": "^0.1.13",
     "swr": "^2.0.3",
+    "tailwindcss-animation-delay": "^1.0.7",
     "ws": "^8.12.1"
   },
   "devDependencies": {

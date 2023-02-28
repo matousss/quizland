@@ -2,6 +2,8 @@ import type {NextPage} from 'next'
 import React from "react";
 import NavBar from "@components/navigation/NavBar";
 import {useUser} from "lib/hooks/user";
+import {Section, SectionContainer} from "@components/sections";
+import Link from "next/link";
 interface Props {
     clientId: string
 }
@@ -14,12 +16,20 @@ const Home: NextPage<Props, any> = (props) => {
         <>
             <NavBar/>
 
-            {/*<SocialButton provider={'Google'} onClick={login} icon={'/assets/google-icon.svg'}/>*/}
-            <div>
+            <SectionContainer>
+                <Section>
+                    <Link href={'/library'}>
+                        Open library
+                    </Link>
+                    <Link href={'/browse'}>
+                        Browse
+                    </Link>
+                    <Link href={'/cardset/create'}>
+                        Create cardset
+                    </Link>
+                </Section>
 
-                {user ? user.lastname : 'no user'}
-                {user ? user.id : null}
-            </div>
+            </SectionContainer>
         </>
     )
 }

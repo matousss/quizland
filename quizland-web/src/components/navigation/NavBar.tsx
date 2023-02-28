@@ -55,7 +55,7 @@ const SmallNavBarItem: FC<{ active: boolean } & Item> = ({active, ...item}) => (
     as={Link}
     href={item.href}
     className={
-        active ? 'bg-gray-900 text-white' : '> hover:bg-middle hover:text-white' + 'block px-3 py-2 rounded-md text-base font-medium'
+        (active ? 'bg-middle text-white' : 'hover:bg-middle hover:text-white') + ' block px-3 py-2 rounded-md text-base font-medium'
     }
     aria-current={active ? 'page' : undefined}
 >
@@ -99,8 +99,8 @@ const BodyBtn: FC<BodyBtnProps> = ({active, ...props}) => (
     <div
         key={props.label}
         className={
-            active ? 'bg-gray-900 text-white' : 'hover:bg-middle hover:text-white' +
-                ' px-3 py-2 rounded-md font-medium flex transition duration-150 ease-in-out outline-none'
+
+                'hover:bg-middle hover:text-white px-3 py-2 rounded-md font-medium flex transition duration-150 ease-in-out outline-none'
         }
         aria-current={active ? 'page' : undefined}
         {...props}

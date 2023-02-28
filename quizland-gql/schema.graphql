@@ -1,10 +1,18 @@
 scalar DateTime
 scalar Void
 
+
+# directives are resolved with graphql-tools
+# https://the-guild.dev/graphql/tools/docs/schema-directives
+
+# todo dynamic Query and Mutation permissions resolving
+# currently query and mutation are statically resolver
+
+# permitted can be used on Folder, CardSet, Group
 directive @permitted (required: Permission) on FIELD_DEFINITION | QUERY | MUTATION # available only for user with permission
-directive @private on FIELD_DEFINITION | QUERY # visible only to user who owns the item
-directive @server on FIELD_DEFINITION | QUERY | MUTATION | OBJECT | INPUT_FIELD_DEFINITION # only for server side
-directive @internal on FIELD_DEFINITION | OBJECT | ENUM # only for internal usage eg. data structure, only relevant for database
+directive @private on FIELD_DEFINITION | QUERY # visible only to that user related user
+directive @server on FIELD_DEFINITION | QUERY | MUTATION | OBJECT # only for server side
+directive @internal on FIELD_DEFINITION | OBJECT | ENUM # only for internal usage eg. data structure, only relevant for database and type generation
 
 type Query {
     # users
@@ -15,7 +23,7 @@ type Query {
     getUser: User
 
     # auth
-    checkToken: CheckTokenPayload @private
+    checkToken: CheckTokenPayload
 
 
     # cardSets
@@ -30,17 +38,18 @@ type Mutation {
     # users
     # createUser(input: CreateUserInput!): User @server
     # updateUser(input: UpdateUserInput!): User @private
-    deleteUser(id: ID!): Void @private
+    # deleteUser(id: ID!): Void @server
+    # closeAccount: Void @private
 
     authenticateUser(provider: ProviderType!, code: String!): AuthenticateUserPayload
 
     # accounts
-    connectAccount(provider: ProviderType!, code: String!): Void @private
+    # connectAccount(provider: ProviderType!, code: String!): Void @private
 
     # auth
 
     # items
-    # items cannot be created directly, only through its child, eg. CardSet, Folder
+    # items cannot be created directly, only through its implementation, eg. CardSet, Folder
     deleteItem(id: ID!): Boolean @permitted(required: M) # delete item and all its children, shared folders, card sets, etc.
     updateItem(id: ID!, name: String, description: String): Void @permitted(required: M)
 

@@ -1,4 +1,4 @@
-import {Card, Item, ItemType} from "../src/graphql/resolvers-types";
+import {Card, Item, ItemType, User} from "../src/graphql/resolvers-types";
 import {ObjectId} from "mongodb";
 
 export type DItem = {type: ItemType} & Omit<Item, 'id'> & {_id: number | string, owner: ObjectId}
@@ -11,3 +11,5 @@ export type DCardSet = {
     cards: Array<DCard>
 
 }
+
+export type DUser = Omit<User, 'id'> & {_id: ObjectId}

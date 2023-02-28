@@ -1,5 +1,5 @@
 import {BaseContext} from "@apollo/server";
-import {MongoClient} from "mongodb";
+import {MongoClient, ObjectId} from "mongodb";
 import {Role, User} from "./resolvers-types";
 import {verifyJWT} from "../auth/util";
 import {AUTH_COLLECTIONS, AUTH_DB, to__id} from "../../lib/mongodb";
@@ -18,7 +18,7 @@ export const specialUsers = {
 }
 
 interface Context extends BaseContext {
-    user: {} | null;
+    user: User | null;
 }
 
 // noinspection JSUnusedLocalSymbols
@@ -50,8 +50,8 @@ const resolveContext = async (mongo: MongoClient, req: NodeRequest, res?: NodeRe
         // get user
         // noinspection UnnecessaryLocalVariableJS
         let user = await mongo.db(AUTH_DB).collection<User>(AUTH_COLLECTIONS.USERS).findOne({_id: to__id(info.id)});
-
-        return user;
+        if (user) return  {id: user._id.toString(), ...user}
+        return null;
 
     }
 

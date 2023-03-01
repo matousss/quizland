@@ -19,11 +19,11 @@ type Query {
     # getUsers: [User] @server
     getUserByID(id: ID!): User
     getUserByEmail(email: String!): User
-    getUserByAccount(providerAccountId: ID!, provider: ProviderType!): User @server
-    getUser: User
+    # getUserByAccount(providerAccountId: ID!, provider: ProviderType!): User @server
+    # getUser: User
 
     # auth
-    checkToken: CheckTokenPayload
+    # checkToken: CheckTokenPayload
 
 
     # cardSets
@@ -59,12 +59,12 @@ type Mutation {
     deleteItem(id: ID!): Void @permitted(required: M) # delete item and all its children, shared folders, card sets, etc.
     updateItem(id: ID!, name: String, description: String): Void @permitted(required: M)
 
-    updatePermission(id: ID!, user: ID!): Boolean @permitted(required: M) # update/delete
+    # updatePermission(id: ID!, user: ID!): Boolean @permitted(required: M) # update/delete
 
-    checkPermission(id: ID!, user: ID!): Permission
+    # checkPermission(id: ID!, user: ID!): Permission
 
     # folders
-    createFolder(parent: ID, name: String!, description: String): Folder @permitted(required: M)
+    # createFolder(parent: ID, name: String!, description: String): Folder @permitted(required: M)
     # moveItem(id: ID!, from: ID!, to: ID!): Boolean @permitted(required: M)
 
     # cardSets

@@ -1,5 +1,5 @@
-import {Disclosure, Popover, Transition} from '@headlessui/react'
-import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
+import {Disclosure, Popover, Transition} from "@headlessui/react"
+import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline"
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import React, {FC, PropsWithChildren} from "react";

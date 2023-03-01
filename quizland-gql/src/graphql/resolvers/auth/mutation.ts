@@ -3,7 +3,7 @@ import {Role} from "../../resolvers-types";
 import type {AuthDB} from "../../../../lib/mongodb";
 import {fromMongo, to__id} from "../../../../lib/mongodb";
 import {resolvers as auth_resolvers, UserInfo} from "../../../auth";
-import {DEFAULT_TOKEN_LIFESPAN, generateJWT} from "../../../auth/util";
+import {DEFAULT_TOKEN_LIFESPAN, generateJWT} from "../../../../lib/jwt";
 import {
     DuplicitAccountError,
     DuplicitEmailError, ERROR_CODES, GQLError,

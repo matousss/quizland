@@ -1,7 +1,7 @@
 import {BaseContext} from "@apollo/server";
-import {MongoClient, ObjectId} from "mongodb";
+import {MongoClient} from "mongodb";
 import {Role, User} from "./resolvers-types";
-import {verifyJWT} from "../auth/util";
+import {verifyJWT} from "../../lib/jwt";
 import {AUTH_COLLECTIONS, AUTH_DB, to__id} from "../../lib/mongodb";
 import {NodeRequest, NodeResponse} from "@whatwg-node/server";
 

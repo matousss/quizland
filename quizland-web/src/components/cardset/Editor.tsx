@@ -59,7 +59,7 @@ const Editor: FC<{
         try {
             let errors = [];
             let newTerms = terms.filter((val) => val?.term && val.definition[0]);
-            if (meta.name === '') errors.push("Name is required!");
+            if (meta.name === "") errors.push("Name is required!");
             if (newTerms.length < 2) errors.push("You have to include at least 2 cards!");
             if (errors.length !== 0) return setErrors(errors);
 
@@ -82,7 +82,7 @@ const Editor: FC<{
                 );
             } catch (e) {
                 console.log(e)
-                setErrors(['Something went wrong!'])
+                setErrors(["Something went wrong!"])
                 return
             }
             await router.push('/cardset/' + response.data.setID.id);

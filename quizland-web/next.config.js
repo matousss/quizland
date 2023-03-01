@@ -53,6 +53,24 @@ const nextConfig = {
                 has: token_cookie,
                 destination: '/home',
                 permanent: false,
+            },
+            {
+                source: '/library',
+                has: token_cookie,
+                destination: '/auth',
+                permanent: false,
+            },
+            {
+                source: '/cardset/create',
+                has: token_cookie,
+                destination: '/auth',
+                permanent: false,
+            },
+            {
+                source: '/cardset/edit/:id',
+                has: token_cookie,
+                destination: '/auth',
+                permanent: false,
             }
         ]
     },

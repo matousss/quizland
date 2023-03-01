@@ -256,21 +256,6 @@ type Group {
     modified: DateTime
 }
 
-fragment ItemFragment on Item {
-    id
-    name
-    description
-    owner {
-        id
-        username
-    }
-    permissions {
-        user
-        permission
-    }
-    modified
-}
-
 # on client can be resolved by __typename
 enum ItemType @internal {
     FOLDER

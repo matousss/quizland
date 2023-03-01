@@ -67,7 +67,7 @@ export const getQueryResolvers = (dbClient: DBClient): QueryResolvers => {
         searchCardSets: async (_, {query}) => {
             let items = await db.Items.find({
                 type: ItemType.CardSet,
-                name: {$regex: '^(?i)' + query}
+                name: {$regex: '(?i)' + query}
             }, {limit: null}).toArray();
             items = items.filter(item => item.permissions === null)
             return await Promise.all(items.map(async (item) => {

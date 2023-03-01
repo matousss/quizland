@@ -32,9 +32,10 @@ export const getIsOwner = (client: DBClient) => rule()(async (parent, args, ctx,
 
 const permissionRule = (perm: Permission, client: DBClient) => rule()(async (parent, args, ctx, info) => {
 
-
-        if (ctx.user.role === Role.Server) return true;
-        if (ctx.user.role === Role.Admin) return true;
+        if (ctx.user) {
+            if (ctx.user.role === Role.Server) return true;
+            if (ctx.user.role === Role.Admin) return true;
+        }
 
         let id = parseIfNumber(args.id);
 
@@ -43,9 +44,11 @@ const permissionRule = (perm: Permission, client: DBClient) => rule()(async (par
         let item = await client.quiz.Items.findOne({_id: id});
         if (!item) return true;
 
-        if (_isOwner(ctx.user, item)) return true;
-
         if (item.permissions === null) return true;
+
+        if (!ctx.user) return false;
+
+        if (_isOwner(ctx.user, item)) return true;
 
         if (hasMinimalPermission(ctx.user, item, perm)) return true;
 

@@ -80,7 +80,7 @@ const FlipCard: FC<{
     return (
         <div className={'w-[18rem] sm:w-[33rem] md:w-[39rem] z-0 select-none'}>
             <div ref={cardRef} key={term}
-                 className={animation + ' relative rounded-lg h-[12rem] sm:h-[22rem] md:h-[26rem] cursor-pointer backdrop-shadow-lg'}
+                 className={animation + ' relative rounded-lg h-[12rem] sm:h-[22rem] md:h-[26rem] cursor-pointer drop-shadow-xl'}
                  onAnimationEnd={onAnimationEnd}
             >
                 <div onClick={() => setFlipped(!flipped)}

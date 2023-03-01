@@ -20,12 +20,17 @@ export const isAuthenticated = rule()((parent, args, ctx, info) => {
     return ctx.user !== null;
 })
 
-export const isOwner = rule()(async (parent, args, ctx, info) => {
-    //console.log("isOwner", parent, args, ctx, info);
-    return true;
+export const getIsOwner = (client: DBClient) => rule()(async (parent, args, ctx, info) => {
+    let id = parseIfNumber(args.id)
+
+    let item = await client.quiz.Items.findOne({_id: id})
+    if (!item) return true
+
+
+    return _isOwner(ctx.user, item)
 })
 
-export const getCanRead = (client: DBClient) => rule()(async (parent, args, ctx, info) => {
+const permissionRule = (perm: Permission, client: DBClient) => rule()(async (parent, args, ctx, info) => {
 
 
         if (ctx.user.role === Role.Server) return true;
@@ -38,12 +43,16 @@ export const getCanRead = (client: DBClient) => rule()(async (parent, args, ctx,
         let item = await client.quiz.Items.findOne({_id: id});
         if (!item) return true;
 
-        if (item.permissions === null) return true
-        if (!ctx.user) throw new AccessDeniedError("You have insufficient permissions to access this resource");
-
         if (_isOwner(ctx.user, item)) return true;
-        if (hasMinimalPermission(ctx.user, item, Permission.R)) return true;
+
+        if (item.permissions === null) return true;
+
+        if (hasMinimalPermission(ctx.user, item, perm)) return true;
 
         throw new AccessDeniedError("You have insufficient permissions to access this resource");
     }
 )
+
+
+export const getCanRead = (client: DBClient) => permissionRule(Permission.R, client);
+export const getCanWrite = (client: DBClient) => permissionRule(Permission.W, client);

@@ -35,6 +35,9 @@ type Query {
 
     searchCardSets(query: String!): [CardSet!]!
     fetchCardSets: [ItemPayload!]!
+    # throws error on fail
+    canRead(id: ID!): Void
+    canWrite(id: ID!): Void
 }
 
 type Mutation {

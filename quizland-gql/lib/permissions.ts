@@ -1,5 +1,4 @@
 import {Permission, Role} from "../src/graphql/resolvers-types";
-import {permissions} from "quizland-gql/src/shield/permissions";
 import {DItem} from "./types";
 
 export const isSuperUser = (user) => {

@@ -1,6 +1,5 @@
-import {or, shield} from "graphql-shield";
-import {getCanRead, isAuthenticated, isOwner, isServer, isSuperUser} from "./rules";
-import {GraphQLSchema} from "graphql/type";
+import {and, or, shield} from "graphql-shield";
+import {getCanRead, getCanWrite, getIsOwner, isAuthenticated, isServer, isSuperUser} from "./rules";
 import {DBClient} from "../../lib/mongodb";
 import {IRules} from "graphql-shield";
 import {AccessDeniedError} from "../../lib/graphql/error";
@@ -26,18 +25,22 @@ const staticPermissions: IRules = {
 
 
 export const getPermissions = (dbClient: DBClient) => {
-    const canRead = getCanRead(dbClient)
+    const canRead = getCanRead(dbClient);
+    const canWrite = getCanWrite(dbClient);
+    const isOwner = getIsOwner(dbClient);
 
     let perms: IRules = {
         Query: {
             getCardSet: or(isServer, canRead),
             getItem: or(isServer, canRead),
+            canRead: or(isSuperUser, canRead),
+            canWrite: or(isSuperUser, canWrite)
         },
         Mutation: {
             // moveItem: or(isServer, isOwner),
-            updateItem: or(isServer, isOwner),
-            deleteItem: or(isServer, isOwner),
-            updateCards: or(isServer, isOwner),
+            updateItem: and(isAuthenticated, or(isServer, canWrite)),
+            deleteItem: and(isAuthenticated, or(isServer, isOwner)),
+            updateCards: and(isAuthenticated, or(isServer, canWrite)),
         }
     }
 

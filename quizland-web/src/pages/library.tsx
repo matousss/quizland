@@ -75,10 +75,10 @@ const Library: NextPage = () => {
                                 </div>
                         </div>
                         ) : <>
-                            <EntryLoading className={'opacity-80 animation-delay-0'}/>
-                            <EntryLoading className={'opacity-80 animation-delay-200'}/>
-                            <EntryLoading className={'opacity-80 animation-delay-400'}/>
-                            <EntryLoading className={'opacity-80 animation-delay-600'}/></>
+                            <EntryLoading className={'opacity-80 animation-delay-0 pr-14'}/>
+                            <EntryLoading className={'opacity-80 animation-delay-200 pr-14'}/>
+                            <EntryLoading className={'opacity-80 animation-delay-400 pr-14'}/>
+                            <EntryLoading className={'opacity-80 animation-delay-600 pr-14'}/></>
                     }
                 </Section>
             </SectionContainer>

@@ -1,5 +1,5 @@
-import {NextMiddleware, NextRequest, NextResponse} from "next/server";
-import {ApolloClient, ApolloError, gql, HttpLink, InMemoryCache} from "@apollo/client";
+import {NextMiddleware, NextResponse} from "next/server";
+import {ApolloClient, ApolloError, gql, InMemoryCache} from "@apollo/client";
 import {YogaLink} from "@graphql-yoga/apollo-link";
 
 const getClient = (token?: string) => {
@@ -27,10 +27,16 @@ const CAN_WRITE = gql`
     }
 `
 
-export const middleware:NextMiddleware = async (request, event) =>  {
+export const middleware:NextMiddleware = async (request) =>  {
     let client = getClient(request.cookies.get('token')?.value)
     let splitURL = request.url.split('/')
     let query = (splitURL[splitURL.length - 2] == 'edit') ? CAN_WRITE : CAN_READ
+    console.log(splitURL[splitURL.length - 1])
+    if (splitURL[splitURL.length - 1] == 'create' || splitURL[splitURL.length - 1] == 'library') {
+        if (request.cookies.get('token')) return
+
+        return NextResponse.redirect(new URL('/auth', request.url))
+    }
 
     try {await client.query({
         query: query,
@@ -46,5 +52,5 @@ export const middleware:NextMiddleware = async (request, event) =>  {
     return
 }
 export const config = {
-    matcher: ['/cardset/:path*', '/cardset/edit/:path*']
+    matcher: ['/cardset/:path*', '/cardset/edit/:path*', '/cardset/edit', '/library']
 }

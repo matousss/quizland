@@ -1,6 +1,5 @@
 import {Menu, Transition} from "@headlessui/react";
 import React, {FC, Fragment} from "react";
-import Link from "next/link";
 import UserImage from "./UserImage"
 import {User} from "#types";
 
@@ -12,12 +11,12 @@ const items = [
 const Item = ({label, href, disabled}:{label: string, href: string, disabled?: boolean}) => (
     <Menu.Item key={label} className={'group'} as={'div'}>
         {({active}) => (
-            <Link href={disabled ? '#' : href}
+            <a href={disabled ? '#' : href}
                   className={(active ? 'bg-gray-500 text-white' : 'text-contrast' )
                       + (disabled ? ' opacity-50 cursor-not-allowed' : '')
                       + ' block px-4 py-2 group:hover:bg-primary'}>
                 {label}
-            </Link>
+            </a>
         )}
     </Menu.Item>
 )

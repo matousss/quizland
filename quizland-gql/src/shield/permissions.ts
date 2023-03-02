@@ -14,7 +14,6 @@ import {GraphQLError} from "graphql/error";
 
 const staticPermissions: IRules = {
     Query: {
-        getUserByAccount: isServer,
         discoverCardSets: isServer,
     },
     Mutation: {

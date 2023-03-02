@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {FC} from "react";
 
 const classes = 'border-2 border-gray-100 round-sm flex p-2'
@@ -16,9 +15,9 @@ const SocialButton: FC<SocialButtonProps> = ({provider, icon, href, onClick, cla
     if (icon) className += ' divide-x divide-black'
 
     if (href) return (
-        <Link className={className} {...props} href={href}>
+        <a className={className} {...props} href={href}>
             <Content provider={provider} icon={icon}/>
-        </Link>
+        </a>
     )
     else return (
         <button className={className} onClick={onClick} {...props}>

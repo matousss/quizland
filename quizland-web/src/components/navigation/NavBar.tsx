@@ -30,13 +30,13 @@ const navigation: Array<Item & Submenu> = [
 ]
 
 const Logo = () => (
-    <Link href={'/home'} className={"flex flex-shrink-0 items-center"}>
+    <a href={'/home'} className={"flex flex-shrink-0 items-center"}>
         <img
             className={"block h-9 w-auto"}
             src="/logo_big.svg"
             alt="QuizLand"
         />
-    </Link>
+    </a>
 )
 
 const ToggleButton = ({open}: { open: boolean }) => (
@@ -111,9 +111,9 @@ const BodyBtn: FC<BodyBtnProps> = ({active, ...props}) => (
 )
 
 const BodyBtnLink: FC<{ href: string } & BodyBtnProps> = ({href, ...props}) => (
-    <Link href={href}>
+    <a href={href}>
         <BodyBtn {...props}/>
-    </Link>
+    </a>
 )
 
 const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Array<Item> }) => {
@@ -147,11 +147,11 @@ const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Ar
 
                             {items.map((item) => {
                                 return (
-                                    <Link href={item.href} key={`${props.label}-${item.label}`}
+                                    <a href={item.href} key={`${props.label}-${item.label}`}
                                           className={'px-3 py-2 w-full hover:bg-middle hover:text-white'}
                                     >
                                         {item.label}
-                                    </Link>
+                                    </a>
                                 )
                             })}
                         </div>
@@ -165,7 +165,7 @@ const BodyMenu = ({active, items, ...props}: Item & { active: boolean, items: Ar
 }
 
 const LoginButton = () => (
-    <BodyBtnLink href={'/login'} active={false} label={'Sign In'}/>
+    <BodyBtnLink href={'/auth'} active={false} label={'Sign In'}/>
 )
 
 

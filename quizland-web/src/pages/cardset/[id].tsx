@@ -146,7 +146,7 @@ const CardSet: NextPage<Props> = (props) => {
                         <BoppyButton onClick={shuffle}>
                             <ShuffleIcon className={'h-8 w-8' + (shuffled ? ' text-contrast' : '')}/>
                         </BoppyButton>
-                        {owner && user && owner.id == user.id ? <BoppyButton>
+                        {owner && user && owner.id == user.id ? <BoppyButton onClick={() => window.location.href = ('/cardset/edit/' +   cardSet.id)}>
                             <PencilIcon className={'h-8 w-8'}/>
                         </BoppyButton> : ''}
                         <BoppyButton onClick={duplicate}>

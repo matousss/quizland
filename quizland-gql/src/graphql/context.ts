@@ -27,15 +27,21 @@ const resolveContext = async (mongo: MongoClient, req: NodeRequest, res?: NodeRe
         // extract token
 
         let headerMap = req.headers?.headersInit || req.headers['map'];
-
-        let cookie = headerMap.get ? headerMap.get('cookie') : headerMap['cookie'] as string;
+        let cookie
+        try {
+            cookie = headerMap.get instanceof Function ? headerMap.get('cookie') : headerMap['cookie'] as string;
+        } catch (e) {
+        }
 
         let token;
-        if (cookie !== undefined){
+        if (cookie !== undefined) {
             token = cookie.split(';').map(v => v.trim().split('=')).find(v => v[0] === 'token')?.[1];
-        }
-        else {
-            let authHeader =headerMap['authorization'] || headerMap.get('authorization')
+        } else {
+            let authHeader
+            try {
+                authHeader = headerMap['authorization'] || headerMap.get('authorization')
+            } catch {
+            }
             token = authHeader ? authHeader.replace('Bearer ', '') : null;
         }
         if (!token) return null;
@@ -50,7 +56,7 @@ const resolveContext = async (mongo: MongoClient, req: NodeRequest, res?: NodeRe
         // get user
         // noinspection UnnecessaryLocalVariableJS
         let user = await mongo.db(AUTH_DB).collection<User>(AUTH_COLLECTIONS.USERS).findOne({_id: to__id(info.id)});
-        if (user) return  {id: user._id.toString(), ...user}
+        if (user) return {id: user._id.toString(), ...user}
         return null;
 
     }

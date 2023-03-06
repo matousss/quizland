@@ -7,12 +7,19 @@ import FlashCardSection from "@components/sections/FlashCardSection";
 import {SectionContainer} from "@components/sections";
 import {useRouter} from "next/router";
 import {cardsSetToQuery} from "../../../lib/encode";
-import {ArrowDownTrayIcon, DocumentDuplicateIcon, ShareIcon} from "@heroicons/react/24/outline";
+import {
+    ArrowDownTrayIcon,
+    DocumentDuplicateIcon,
+    PencilIcon,
+    PencilSquareIcon,
+    ShareIcon
+} from "@heroicons/react/24/outline";
 import {BoppyButton} from "@components/buttons/BoppyButton";
 
 import type {CardSet} from "#types";
 import type {NextPage} from "next";
 import ShuffleIcon from "@components/utility/ShuffleIcon";
+import {useUser} from "../../../lib/hooks/user";
 
 
 interface Params {
@@ -91,6 +98,7 @@ const CardSet: NextPage<Props> = (props) => {
     const [index, setIndex] = useState(0)
     const [currentCard, setCard] = useState(cards[0])
     const [shuffled, setShuffled] = useState<typeof cards | null>(null)
+    const user = useUser()
 
     useEffect(() => {
         if (index === cards.length) return setIndex(0)
@@ -138,6 +146,9 @@ const CardSet: NextPage<Props> = (props) => {
                         <BoppyButton onClick={shuffle}>
                             <ShuffleIcon className={'h-8 w-8' + (shuffled ? ' text-contrast' : '')}/>
                         </BoppyButton>
+                        {owner && user && owner.id == user.id ? <BoppyButton>
+                            <PencilIcon className={'h-8 w-8'}/>
+                        </BoppyButton> : ''}
                         <BoppyButton onClick={duplicate}>
                             <DocumentDuplicateIcon className={'h-8 w-8'}/>
                         </BoppyButton>

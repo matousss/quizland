@@ -1,7 +1,7 @@
 import 'src/styles/global.css'
 import type {AppProps} from 'next/app'
 import React, {useEffect} from "react";
-import {SWRConfig} from "swr";
+import Head from 'next/head';
 
 
 function MyApp({Component, pageProps: {session, ...pageProps}}: AppProps) {
@@ -13,11 +13,14 @@ function MyApp({Component, pageProps: {session, ...pageProps}}: AppProps) {
         }
     }, [])
     // @ts-ignore
-    return <SWRConfig value={{}}>
+    return <>
+        <Head>
+            <title>QuizLand</title>
+        </Head>
         <Component {...pageProps} />
 
+    </>
 
-    </SWRConfig>
 
 }
 

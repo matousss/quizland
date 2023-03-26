@@ -1,5 +1,5 @@
 import {GetServerSideProps} from "next";
-import {deleteCookie, getCookies, setCookie} from "cookies-next";
+import {deleteCookie} from "cookies-next";
 
 export const getServerSideProps: GetServerSideProps = async ({query, req, res}) => {
     deleteCookie("token", {res: res, req: req})

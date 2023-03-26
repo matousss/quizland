@@ -3,7 +3,7 @@ import {EventHandler, FC, MouseEvent, useState} from "react";
 import MetaSection, {MetaType} from "@components/sections/create/MetaSection";
 import TermsSection, {TermArray} from "@components/sections/create/TermsSection";
 import {useRouter} from "next/router";
-import {useGQL} from "../../../lib/hooks/graphql";
+import {useGQL} from "@lib/hooks/graphql";
 import NavBar from "@components/navigation/NavBar";
 import {Section, SectionContainer, TitleSection} from "@components/sections";
 

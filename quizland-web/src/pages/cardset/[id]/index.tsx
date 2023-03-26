@@ -1,96 +1,27 @@
-import apollo_client from "../../graphql";
-import {gql} from "@apollo/client";
 import React, {useEffect, useState} from "react";
 import NavBar from "@components/navigation/NavBar";
 import {CardSetDescriptionSection as DescriptionSection, TitleSection} from "@components/sections";
 import FlashCardSection from "@components/sections/FlashCardSection";
 import {SectionContainer} from "@components/sections";
 import {useRouter} from "next/router";
-import {cardsSetToQuery} from "../../../lib/encode";
+
 import {
     ArrowDownTrayIcon,
     DocumentDuplicateIcon,
     PencilIcon,
-    PencilSquareIcon,
     ShareIcon
 } from "@heroicons/react/24/outline";
 import {BoppyButton} from "@components/buttons/BoppyButton";
-
-import type {CardSet} from "#types";
-import type {NextPage} from "next";
 import ShuffleIcon from "@components/utility/ShuffleIcon";
-import {useUser} from "../../../lib/hooks/user";
+import {cardsSetToQuery} from "@lib/encode";
+import {useUser} from "@lib/hooks/user";
+import {CardSetPage, getStaticPaths as getPaths, getStaticProps as getProps} from "./util";
+import {shuffleArray} from "@lib/util";
 
+export const getStaticPaths = getPaths
+export const getStaticProps = getProps
 
-interface Params {
-    id: number
-}
-
-export const getStaticPaths = async () => {
-    const {data} = await apollo_client.query<{ idList: number[] }>({
-        query: gql`
-            query {
-                idList: discoverCardSets
-            }
-        `
-    });
-    const paths = data.idList.map((id) => {
-        return {
-            params: {
-                id: id.toString()
-            }
-        }
-    });
-    return {
-        paths,
-        fallback: false
-    }
-}
-
-type Props = {
-    cardSet: CardSet
-}
-export const getStaticProps = async ({params}: { params: Params }): Promise<{ props: Props } & any> => {
-    const {data} = await apollo_client.query<{ cardSet: CardSet }>(
-        {
-            query: gql`
-                query ($id: ID!) {
-                    cardSet: getCardSet(id: $id) {
-                        id
-                        name
-                        description
-                        owner {
-                            id
-                            username
-                            surname
-                            lastname
-                            image
-                        }
-                        cards {
-                            term
-                            definition
-                        }
-                        termLng
-                        definitionLng
-                        modified
-                    }
-                }
-            `,
-            variables: {
-                id: params.id
-            }
-        }
-    )
-
-    return {
-        props: {
-            cardSet: data.cardSet
-        },
-        revalidate: 60 * 60 * 24
-    }
-}
-
-const CardSet: NextPage<Props> = (props) => {
+const CardSet: CardSetPage = (props) => {
     const cardSet = props.cardSet
     const {name, cards, owner, modified, ...rest} = cardSet
     // rest: {description, termLng, definitionLng}
@@ -123,14 +54,7 @@ const CardSet: NextPage<Props> = (props) => {
             return
         }
 
-        let shuffledCards = cards.slice()
-
-        // https://en.wikipedia.org/wiki/Fisher–Yates_shuffle
-        for (let i = shuffledCards.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffledCards[i], shuffledCards[j]] = [shuffledCards[j], shuffledCards[i]];
-        }
-        setShuffled(shuffledCards)
+        setShuffled(shuffleArray(cards))
     }
 
     return (

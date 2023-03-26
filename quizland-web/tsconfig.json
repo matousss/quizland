@@ -25,7 +25,13 @@
       ],
       "@components/*": [
         "./src/components/*"
-      ]
+      ],
+      "@/*": [
+        "./src/*"
+      ],
+      "@lib/*": [
+        "./lib/*"
+      ],
     }
   },
   "include": [

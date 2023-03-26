@@ -20,6 +20,7 @@ const nextConfig = {
             ]
 
     },
+    pageExtensions: ['tsx', 'jsx'],
     output: 'standalone',
     webpack: (config) => {
         config.experiments = {...config.experiments, topLevelAwait: true};

@@ -14,10 +14,10 @@ const Button = ({title, Icon, onClick}: { title: string, Icon?: any, onClick: Mo
     </div>
 )
 
-const ResultBoard = ({restart, restartMissed, result, show = true}:
+const ResultBoard = ({restart, restartMissed, result, show = true, id}:
                          {
                              restart: MouseEventHandler, restartMissed: MouseEventHandler,
-                             result: { learning: number, known: number }, show: boolean
+                             result: { learning: number, known: number }, show: boolean, id: string
                          }) => {
     const data = [
         {title: 'Learning', value: result.learning, color: '#a30000'},

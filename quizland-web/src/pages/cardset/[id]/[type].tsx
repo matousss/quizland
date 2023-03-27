@@ -6,14 +6,13 @@ import NavBar from "@components/navigation/NavBar";
 import {Section, TitleSection} from "@components/sections";
 import React, {useEffect, useState} from "react";
 import {AnimationCard, FlipCard} from "@components/cardset/FlipCard";
-import {CheckIcon, XMarkIcon} from "@heroicons/react/24/solid";
-import {random} from "nanoid";
+import {ArrowLeftIcon, CheckIcon, XMarkIcon} from "@heroicons/react/24/solid";
 import ResultBoard from "@components/cardset/ResultBoard";
 import {shuffleArray} from "@lib/util";
 
 enum Type {
     FlashCard = 'flashcard',
-    Match = 'multiplechoice',
+    Match = 'match',
     Learn = 'learn',
 }
 
@@ -35,8 +34,12 @@ export const getStaticProps = async ({params}: { params: Params & { type: Type }
     return {...props, props: {...props.props, type: params.type}}
 }
 
-const FlashCard = (props: Props) => {
-    const [cards, setCards] = useState(props.cardSet.cards as Card[]);
+const GoBackBtn = ({id}: { id: string }) =>
+    <a href={`/cardset/${id}`} className={'hover:text-white duration-500 fixed left-0 bottom-0'}>
+        <ArrowLeftIcon className={'w-20 p-4'}/>
+    </a>
+const FlashCard = ({cardSet}: Props) => {
+    const [cards, setCards] = useState(cardSet.cards as Card[]);
     const [currentI, setCurrentI] = useState(0);
     const [flipped, setFlipped] = useState(false);
     const [animation, setAnimation] = useState<string>()
@@ -51,7 +54,8 @@ const FlashCard = (props: Props) => {
 
     const next = (known: boolean) => {
         setFlipped(false)
-        setAnimationFace(<AnimationCard key={random(1)} onAnimationEnd={() => setAnimationFace(null)} success={known} />)
+        setAnimationFace(<AnimationCard key={Math.random()} onAnimationEnd={() => setAnimationFace(null)}
+                                        success={known}/>)
         if (known) setKnown(knownN + 1)
         else setUnknown([...unknown, cards[currentI]])
         if (currentI === cards.length - 1) {
@@ -70,7 +74,7 @@ const FlashCard = (props: Props) => {
     }
     const restart = () => {
         reset()
-        setCards(shuffleArray(props.cardSet.cards) as Card[])
+        setCards(shuffleArray(cardSet.cards) as Card[])
         setUnknown([])
     }
 
@@ -83,9 +87,10 @@ const FlashCard = (props: Props) => {
 
     return (<>
         <NavBar/>
-        <ResultBoard show={showResult} restart={restart} restartMissed={restartMissed} result={{learning: cards.length - knownN, known: knownN}}/>
+        <ResultBoard show={showResult} restart={restart} restartMissed={restartMissed}
+                     result={{learning: cards.length - knownN, known: knownN}} id={cardSet.id}/>
         <div className={'divide-y divide-secondary divide-dashed w-full text-lg'}>
-            <TitleSection title={props.cardSet.name}/>
+            <TitleSection title={cardSet.name}/>
             <Section>
                 <div className={'w-full text-center display-1'}>
                     {currentI + 1} / {cards.length}
@@ -93,7 +98,7 @@ const FlashCard = (props: Props) => {
                 <div className={'sm:m-5 flex grow'}>
                     <div className={'w-[6rem] ml-auto py-4 my-auto bg-middle rounded-l-[95%] text-secondary' +
                         ' duration-500 translate-x-[20%] hover:translate-x-[5%] hover:text-red-600 cursor-pointer'}
-                        onClick={() => next(false)}
+                         onClick={() => next(false)}
                     >
                         <XMarkIcon className={'py-4 pr-2 pl-4'}/>
                     </div>
@@ -114,7 +119,7 @@ const FlashCard = (props: Props) => {
                 </div>
             </Section>
         </div>
-
+        <GoBackBtn id={cardSet.id}/>
 
     </>)
 }

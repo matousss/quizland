@@ -14,7 +14,7 @@ import OptionsModal from "@components/cardset/OptionsModal";
 import {RadioGroup} from "@headlessui/react";
 
 enum Type {
-    FlashCard = 'flashcard',
+    Flashcard = 'flashcard',
     Match = 'match',
     Learn = 'learn',
 }
@@ -52,7 +52,7 @@ const GoBackBtn = ({id}: { id: string }) =>
 *
 * ----------------------------------------------------------------------------------------
 *
-* FlashCard mode
+* Flashcard mode
 *
 * ----------------------------------------------------------------------------------------
 *
@@ -65,7 +65,7 @@ const GoBackBtn = ({id}: { id: string }) =>
 * */
 
 
-const FlashCard = ({cardSet}: Props) => {
+const Flashcard = ({cardSet}: Props) => {
     const [cards, setCards] = useState(cardSet.cards as Card[]);
     const [currentI, setCurrentI] = useState(0);
     const [flipped, setFlipped] = useState(false);
@@ -239,8 +239,8 @@ const Match = ({cardSet}: Props) => {
 const cardset: NextPage<{ type: Type } & Props> = (props) => {
     const C = (() => {
         switch (props.type) {
-            case Type.FlashCard:
-                return FlashCard
+            case Type.Flashcard:
+                return Flashcard
             case Type.Match:
                 return Match
             case Type.Learn:

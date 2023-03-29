@@ -11,7 +11,7 @@ const CardBtn: FC<{ onClick: MouseEventHandler, flipped?: boolean }> = ({onClick
     </div>
 )
 
-export const FlashCard: FC<ComponentProps<'div'> & { onNext: MouseEventHandler, onBack: MouseEventHandler, currentCard: Card, animation?: string, flipState?: [boolean, Dispatch<SetStateAction<boolean>>] }>
+export const Flashcard: FC<ComponentProps<'div'> & { onNext: MouseEventHandler, onBack: MouseEventHandler, currentCard: Card, animation?: string, flipState?: [boolean, Dispatch<SetStateAction<boolean>>] }>
     = ({
            onNext,
            onBack,

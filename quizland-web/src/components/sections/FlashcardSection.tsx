@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useState} from "react";
-import {FlashCard} from "../cardset/FlashCard";
+import {Flashcard} from "../cardset/Flashcard";
 
 import type {Card} from "#types";
 import { Section } from "./Section";
 
 
-const FlashCardSection: FC<{ next: Function, previous: Function, currentCard: Card }> = ({
+const FlashcardSection: FC<{ next: Function, previous: Function, currentCard: Card }> = ({
                                                                                              next,
                                                                                              previous,
                                                                                              currentCard
@@ -38,11 +38,11 @@ const FlashCardSection: FC<{ next: Function, previous: Function, currentCard: Ca
     return (
         <Section>
             <div className={'sm:m-5 py-6 flex grow'}>
-                <FlashCard onNext={goNext} onBack={goBack} currentCard={currentCard} animation={animation} onAnimationEnd={() => setAnimation(undefined)}
+                <Flashcard onNext={goNext} onBack={goBack} currentCard={currentCard} animation={animation} onAnimationEnd={() => setAnimation(undefined)}
                            flipState={[flipped, setFlipped]}/>
             </div>
         </Section>
     )
 }
 
-export default FlashCardSection
+export default FlashcardSection

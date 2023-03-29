@@ -4,7 +4,7 @@ import {Section, SectionContainer} from "@components/sections";
 
 import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import React, {useState} from "react";
-import {useGQL} from "../../../lib/hooks/graphql";
+import {useGQL} from "@lib/hooks/graphql";
 import {gql} from "@apollo/client";
 import {Entry, EntryLoading} from "@components/cardset/Entry";
 
@@ -40,7 +40,7 @@ const Browse: NextPage = (props) => {
                     query: searchQuery
                 }
             })
-            console.log(response.data)
+
             setResults(response.data.results)
         } finally {
             setBtnDisabled(false)

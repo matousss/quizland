@@ -1,33 +1,30 @@
-import {MouseEventHandler} from "react";
+import {FC, MouseEventHandler, useEffect} from "react";
 import Modal from "@components/utility/Modal";
 import {ArrowPathIcon, ArrowsRightLeftIcon, ArrowTrendingUpIcon} from "@heroicons/react/24/solid";
 import {PieChart} from "react-minimal-pie-chart";
+import styles from '@styles/ResultBoard.module.css'
 
-
-const Button = ({title, Icon, onClick}: { title: string, Icon?: any, onClick: MouseEventHandler }) => (
+const Button: FC<{ title: string, Icon?: any, onClick: MouseEventHandler }> = ({title, Icon, onClick}) => (
     <div
         onClick={onClick}
         className={'bg-secondary rounded-md text-lg p-4 pr-2 flex hover:scale-105 hover:text-white cursor-pointer duration-[250ms]'}>
         {Icon ? <Icon className={'w-7 mr-2'}/> : null}
-
+        {/*@ts-ignore*/}
         <nobr>{title}</nobr>
     </div>
 )
-
-const ResultBoard = ({restart, restartMissed, result, show = true, id}:
-                         {
-                             restart: MouseEventHandler, restartMissed: MouseEventHandler,
-                             result: { learning: number, known: number }, show: boolean, id: string
-                         }) => {
+type Result = {title: string, value: number}
+const ResultBoard: FC<{
+    restart: MouseEventHandler, restartMissed: MouseEventHandler,
+    success: Result, fail: Result, show: boolean
+}> = ({restart, restartMissed, success, fail, show = true}) => {
     const data = [
-        {title: 'Learning', value: result.learning, color: '#a30000'},
-        {title: 'Known', value: result.known, color: '#00a300'},
-
+        { color: '#c72e24', ...fail},
+        {color: '#00a300', ...success},
     ]
-    let percentage = (result.known / (result.known + result.learning) * 100)
+    let percentage = (success.value / (success.value + fail.value) * 100)
     let tier = percentage > 100 ? 'A+' : percentage > 90 ? 'A' : percentage > 80 ? 'B' : percentage > 70 ? 'C' : percentage > 60 ? 'D' : 'F'
     let getText = () => {
-        console.log({tier})
         switch (tier) {
             case 'A+':
                 return 'Perfect!';
@@ -48,44 +45,43 @@ const ResultBoard = ({restart, restartMissed, result, show = true, id}:
 
     return <Modal isOpen={show}>
         <div className={'flex flex-col h-full p-6'}>
-            <div className={'flex grow mt-4 lg:mt-8'}>
+            <div className={'flex md:flex-row grow mt-4 lg:mt-8'}>
                 <div
-                    className={'flex mx-auto md:absolute w-full h-2/3 flex flex-col md:flex-row md:h-2/5 lg:h-2/3 mt-28 md:mt-0'}>
-                    <div className={'mx-auto md:mx-0 md:mr-auto w-2/3 md:w-1/3 h-full'}>
-                        <PieChart
-                            style={{marginTop: 'auto', marginBottom: '', height: '70%'}}
-                            data={data}
-                            lineWidth={30}
-                            labelPosition={0}
-                            label={({dataEntry}) => dataEntry.title == 'Known' ? `${percentage.toString().split('.')[0]}%` : null}
-                            labelStyle={{fill: "whitesmoke"}}
-                        />
-                        <div className={'relative font-bold top-2 text-xl md:text-lg lg:text-lg text-center'}>
-                            {
-                                data.map((entry, i) =>
-                                    (
-                                        <div key={i} style={{color: entry.color}}>
-                                            {entry.title}: {entry.value}
-                                        </div>
-                                    )
-                                )
-                            }
+                    className={'flex mx-auto flex flex-col w-1/2 md:w-1/3 ml-6'}>
+                    <div className={'relative mt-16 md:mt-0 md:mx-0 md:mr-auto w-full h-full'}>
+                        <div className={'duration-200 ' + styles.ringAnimated}>
+                            <PieChart
+                                style={{ height: '80%', 'width': '100%', position: 'absolute', top: 0, left: 0}}
+                                data={data}
+                                lineWidth={30}
+                                labelPosition={0}
+                                label={({dataEntry}) => dataEntry.title == 'Known' ? `${percentage.toString().split('.')[0]}%` : null}
+                                labelStyle={{fill: "whitesmoke"}}
+                            />
                         </div>
+
                     </div>
 
                 </div>
-
-                <div className={'hidden md:block w-2/3 ml-auto flex justify-center'}>
-                    <div className={'text-3xl text-center lg:text-4xl md:mt-8 lg:mt-16'}>
-                        {getText()}
+                <div className={'w-1/3 sm:w-1/5 flex md:mb-16'}>
+                    <div className={'my-auto ml-8 text-xl md:text-lg'}>
+                        {data.map((d: {title: string, color:string, value:number}, i) =>
+                            <div key={i} className={'font-bold whitespace-nowrap'} style={{'color': d.color}}>{d.title}: {d.value}</div>)}
                     </div>
+                </div>
+
+                <div className={'hidden w-4/5 md:flex justify-center align-middle text-3xl text-center lg:text-4xl mb-16'}>
+
+                        <div className={'my-auto'}>
+                            {getText()}
+                        </div>
 
 
                 </div>
             </div>
             <div className={'w-full grid grid-cols-1 grid-rows-1 md:grid-cols-3 md:grid-flow-col gap-4'}>
                 <Button title={'Restart'} Icon={ArrowPathIcon} onClick={restart}/>
-                {result.learning === 0 ? <div/> : <Button title={'Only missed'} Icon={ArrowTrendingUpIcon}
+                {fail.value === 0 ? <div/> : <Button title={'Only missed'} Icon={ArrowTrendingUpIcon}
                                                           onClick={restartMissed}/>}
                 <Button title={'Switch mode'} Icon={ArrowsRightLeftIcon}
                         onClick={() => window.location.href = window.location.href.replace('/flashcard', '')}/>

@@ -1,0 +1,16 @@
+.ringAnimated * {
+    transition-duration: .6s;
+}
+
+.ringAnimated text  {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.ringAnimated:hover svg {
+    transform: rotate(360deg);
+}
+
+.ringAnimated:hover text {
+    transform: rotate(-360deg);
+}

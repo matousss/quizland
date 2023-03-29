@@ -31,7 +31,7 @@ export const middleware:NextMiddleware = async (request) =>  {
     let client = getClient(request.cookies.get('token')?.value)
     let splitURL = request.url.split('/')
     let query = (splitURL[splitURL.length - 2] == 'edit') ? CAN_WRITE : CAN_READ
-    console.log(splitURL[splitURL.length - 1])
+
     if (splitURL[splitURL.length - 1] == 'create' || splitURL[splitURL.length - 1] == 'library') {
         if (request.cookies.get('token')) return
 

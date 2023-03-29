@@ -1,12 +1,12 @@
 {
   "name": "quizland-gql",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "main": "./start.ts",
   "type": "module",
   "scripts": {
     "gentypes": "graphql-codegen --config ./codegen.yml",
     "watch": "nodemon --experimental-specifier-resolution=node ./start.ts",
-    "dev": "node --loader ts-node/esm --experimental-specifier-resolution=node ./start.ts",
+    "dev": "webpack --mode=development && node --loader ts-node/esm --experimental-specifier-resolution=node ./start.ts",
     "start": "node --experimental-specifier-resolution=node ./dist/start.js",
     "compile": "tsc",
     "build": "graphql-codegen --config ./codegen.yml && tsc",

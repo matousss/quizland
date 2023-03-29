@@ -4,11 +4,14 @@ import {Card} from "#types";
 import {Props, Params} from "./util";
 import NavBar from "@components/navigation/NavBar";
 import {Section, TitleSection} from "@components/sections";
-import React, {useEffect, useState} from "react";
+import React, {ReactNode, useEffect, useState} from "react";
 import {AnimationCard, FlipCard} from "@components/cardset/FlipCard";
 import {ArrowLeftIcon, CheckIcon, XMarkIcon} from "@heroicons/react/24/solid";
+import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import ResultBoard from "@components/cardset/ResultBoard";
 import {shuffleArray} from "@lib/util";
+import OptionsModal from "@components/cardset/OptionsModal";
+import {RadioGroup} from "@headlessui/react";
 
 enum Type {
     FlashCard = 'flashcard',
@@ -28,16 +31,40 @@ export const getStaticPaths = async () => {
     }
 }
 export const getStaticProps = async ({params}: { params: Params & { type: Type } }) => {
-    console.log({params})
     let props = await getProps({params});
 
     return {...props, props: {...props.props, type: params.type}}
 }
 
 const GoBackBtn = ({id}: { id: string }) =>
-    <a href={`/cardset/${id}`} className={'hover:text-white duration-500 fixed left-0 bottom-0'}>
+    <a href={`/cardset/${id}`}
+       className={'hover:text-white text-secondary drop-shadow-xl duration-500 fixed left-0 bottom-0 z-50'}>
         <ArrowLeftIcon className={'w-20 p-4'}/>
     </a>
+
+/*
+*
+*
+*
+*
+*
+*
+*
+* ----------------------------------------------------------------------------------------
+*
+* FlashCard mode
+*
+* ----------------------------------------------------------------------------------------
+*
+*
+*
+*
+*
+*
+*
+* */
+
+
 const FlashCard = ({cardSet}: Props) => {
     const [cards, setCards] = useState(cardSet.cards as Card[]);
     const [currentI, setCurrentI] = useState(0);
@@ -58,7 +85,8 @@ const FlashCard = ({cardSet}: Props) => {
                                         success={known}/>)
         if (known) setKnown(knownN + 1)
         else setUnknown([...unknown, cards[currentI]])
-        if (currentI === cards.length - 1) {
+        if (currentI >= cards.length - 1) {
+            console.log('amfjkdzhujfbghj')
             setShowResult(true)
             return
         }
@@ -86,9 +114,9 @@ const FlashCard = ({cardSet}: Props) => {
     }
 
     return (<>
-        <NavBar/>
         <ResultBoard show={showResult} restart={restart} restartMissed={restartMissed}
-                     result={{learning: cards.length - knownN, known: knownN}} id={cardSet.id}/>
+                     fail={{title: 'Learning', value: cards.length - knownN}}
+                     success={{title: 'Known', value: knownN}}/>
         <div className={'divide-y divide-secondary divide-dashed w-full text-lg'}>
             <TitleSection title={cardSet.name}/>
             <Section>
@@ -119,20 +147,113 @@ const FlashCard = ({cardSet}: Props) => {
                 </div>
             </Section>
         </div>
-        <GoBackBtn id={cardSet.id}/>
 
     </>)
 }
 
+/*
+*
+*
+*
+*
+*
+*
+*
+* ----------------------------------------------------------------------------------------
+*
+* Match mode
+*
+* ----------------------------------------------------------------------------------------
+*
+*
+*
+*
+*
+*
+*
+* */
+const Option = ({children, ...props}: { value: string, children: ReactNode }) => (
+    <RadioGroup.Option {...props}>
+        {({checked}) => (
+            <div
+                className={`${
+                    checked ? 'bg-primary text-white' : 'bg-middle_dark '
+                } relative ring-0 border-0 outline-none rounded-lg shadow-md px-5 py-4 cursor-pointer flex items-center justify-between `}
+            >
+                <div className="flex items-center flex-1">
+                    <div className="text-sm">
+                        <RadioGroup.Label as="p" className="font-medium text-white">
+                            {children}
+                        </RadioGroup.Label>
+                    </div>
+                </div>
+                {checked && (
+                    <CheckCircleIcon className="h-5 text-contrast" aria-hidden="true"/>
+                )}
+            </div>
+        )
+        }
+    </RadioGroup.Option>
+)
+
+enum AnswerWith {
+    TERM= 'Term',
+    DEFINITION = 'Definition'
+}
+
+const Match = ({cardSet}: Props) => {
+    const [cards, setCards] = useState(cardSet.cards as Card[]);
+    const [answerWith, setAnswerWith] = useState<AnswerWith>(AnswerWith.TERM)
+    const [started, setStarted] = useState<boolean>(false)
+    const [currentI, setCurrentI] = useState(0);
+    useEffect(() => console.log(started), [started])
+    return (
+        <>
+            <OptionsModal show={!started} onConfirm={() => setStarted(true)}>
+                <div className={'flex mb-auto'}>
+                    <RadioGroup value={answerWith} onChange={setAnswerWith} as={'div'} className={'flex gap-3 flex-col w-1/3 mb-auto mx-auto'}>
+                        <RadioGroup.Label className={'text-xl'}>
+                            Answer with:
+                        </RadioGroup.Label>
+                        {Object.values(AnswerWith).map(
+                            (value, i) => <Option value={value} key={i}>{value}</Option>
+                        )}
+                    </RadioGroup>
+                </div>
+                <div className={'text-xl mt-auto mx-auto'}>
+                    More coming soon...
+                </div>
+
+            </OptionsModal>
+            <div className={'divide-y divide-secondary divide-dashed w-full text-lg'}>
+                <TitleSection title={cardSet.name}/>
+                <Section>
+                    <div className={'w-full text-center display-1'}>
+                        {currentI + 1} / {cards.length}
+                    </div>
+                </Section>
+            </div>
+        </>
+    )
+}
+
 const cardset: NextPage<{ type: Type } & Props> = (props) => {
-    switch (props.type) {
-        case Type.FlashCard:
-            return <FlashCard {...props}/>
-        case Type.Match:
-            return <div>Match</div>
-        case Type.Learn:
-            return <div>Learn</div>
-    }
+    const C = (() => {
+        switch (props.type) {
+            case Type.FlashCard:
+                return FlashCard
+            case Type.Match:
+                return Match
+            case Type.Learn:
+                return () => <div/>
+        }
+    })()
+
+    return <>
+        <NavBar/>
+        <C {...props}/>
+        <GoBackBtn id={props.cardSet.id}/>
+    </>
 }
 
 export default cardset

@@ -32,6 +32,9 @@
       "@lib/*": [
         "./lib/*"
       ],
+      "@styles/*": [
+        "./src/styles/*"
+      ],
     }
   },
   "include": [

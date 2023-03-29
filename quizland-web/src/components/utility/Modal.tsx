@@ -1,7 +1,7 @@
 import {Transition} from "@headlessui/react";
 import {FC, PropsWithChildren, useEffect, useState} from "react";
 
-const Modal: FC<{isOpen: boolean} & PropsWithChildren> = ({ children, isOpen, close }) => {
+const Modal: FC<{isOpen: boolean} & PropsWithChildren> = ({ children, isOpen }) => {
     const [show, setShow] = useState(isOpen)
 
     useEffect(() => {

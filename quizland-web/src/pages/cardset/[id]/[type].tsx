@@ -86,7 +86,6 @@ const FlashCard = ({cardSet}: Props) => {
         if (known) setKnown(knownN + 1)
         else setUnknown([...unknown, cards[currentI]])
         if (currentI >= cards.length - 1) {
-            console.log('amfjkdzhujfbghj')
             setShowResult(true)
             return
         }

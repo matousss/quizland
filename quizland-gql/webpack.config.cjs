@@ -1,8 +1,13 @@
 const path = require("path");
+const Dotenv = require('dotenv-webpack');
+
 module.exports = {
     entry: './start.ts',
     mode: 'development',
     target: 'node',
+    plugins: [
+
+    ],
     module: {
         rules: [
             {
@@ -23,6 +28,6 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, './dist'),
-        filename: 'server.bundle.js'
+        filename: 'server.bundle.cjs'
     }
 };

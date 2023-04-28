@@ -76,7 +76,7 @@ const Flashcard = ({cardSet}: Props) => {
     const [unknown, setUnknown] = useState<Card[]>([])
     useEffect(() => {
         if (!animation) setAnimation('')
-    }, [currentI])
+    }, [currentI, animation])
 
 
     const next = (known: boolean) => {
@@ -134,7 +134,7 @@ const Flashcard = ({cardSet}: Props) => {
                             <div className={'bg-middle h-[7rem] w-full my-auto'}/>
                         </div>
 
-                        <FlipCard card={cards[currentI]} animation={animation} flipState={[flipped, setFlipped]}/>
+                        <FlipCard card={cards[currentI]} animation={animation} useFlipState={() => [flipped, setFlipped]}/>
                         {animationFace}
                     </div>
                     <div className={'w-[6rem] h-full mr-auto py-4 my-auto bg-middle rounded-r-[95%] text-secondary' +
@@ -236,6 +236,7 @@ const Match = ({cardSet}: Props) => {
     )
 }
 
+const Learn = () => <div/>
 const cardset: NextPage<{ type: Type } & Props> = (props) => {
     const C = (() => {
         switch (props.type) {
@@ -244,7 +245,7 @@ const cardset: NextPage<{ type: Type } & Props> = (props) => {
             case Type.Match:
                 return Match
             case Type.Learn:
-                return () => <div/>
+                return Learn
         }
     })()
 

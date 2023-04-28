@@ -13,4 +13,5 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
     }
 }
 
-export default () => {}
+const dummy = () => {}
+export default dummy

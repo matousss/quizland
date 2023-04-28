@@ -10,7 +10,7 @@ export const ERROR_CODES = {
 }
 
 export class GQLError extends GraphQLError {
-    constructor(message, code, options = {}) {
+    constructor(message: string, code: string, options = {}) {
         super(message, {extensions: {code: code, ...options}});
     }
 }
@@ -29,13 +29,13 @@ export class UserError extends AuthError {
 }
 
 export class ProviderError extends AuthError {
-    constructor(message, provider, code, options=undefined) {
+    constructor(message: string, provider: string, code: string, options=undefined) {
         super(`ProviderError: ${provider}: ${message}`, code, options);
     }
 }
 
 export class DuplicitEmailError extends UserError {
-    constructor(email, options=undefined) {
+    constructor(email: string, options=undefined) {
         super(`Email "${email}" is already in use`, ERROR_CODES.DUPLICIT_EMAIL, options);
 
     }
@@ -50,33 +50,33 @@ export class DuplicitAccountError extends UserError {
 
 
 export class ProviderUserNotFound extends ProviderError implements ResourceNotFound {
-    constructor(provider, options=undefined) {
+    constructor(provider: string, options=undefined) {
         super("User not found", provider, ERROR_CODES.USER_NOT_FOUND, options);
     }
 
 }
 
 export class NotLinkedAccountError extends ProviderError {
-    constructor(provider, options=undefined) {
+    constructor(provider: string, options=undefined) {
         super("Account is not linked to any user", provider, ERROR_CODES.USER_NOT_FOUND, options);
     }
 }
 
 
 export class WriteError extends GQLError {
-    constructor(message, options=undefined) {
+    constructor(message: string, options=undefined) {
         super(message, ERROR_CODES.WRITE_ERROR, options);
     }
 }
 
 export class InvalidUserInput extends InputError {
-    constructor(message, options=undefined) {
+    constructor(message: string, options=undefined) {
         super(message, ERROR_CODES.INVALID_USER_INPUT, options);
     }
 }
 
 export class PermissionError extends GQLError {
-    constructor(message, options=undefined) {
+    constructor(message: string, options=undefined) {
         super(message, "PERMISSION_ERROR", options);
     }
 }

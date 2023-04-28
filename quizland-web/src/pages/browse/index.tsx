@@ -70,14 +70,14 @@ const Browse: NextPage = (props) => {
                 <Section className={'px-4 md:px-0 flex flex-col gap-4'}>
                     {
                         results.length > 0 && results.map(({__typename, author, id, ...r}, i) =>
-                            <a href={'/cardset/' + id}>
-                                <Entry author={author.username} {...r} key={i}/>
+                            <a href={'/cardset/' + id} key={i}>
+                                <Entry author={author.username} {...r} />
                             </a>
                         )
 
                     }
                     {
-                        !btnDisabled && results?.length === 0 &&  <div className={'text-center text-gray-500 text-[2rem] text-medium'}>I'm so empty ._.</div>
+                        !btnDisabled && results?.length === 0 &&  <div className={'text-center text-gray-500 text-[2rem] text-medium'}>{"I'm so empty ._."}</div>
                     }
 
                     {btnDisabled &&

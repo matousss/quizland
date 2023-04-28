@@ -1,12 +1,13 @@
-const path = require("path");
-const Dotenv = require('dotenv-webpack');
+const path = require("path")
+const Dotenv = require('dotenv-webpack')
+//const webpack = require('webpack')
 
 module.exports = {
     entry: './start.ts',
     mode: 'development',
     target: 'node',
     plugins: [
-
+        new Dotenv()
     ],
     module: {
         rules: [

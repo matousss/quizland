@@ -21,7 +21,7 @@ export const Flashcard: FC<ComponentProps<'div'> & { onNext: MouseEventHandler, 
        }) => (
     <>
         <CardBtn onClick={onBack}/>
-        <FlipCard card={currentCard} animation={animation} flipState={flipState} {...props}/>
+        <FlipCard card={currentCard} animation={animation} useFlipState={flipState ? () => flipState : undefined} {...props}/>
         <CardBtn onClick={onNext} flipped={true}/>
     </>
 )

@@ -20,7 +20,7 @@
     "graphql-yoga": "^3.5.1",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.13.0",
-    "quizland-gql": "file:../quizland-gql"
+    "quizland-gql": "file:."
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.16.1",

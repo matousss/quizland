@@ -50,7 +50,7 @@ const CardSet: CardSetPage = (props) => {
         let useCards = shuffled ?? cards
 
         setCard(useCards[index])
-    }, [index, shuffled])
+    }, [index, shuffled, cards])
 
     const router = useRouter()
     const duplicate = async () => {

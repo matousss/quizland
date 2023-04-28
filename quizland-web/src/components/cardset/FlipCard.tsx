@@ -60,17 +60,17 @@ const FlipCard: FC<{
     card: Card,
     animation?: string,
     onAnimationEnd?: AnimationEventHandler,
-    flipState?: [boolean, Dispatch<SetStateAction<boolean>>],
+    useFlipState?: () => [boolean, Dispatch<SetStateAction<boolean>>],
     AdditionalFace?: ElementType
 }> = ({
           card,
           animation = '',
           onAnimationEnd,
-          flipState,
+          useFlipState= () => useState(false),
           AdditionalFace
       }) => {
 
-    const [flipped, setFlipped] = flipState || useState(false)
+    const [flipped, setFlipped] = useFlipState()
 
     let {term, definition} = card
 

@@ -71,7 +71,7 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
     })
 
     setCookie("user", JSON.stringify(response.data.authenticateUser.user), {
-         sameSite: "strict", secure: true, res: res, req: req, expires: exp
+        sameSite: "strict", secure: true, res: res, req: req, expires: exp
     })
 
 
@@ -84,5 +84,5 @@ export const getServerSideProps: GetServerSideProps = async ({query, req, res}) 
     }
 }
 
-export default () => {
-}
+const dummy = () => {}
+export default dummy

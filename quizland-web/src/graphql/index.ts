@@ -36,6 +36,8 @@ const splitLink = split(
     httpLink,
 );*/
 
+
+// only for server
 const apolloClient = new ApolloClient({
     ssrMode: true,
     cache: new InMemoryCache(),

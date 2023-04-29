@@ -31,7 +31,7 @@ const nextConfig = {
         })
         return config;
     },
-    transpilePackages: ['quizland-gql'],
+    //transpilePackages: ['quizland-gql'],
     redirects: async () => {
         return [
             {

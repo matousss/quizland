@@ -80,7 +80,7 @@ export const getMutationResolvers = (db: AuthDB, mongoClient: MongoClient): Muta
             await session.endSession()
         }
 
-        if (!response.ok) throw new GQLError("Could not create account", {code: ERROR_CODES.WRITE_ERROR})
+        if (!response.ok) throw new GQLError("Could not create account",  ERROR_CODES.WRITE_ERROR)
 
 
         let exp = Date.now() + DEFAULT_TOKEN_LIFESPAN * 1000;

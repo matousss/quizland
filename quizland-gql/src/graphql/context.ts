@@ -1,4 +1,3 @@
-import {BaseContext} from "@apollo/server";
 import {MongoClient} from "mongodb";
 import {Role, User} from "./resolvers-types";
 import {verifyJWT} from "../../lib/jwt";
@@ -17,7 +16,7 @@ export const specialUsers = {
     next: nextClient
 }
 
-interface Context extends BaseContext {
+interface Context {
     user: User | null;
 }
 

@@ -1,5 +1,6 @@
 import {Role, User} from "../src/graphql/resolvers-types";
 import jsonwebtoken from "jsonwebtoken";
+import {JWT_SECRET} from "./config"
 
 const jwt = jsonwebtoken;
 
@@ -22,7 +23,7 @@ const verifyJWT = async (raw: string): Promise<JWTPayload | null> => {
     let payload: JWTPayload;
     // verifies secret, checks exp and returns user info if valid
     try {
-        payload = await jwt.verify(token, process.env.JWT_SECRET as string) as any;
+        payload = await jwt.verify(token, JWT_SECRET) as any;
     } catch (e) {
         return null;
     }
@@ -40,7 +41,7 @@ const generateJWT = (user: User, exp = DEFAULT_TOKEN_LIFESPAN): string => {
         id: user.id
     }
 
-    return jwt.sign(payload, process.env.JWT_SECRET as string, {expiresIn: exp});
+    return jwt.sign(payload, JWT_SECRET as string, {expiresIn: exp});
 }
 
 export {verifyJWT, generateJWT}

@@ -9,7 +9,7 @@
     "dev": "webpack --mode=development && node --loader ts-node/esm --experimental-specifier-resolution=node ./start.ts",
     "start": "node --experimental-specifier-resolution=node ./dist/start.js",
     "compile": "tsc",
-    "build": "graphql-codegen --config ./codegen.yml && webpack --env production --mode production"
+    "build": "webpack --env production --mode production"
   },
   "dependencies": {
     "aws-crt": "^1.15.9",

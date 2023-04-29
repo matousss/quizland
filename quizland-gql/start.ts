@@ -2,7 +2,7 @@ import getServer from "./src/yoga";
 import {createServer} from "http";
 
 
-const endpoint = '/graphql';
+const endpoint = '';
 const port = 4000
 
 async function start() {

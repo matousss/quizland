@@ -1,0 +1,2 @@
+:80
+reverse-proxy /api/graphql* 172.18.1.10:4000/graphql

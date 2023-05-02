@@ -1713,6 +1713,11 @@
   dependencies:
     tslib "^2.3.1"
 
+"@graphql-yoga/plugin-disable-introspection@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@graphql-yoga/plugin-disable-introspection/-/plugin-disable-introspection-0.8.1.tgz#750ad4da64f97c05a2d142b98e0091c5f1ab4d92"
+  integrity sha512-5nul7rIrNsTJL7l3lNY6WRtmGh7bMP8LyS2mwueb7EH8qyZU7lUCBpvF9Fcys5Kau2TcNu2n+Fek5bLDDtD4cw==
+
 "@graphql-yoga/subscription@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@graphql-yoga/subscription/-/subscription-3.1.0.tgz#4a0bb0b9db2602d02c68f9828603e1e40329140b"
@@ -5483,6 +5488,7 @@ queue-microtask@^1.2.2:
 "quizland-gql@file:.":
   version "1.0.0"
   dependencies:
+    "@graphql-yoga/plugin-disable-introspection" "^0.8.1"
     aws-crt "^1.15.9"
     google-auth-library "^8.7.0"
     graphql "^16.6.0"
@@ -5491,7 +5497,7 @@ queue-microtask@^1.2.2:
     graphql-yoga "^3.5.1"
     jsonwebtoken "^9.0.0"
     mongodb "^4.13.0"
-    quizland-gql "file:../../.cache/yarn/v6/npm-quizland-gql-1.0.0-c243eb05-b338-45f9-98da-8751e621eb58-1682782490504/node_modules/quizland-gql"
+    quizland-gql "file:../../.cache/yarn/v6/npm-quizland-gql-1.0.0-6f1caf17-4c3a-46d1-b8e8-e633aa065184-1682791406219/node_modules/quizland-gql"
 
 radio-symbol@^2.0.0:
   version "2.0.0"

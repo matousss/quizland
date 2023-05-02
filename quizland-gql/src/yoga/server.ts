@@ -1,4 +1,5 @@
 import {createYoga, createSchema} from 'graphql-yoga'
+import { useDisableIntrospection } from '@graphql-yoga/plugin-disable-introspection'
 import mongoClient, {getDBClient} from "../../lib/mongodb";
 import {getResolvers, typeDefs} from "../graphql";
 import {Context, resolveContext} from "../graphql/context";
@@ -12,8 +13,9 @@ export const config = {
     }
 }
 
+const isDev = process.env.NODE_ENV === 'development'
 
-async function getServer<TServerContext>(endpoint = "/graphql") {
+async function getServer<TServerContext>(endpoint = "/") {
     console.log('Connecting to mongo...');
     let connection;
     try {
@@ -38,7 +40,9 @@ async function getServer<TServerContext>(endpoint = "/graphql") {
     return createYoga<TServerContext, Context>({
         schema: directiveSchema,
         graphqlEndpoint: endpoint,
-        context: async ({request}) => resolveContext(connection, request)
+        context: async ({request}) => resolveContext(connection, request),
+        graphiql: isDev,
+        plugins: isDev ? [useDisableIntrospection()] : []
     })
 
 }

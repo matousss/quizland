@@ -1,0 +1,8 @@
+node_modules/
+.next/
+.env.me
+.env.vault
+*.md
+.gitignore
+*.iml
+QuizLandA2.drawio.png

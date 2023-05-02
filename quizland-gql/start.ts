@@ -11,7 +11,7 @@ async function start() {
 }
 
 start().then(
-    () => console.log(`🚀 Server ready at http://localhost:${port}${endpoint}`)
+    () => console.log(`🚀 Server ready at ::${port}${endpoint}`)
 )
 
 

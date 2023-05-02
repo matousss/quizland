@@ -1,0 +1,15 @@
+services:
+  api:
+    image: quizland-api:0.1.1
+    networks:
+      quizland:
+        ipv4_address: "172.18.1.10"
+
+
+
+networks:
+  quizland:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.18.1.0/24"

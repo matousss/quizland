@@ -12,6 +12,7 @@
     "build": "webpack --env production --mode production"
   },
   "dependencies": {
+    "@graphql-yoga/plugin-disable-introspection": "^0.8.1",
     "aws-crt": "^1.15.9",
     "google-auth-library": "^8.7.0",
     "graphql": "^16.6.0",

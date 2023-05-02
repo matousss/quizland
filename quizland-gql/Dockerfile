@@ -1,27 +1,23 @@
 # syntax=docker/dockerfile:1
 
-FROM node:18-alpine AS build
+FROM node:18-alpine as deps
 
-WORKDIR /build
-COPY src lib start.ts tsconfig.json webpack.config.cjs package.json yarn.lock .env ./
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --production
 
-
-RUN yarn install
-
-
-ENV NODE_ENV=production
-RUN node_modules/.bin/webpack --env production --mode production
-
-
-
-FROM node:18-alpine as run
+FROM node:18-alpine as runner
 
 WORKDIR /app
 
-COPY --from=build package.json yarn.lock ./
-COPY --from=build dist/server.bundle.cjs ./
+COPY --from=deps /app/node_modules /
+COPY dist/server.bundle.cjs ./
 
-RUN yarn install --production
+
+
+# RUN addgroup --system --gid 1001 nodejs
+# RUN adduser --system --uid 1001 yoga
+# USER yoga
 
 EXPOSE 4000
 CMD node --experimental-specifier-resolution=node server.bundle.cjs

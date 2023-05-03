@@ -1,5 +1,6 @@
 services:
   api:
+    container_name: quizland_api 
     image: quizland-api:0.1.3
     build: ./quizland-gql
     ports:
@@ -7,8 +8,10 @@ services:
     networks:
       quizland:
         ipv4_address: "172.18.1.10"
+    restart: unless-stopped
 
   www:
+    container_name: quizland_www
     image: quizland-www:0.1.1
     build: ./quizland-web
     ports:
@@ -16,6 +19,9 @@ services:
     networks:
       quizland:
         ipv4_address: "172.18.1.20"
+    restart: unless-stopped
+    depends_on:
+      - "api"
 
 networks:
   quizland:

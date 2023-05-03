@@ -1,11 +1,21 @@
 services:
   api:
-    image: quizland-api:0.1.1
+    image: quizland-api:0.1.3
+    build: ./quizland-gql
+    ports:
+      - "4000:4000"
     networks:
       quizland:
         ipv4_address: "172.18.1.10"
 
-
+  www:
+    image: quizland-www:0.1.1
+    build: ./quizland-web
+    ports:
+      - "3000:3000"
+    networks:
+      quizland:
+        ipv4_address: "172.18.1.20"
 
 networks:
   quizland:

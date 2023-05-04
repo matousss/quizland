@@ -20,7 +20,7 @@ const CardSetDescriptionSection: FC<{ author: User, description?: Maybe<string>,
                     </div>
                 </div>
                 <div className={'hidden sm:block grow'}></div>
-                <div className={'pr-4 my-auto'}>
+                <div className={'pr-4 pt-2 md:pt-0 my-auto'}>
                     {modified && "Last change " + Moment(modified).fromNow()}
                 </div>
             </div>

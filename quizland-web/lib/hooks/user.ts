@@ -6,17 +6,18 @@ import type {User} from "#types";
  * Return the user object from the cookie
  * */
 export function useUser() {
-    const [user, setUser] = useState(undefined)
+    const [user, setUser] = useState<User | undefined | null>(undefined)
     const [cookie, setCookie] = useState<string | undefined>(undefined)
     useEffect(() => {
-        const u = getCookie("user")
+        const u = getCookie("user");
         if (u) {
-            setUser(JSON.parse(u + ''))
+            setUser(JSON.parse(u + ''));
         }
+	else setUser(null);
     }, [cookie])
 
     useEffect(() => setCookie(document.cookie), [])
-    return user as User | undefined
+    return user as User | undefined | null
 }
 
 /**

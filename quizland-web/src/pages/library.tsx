@@ -1,9 +1,12 @@
 import {NextPage} from "next";
+import {useRouter} from "next/navigation";
+import {useEffect} from 'react';
 import NavBar from "@components/navigation/NavBar";
 import React, {ComponentProps, FC, useState} from "react";
 import {Entry, EntryLoading} from "@components/cardset/Entry";
 import {Section, SectionContainer} from "@components/sections";
-import {useGQL} from "../../lib/hooks/graphql";
+import {useGQL} from "@lib/hooks/graphql";
+import {useUser} from "@lib/hooks/user";
 import {gql} from "@apollo/client";
 import {PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
 
@@ -20,11 +23,14 @@ const DeleteButton: FC<ComponentProps<'button'>> = (props) =>
         <TrashIcon className={'w-8 h-8'}/>
     </button>
 
-
 const Library: NextPage = () => {
+    const user = useUser();
+    const router = useRouter();
+    useEffect(() => {if (user === null) router.push('/auth');}, [user])
+
     const [entries, setEntries] = useState<Array<{ title: string, description: string, id: string }> | null>(null)
     const client = useGQL();
-
+   
     fetchEntries : {
         if (entries) break fetchEntries;
 

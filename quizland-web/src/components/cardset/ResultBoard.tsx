@@ -47,7 +47,7 @@ const ResultBoard: FC<{
         <div className={'flex flex-col h-full p-6'}>
             <div className={'flex md:flex-row grow mt-4 lg:mt-8'}>
                 <div
-                    className={'flex mx-auto flex flex-col w-1/2 md:w-1/3 ml-6'}>
+                    className={'flex mx-auto flex flex-col w-1/2 md:w-1/3 md:h-1/2 ml-6'}>
                     <div className={'relative mt-16 md:mt-0 md:mx-0 md:mr-auto w-full h-full'}>
                         <div className={'duration-200 ' + styles.ringAnimated}>
                             <PieChart

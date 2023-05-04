@@ -12,7 +12,7 @@ import {CheckIcon, XMarkIcon} from "@heroicons/react/24/solid";
  * */
 const AnimationCard: FC<{ success: boolean } & ComponentProps<any>> = ({success, ...props}) => (
     <div
-        className={'pointer-events-none opacity-0 font-sans uppercase bg-secondary absolute top-0 z-10 w-full h-full text-[4rem] rounded-lg text-gray-500 flex drop-shadow-lg border-[3.5px] '
+        className={'w-max-[60vw] h-max-[80vh] pointer-events-none opacity-0 font-sans uppercase bg-secondary absolute top-0 z-10 w-full h-full text-[4rem] rounded-lg text-gray-500 flex drop-shadow-lg border-[3.5px] '
             + (success ? 'border-green-600 text-green-600 animate-card_result_r ' + styles.strokeGreen : 'border-red-600 text-red-600 animate-card_result_l ' + styles.strokeRed)}
         {...props}
     >

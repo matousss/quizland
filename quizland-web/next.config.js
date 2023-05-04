@@ -54,9 +54,15 @@ const nextConfig = {
                 has: token_cookie,
                 destination: '/home',
                 permanent: false,
-            }
+            },
+            {
+		source: '/create',
+		destination: '/cardset/create',
+		permanent: false,
+	    }
         ]
     },
 }
 
 module.exports = nextConfig
+

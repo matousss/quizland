@@ -57,6 +57,7 @@ const Browse: NextPage = (props) => {
                     <div className={'flex relative max-w-[500px]'}>
                         <input type={'text'} placeholder={'Goa\'uld names...'}
                                onChange={(e) => setSearchQuery(e.target.value)}
+			       onKeyDown={e => {if (e.key === 'Enter') submitSearch()}}
                                className={'w-full border-secondary focus:border-contrast bg-middle outline-none ring-0 focus:ring-0 focus:outline-none duration-200 rounded-md'}/>
                         <button
                             className={'h-full absolute right-2 text-gray-500 hover:text-contrast duration-200 disabled:cursor-no-drop disabled:hover:text-gray-500'}

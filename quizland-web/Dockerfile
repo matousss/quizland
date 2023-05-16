@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-
+RUN yarn add sharp
 
 
 FROM node:18-alpine AS builder
